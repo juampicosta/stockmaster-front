@@ -1,7 +1,8 @@
 const Articulos = () => {
   return (
     <div>
-      <h1>Articulos Pagee</h1>
+      <h1>Articulos Pageedvvasfasfasf</h1>
+      <h2>dwsdwa</h2>
     </div>
   )
 }
