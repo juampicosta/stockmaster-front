@@ -1,9 +1,10 @@
+import Header from './Header.jsx';
+
 const Layout = ({ children }) => {
   return (
     <div>
-      <header>Header</header>
+      <Header />
       <main>{children}</main>
-      <footer>Footer</footer>
     </div>
   )
 }
