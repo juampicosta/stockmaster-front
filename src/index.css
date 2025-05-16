@@ -1,7 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import "tailwindcss";
+
 
 :root {
-  font-family: Nunito, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Merriweather , system-ui, Avenir, Helvetica, Arial, sans-serif;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #fff3d0;
+}
+
+@theme{
+--color-crema: #FEFAEF;
+--color-marron: #884919;
+--color-beige: #F0CFA4;
+--color-arena: #EDC391;
+}
+
+@layer utilities {
+  @keyframes wiggle {
+    0%, 100% {transform: rotate(-15deg);}
+    50% {transform: rotate(15deg);}
+  }
+
+  @keyframes heartBeat {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.5);}
+    100% {transform: scale(1);}
+  }
+
+.animate-wiggle {
+  animation: wiggle 0.3s ease-in-out 3 ;
+}
+
+.animate-heartBeat {
+  animation: heartBeat 0.9s ease-in-out 1 ;
+}
+
 }
