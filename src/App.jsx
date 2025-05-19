@@ -5,6 +5,7 @@ import Proveedores from './pages/Proveedores'
 import OrdenesDeCompra from './pages/OrdenesDeCompra'
 import Ventas from './pages/Ventas'
 import Layout from './layouts/Layout'
+import Inicio from './pages/Inicio'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path='/proveedores' element={<Proveedores />} />
         <Route path='/ordenes-de-compra' element={<OrdenesDeCompra />} />
         <Route path='/ventas' element={<Ventas />} />
+        <Route path='/inicio' element={<Inicio />} />
       </Routes>
     </Layout>
   )

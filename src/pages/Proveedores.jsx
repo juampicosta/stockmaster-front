@@ -1,8 +1,8 @@
 const Proveedores = () => {
   return (
-    <div>
-      <h1>Proveedores Page</h1>
-    </div>
+      <h1 style={{ fontWeight: 'bold', fontSize: '2rem', color: "black"}}>
+       AGUANTE RIVER
+      </h1>
   )
 }
 
