@@ -13,29 +13,32 @@ const Header = () => {
         </div>
 
         <nav className='flex items-center space-x-6'>
-          <a href='/inicio' className='text-lg font-semibold hover:text-orange-600'>
+          <a
+            href='/inicio'
+            className='text-lg font-semibold hover:text-orange-600'
+          >
             Inicio
           </a>
           <a
-            href='/Articulos'
+            href='/articulos'
             className='text-lg font-semibold hover:text-orange-600'
           >
             Artículos
           </a>
           <a
-            href='/OrdenesDeCompra'
+            href='/ordenes-de-compra'
             className='text-lg font-semibold hover:text-orange-600'
           >
             Órdenes de Compra
           </a>
           <a
-            href='/Proveedores'
+            href='/proveedores'
             className='text-lg font-semibold hover:text-orange-600'
           >
             Proveedores
           </a>
           <a
-            href='/Ventas'
+            href='/ventas'
             className='text-lg font-semibold hover:text-orange-600'
           >
             Ventas
