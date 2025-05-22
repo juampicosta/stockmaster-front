@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { Link } from 'react-router'
 
 const ListaProveedores = () => {
   //Proveedores creados temporales
   const [proveedoresCreados, setProveedoresCreados] = useState([
     {
+      id: 1,
       email: 'proveedor1@gmail.com',
       razonSocial: 'Proveedor Uno S.A.',
       telefono: '123456789',
@@ -84,18 +86,18 @@ const ListaProveedores = () => {
                     </p>
                   </div>
                   <div>
-                    <a
-                      href={`/detalle/${prov.id}`}
+                    <Link
+                      to={`/proveedores/detalle/${prov.id}`}
                       className='ml-2 text-green-600 hover:underline'
                     >
                       Ver Detalle
-                    </a>
-                    <a
-                      href={`/editar/${prov.id}`}
+                    </Link>
+                    <Link
+                      to={`/proveedores/editar/${prov.id}`}
                       className='ml-2 text-blue-600 hover:underline'
                     >
                       Editar
-                    </a>
+                    </Link>
                     <button
                       className='cursor-pointer ml-2 text-red-600 hover:underline'
                       onClick={() => handleBorrarProveedor(prov.id)}
