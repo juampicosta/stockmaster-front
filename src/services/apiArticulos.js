@@ -1,35 +1,40 @@
-const API_URL = "http://localhost:8080/articulos";
+const API_URL = 'http://localhost:8080/articulos'
 
 // Registrar artículo (POST)
 export const registrarArticulo = async (datos) => {
   try {
     const response = await fetch(API_URL, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(datos),
-    });
+      body: JSON.stringify(datos)
+    })
 
-    if (!response.ok) throw new Error("Error al registrar");
-    return await response.json(); // Devuelve ArticuloCreadoDTO
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Error al registrar el artículo')
+    }
+
+    return { data } // Devuelve ArticuloCreadoDTO
   } catch (error) {
-    console.error("Error en registrarArticulo:", error);
-    throw error;
+    console.error('Error en registrarArticulo:', error)
+    return { errorMsg: error.message } // Devuelve un objeto con el mensaje de error
   }
-};
+}
 
 // Eliminar artículo (DELETE)
 export const eliminarArticulo = async (id) => {
   try {
     const response = await fetch(`${API_URL}/${id}`, {
-      method: "DELETE",
-    });
+      method: 'DELETE'
+    })
 
-    if (!response.ok) throw new Error("Error al eliminar");
-    return true; // Éxito
+    if (!response.ok) throw new Error('Error al eliminar')
+    return true // Éxito
   } catch (error) {
-    console.error("Error en eliminarArticulo:", error);
-    throw error;
+    console.error('Error en eliminarArticulo:', error)
+    throw error
   }
-};
+}
