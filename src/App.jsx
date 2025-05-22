@@ -7,6 +7,8 @@ import Layout from './layouts/Layout'
 import Inicio from './pages/Inicio'
 import ListaProveedores from './pages/Proveedores/ListaProveedores'
 import AltaProveedor from './pages/Proveedores/AltaProveedor'
+import EditarProveedor from './pages/Proveedores/EditarProveedor'
+import DetalleProveedor from './pages/Proveedores/DetalleProveedor'
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path='/articulos' element={<Articulos />} />
         <Route path='/proveedores' element={<ListaProveedores />} />
         <Route path='/proveedores/alta-proveedor' element={<AltaProveedor />} />
+        <Route path='/proveedores/editar/:id' element={<EditarProveedor />} />
+        <Route path='/proveedores/detalle/:id' element={<DetalleProveedor />} />
         <Route path='/ordenes-de-compra' element={<OrdenesDeCompra />} />
         <Route path='/ventas' element={<Ventas />} />
         <Route path='/inicio' element={<Inicio />} />

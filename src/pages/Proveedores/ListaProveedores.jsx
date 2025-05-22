@@ -59,8 +59,6 @@ const ListaProveedores = () => {
         >
           Crear Proveedor
         </a>
-        {/* Proveedores Creados */}
-
         <section className='mt-10'>
           <h2 className='text-xl font-semibold text-orange-800 mb-4'>
             Lista de Proveedores
@@ -86,6 +84,12 @@ const ListaProveedores = () => {
                     </p>
                   </div>
                   <div>
+                    <a
+                      href={`/detalle/${prov.id}`}
+                      className='ml-2 text-green-600 hover:underline'
+                    >
+                      Ver Detalle
+                    </a>
                     <a
                       href={`/editar/${prov.id}`}
                       className='ml-2 text-blue-600 hover:underline'
