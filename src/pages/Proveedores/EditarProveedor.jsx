@@ -118,6 +118,7 @@ const EditarProveedor = () => {
           <input
             required
             onChange={handleChangeProveedor}
+            value={proveedor.email}
             type='email'
             name='email'
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
@@ -130,6 +131,7 @@ const EditarProveedor = () => {
           </label>
           <input
             onChange={handleChangeProveedor}
+            value={proveedor.razonSocial}
             required
             type='text'
             name='razonSocial'
@@ -143,6 +145,7 @@ const EditarProveedor = () => {
           </label>
           <input
             onChange={handleChangeProveedor}
+            value={proveedor.telefono}
             required
             type='number'
             name='telefono'
