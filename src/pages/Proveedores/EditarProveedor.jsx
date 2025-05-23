@@ -6,7 +6,7 @@ const EditarProveedor = () => {
   const { id } = useParams()
   // Datos temporales para cargar Proveedor, esto hay que traerlo de la API
   const [proveedor, setProveedor] = useState({
-    id: id,
+    id,
     email: 'proveedor@example.com',
     razonSocial: 'Proveedor S.A.',
     telefono: '123456789',
