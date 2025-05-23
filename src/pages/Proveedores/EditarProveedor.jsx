@@ -194,7 +194,7 @@ const EditarProveedor = () => {
             <h3 className='text-lg font-semibold text-orange-800 mb-2'>
               Articulos Seleccionados
             </h3>
-            <ul className='list-disc pl-5'>
+            <ul className='list-disc pl-5 space-y-3'>
               {proveedor.articulos.map((articulo) => (
                 <li key={articulo.id} className='text-sm text-marron'>
                   <div className='flex items-center justify-between mb-2'>
