@@ -14,7 +14,7 @@ export const registrarArticulo = async (datos) => {
     const data = await response.json()
 
     if (!response.ok) {
-      throw new Error(data.mensaje || 'Error al registrar el artículo')
+      throw new Error(data[0].mensaje || 'Error al registrar el artículo')
     }
 
     return { data } // Devuelve ArticuloCreadoDTO

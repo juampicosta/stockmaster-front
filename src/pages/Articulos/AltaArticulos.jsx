@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import { registrarArticulo } from '../../services/apiArticulos'
+import { toast } from 'sonner'
 const proveedores = [
   { id: 1, nombre: 'Proveedor A' },
   { id: 2, nombre: 'Proveedor B' },
@@ -7,17 +7,15 @@ const proveedores = [
 ]
 
 const AltaArticulos = () => {
-  const [error, setError] = useState(null)
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
     const data = Object.fromEntries(formData.entries())
     const { errorMsg } = await registrarArticulo(data)
     if (errorMsg) {
-      setError(errorMsg)
-      return
+      return toast.error(errorMsg)
     }
+    toast.success('Artículo creado correctamente')
   }
 
   return (
@@ -79,11 +77,6 @@ const AltaArticulos = () => {
             ))}
           </select>
         </label>
-        {error && (
-          <div className='col-span-full text-red-600 font-medium'>
-            Error: {error}
-          </div>
-        )}
         <button
           type='submit'
           className='w-full px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-md transition-colors duration-200'

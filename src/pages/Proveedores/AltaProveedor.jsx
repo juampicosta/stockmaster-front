@@ -1,14 +1,13 @@
 import { useState } from 'react'
 import { registrarProveedor } from '../../services/apiProveedores'
+import { toast } from 'sonner'
 
 const AltaProveedor = () => {
   //Datos temporales para cargar Articulo en el Alta de Proveedor
   const [articulos] = useState([
-    { id: 1, nombre: 'Articulo 1' },
+    { id: 13443, nombre: 'Articulo 1' },
     { id: 2, nombre: 'Articulo 2' }
   ])
-  //Estados de Alerta y Error:
-  const [alerta, setAlerta] = useState('')
 
   //Datos de cada Articulo del Proveedor
   const [articuloDatos, setArticuloDatos] = useState([])
@@ -117,15 +116,12 @@ const AltaProveedor = () => {
     }
 
     // Llamar al servicio
-    const { error, data } = await registrarProveedor(dataToSend)
-    if (error) {
-      setAlerta(`Error al crear el proveedor: ${error}`)
-      setTimeout(() => setAlerta(''), 3000)
-      return
+    const { errorMsg, data } = await registrarProveedor(dataToSend)
+    if (errorMsg) {
+      return toast.error(errorMsg)
     }
 
-    setAlerta('Proveedor creado correctamente')
-    setTimeout(() => setAlerta(''), 3000)
+    toast.success('Proveedor creado correctamente')
     e.target.reset() // Reiniciar el formulario
     setArticuloDatos([]) // Reiniciar los articulos seleccionados
   }
@@ -150,12 +146,6 @@ const AltaProveedor = () => {
 
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
-      {/* Alerta temporal */}
-      {alerta && (
-        <div className='fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-700 px-6 py-3 rounded-lg shadow-md z-50 animate-bounce'>
-          {alerta}
-        </div>
-      )}
       <h2 className='text-xl font-semibold text-orange-800 mb-4'>
         Nuevo Proveedor
       </h2>

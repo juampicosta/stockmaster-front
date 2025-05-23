@@ -12,10 +12,12 @@ import DetalleProveedor from './pages/Proveedores/DetalleProveedor'
 import AltaArticulos from './pages/Articulos/AltaArticulos'
 import DetalleArticulo from './pages/Articulos/DetalleArticulo'
 import EditarArticulo from './pages/Articulos/EditarArticulo'
+import { Toaster } from 'sonner'
 
 function App() {
   return (
     <Layout>
+      <Toaster />
       <Routes>
         <Route path='/proveedores' element={<ListaProveedores />} />
         <Route path='/proveedores/alta-proveedor' element={<AltaProveedor />} />
