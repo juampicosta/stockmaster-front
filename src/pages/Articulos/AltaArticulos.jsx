@@ -1,12 +1,11 @@
+import { useEffect, useState } from 'react'
 import { registrarArticulo } from '../../services/apiArticulos'
 import { toast } from 'sonner'
-const proveedores = [
-  { id: 1, nombre: 'Proveedor A' },
-  { id: 2, nombre: 'Proveedor B' },
-  { id: 3, nombre: 'Proveedor C' }
-]
+import { obtenerProveedores } from '../../services/apiProveedores'
 
 const AltaArticulos = () => {
+  const [proveedores, setProveedores] = useState([])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
@@ -17,6 +16,20 @@ const AltaArticulos = () => {
     }
     toast.success('Artículo creado correctamente')
   }
+
+  useEffect(() => {
+    // llamada a la API para obtener los proveedores
+    const fetchProveedores = async () => {
+      const { data, errorMsg } = await obtenerProveedores()
+      if (errorMsg) {
+        return toast.error(errorMsg)
+      }
+
+      setProveedores(data.content)
+    }
+
+    fetchProveedores()
+  }, [])
 
   return (
     <section className='min-h-screen p-8'>
@@ -72,7 +85,7 @@ const AltaArticulos = () => {
             <option value=''>Seleccionar proveedor</option>
             {proveedores.map((prov) => (
               <option key={prov.id} value={prov.id}>
-                {prov.nombre}
+                {prov.razonSocial}
               </option>
             ))}
           </select>

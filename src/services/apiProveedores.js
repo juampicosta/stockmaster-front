@@ -23,3 +23,19 @@ export const registrarProveedor = async (datos) => {
     return { errorMsg: error.message } // Devuelve un objeto con el mensaje de error
   }
 }
+
+export const obtenerProveedores = async () => {
+  try {
+    const response = await fetch(API_URL)
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data[0].mensaje || 'Error al obtener los proveedores')
+    }
+
+    return { data }
+  } catch (error) {
+    console.error('Error en obtenerProveedores:', error)
+    return { errorMsg: error.message } // Devuelve un objeto con el mensaje de error
+  }
+}

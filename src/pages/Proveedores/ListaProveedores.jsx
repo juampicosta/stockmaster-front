@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
+import { toast } from 'sonner'
+import { obtenerProveedores } from '../../services/apiProveedores'
 
 const ListaProveedores = () => {
-  //Proveedores creados temporales
-  const [proveedoresCreados, setProveedoresCreados] = useState([
+  const [proveedores, setProveedores] = useState([
     {
       id: 1,
       email: 'proveedor1@gmail.com',
@@ -33,23 +34,29 @@ const ListaProveedores = () => {
       ]
     }
   ])
-  //Estados de Alerta y Error:
-  const [alerta, setAlerta] = useState('')
 
   //Para dar de baja el proveedor
   const handleBorrarProveedor = (index) => {
-    setProveedoresCreados((prev) => prev.filter((_, idx) => idx !== index))
-    setAlerta('Proveedor borrado correctamente')
-    setTimeout(() => setAlerta(''), 3000)
+    setProveedores((prev) => prev.filter((_, idx) => idx !== index))
+    toast.success('Proveedor eliminado correctamente')
   }
+
+  useEffect(() => {
+    // llamada a la API para obtener los proveedores
+    const fetchProveedores = async () => {
+      const { data, errorMsg } = await obtenerProveedores()
+      if (errorMsg) {
+        return toast.error(errorMsg)
+      }
+
+      setProveedores(data.content)
+    }
+
+    fetchProveedores()
+  }, [])
 
   return (
     <div className='bg-white min-h-screen p-8'>
-      {alerta && (
-        <div className='fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-700 px-6 py-3 rounded-lg shadow-md z-50 animate-bounce'>
-          {alerta}
-        </div>
-      )}
       <h1 className='text-3xl font-bold text-orange-900 mb-6'>
         Gestión de Proveedores
       </h1>
@@ -65,11 +72,11 @@ const ListaProveedores = () => {
           <h2 className='text-xl font-semibold text-orange-800 mb-4'>
             Lista de Proveedores
           </h2>
-          {proveedoresCreados.length === 0 ? (
+          {proveedores.length === 0 ? (
             <p className='text-gray-500'>Aún no hay proveedores creados.</p>
           ) : (
             <ul className='space-y-4'>
-              {proveedoresCreados.map((prov) => (
+              {proveedores.map((prov) => (
                 <li
                   key={prov.id}
                   className='flex justify-between items-center bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded'
