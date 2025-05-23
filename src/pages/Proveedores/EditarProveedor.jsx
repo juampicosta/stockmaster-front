@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 
 const EditarProveedor = () => {
   const { id } = useParams()
-  // Datos temporales para cargar Proveedor
+  // Datos temporales para cargar Proveedor, esto hay que traerlo de la API
   const [proveedor, setProveedor] = useState({
     id: id,
     email: 'proveedor@example.com',
@@ -22,7 +22,7 @@ const EditarProveedor = () => {
     ]
   })
 
-  //Datos temporales para cargar Articulo en el Alta de Proveedor
+  //Datos temporales para Articulos, esto hay que traerlo de la API
   const [articulos] = useState([
     { id: 1, nombre: 'Articulo 1' },
     { id: 2, nombre: 'Articulo 2' }
@@ -234,7 +234,7 @@ const EditarProveedor = () => {
             type='submit'
             className='px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-md transition-colors duration-200'
           >
-            Crear Proveedor
+            Editar Proveedor
           </button>
         </div>
       </form>
