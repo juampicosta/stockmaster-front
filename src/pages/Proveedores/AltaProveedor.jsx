@@ -271,7 +271,7 @@ const AltaProveedor = () => {
             </ul>
           </div>
         ) : (
-          <p>No hay articulos seleccionados!</p>
+          <p className='text-orange-500'>No hay articulos seleccionados!</p>
         )}
 
         <div className='flex items-end justify-start'>
