@@ -255,7 +255,9 @@ const EditarProveedor = () => {
             </ul>
           </div>
         ) : (
-          <p className='text-orange-500'>No hay articulos seleccionados!</p>
+          <p className='col-span-full text-orange-500'>
+            No hay articulos seleccionados!
+          </p>
         )}
 
         <div className='flex items-end justify-start'>
