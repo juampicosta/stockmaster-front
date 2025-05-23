@@ -1,12 +1,12 @@
 import { useState } from 'react'
+import { registrarProveedor } from '../../services/apiProveedores'
 
 const AltaProveedor = () => {
   //Datos temporales para cargar Articulo en el Alta de Proveedor
   const [articulos] = useState([
-    { codigo: 1, nombre: 'Articulo 1' },
-    { codigo: 2, nombre: 'Articulo 2' }
+    { id: 1, nombre: 'Articulo 1' },
+    { id: 2, nombre: 'Articulo 2' }
   ])
-  const [error, setError] = useState('')
   //Estados de Alerta y Error:
   const [alerta, setAlerta] = useState('')
 
@@ -102,14 +102,14 @@ const AltaProveedor = () => {
   }
 
   //Dar de alta el nuevo Proveedor
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const formData = new FormData(e.target) //Recupero los datos del formulario
     const email = formData.get('email')
     const razonSocial = formData.get('razonSocial')
     const telefono = formData.get('telefono')
 
-    const data = {
+    const dataToSend = {
       email,
       razonSocial,
       telefono,
@@ -117,11 +117,14 @@ const AltaProveedor = () => {
     }
 
     // Llamar al servicio
-    // const {error} = await crearProveedor(data)
-    // setError(error)
+    const { error, data } = await registrarProveedor(dataToSend)
+    if (error) {
+      setAlerta(`Error al crear el proveedor: ${error}`)
+      setTimeout(() => setAlerta(''), 3000)
+      return
+    }
 
     setAlerta('Proveedor creado correctamente')
-
     setTimeout(() => setAlerta(''), 3000)
     e.target.reset() // Reiniciar el formulario
     setArticuloDatos([]) // Reiniciar los articulos seleccionados
@@ -133,7 +136,7 @@ const AltaProveedor = () => {
     setArticuloDatos((prevState) => [
       ...prevState,
       {
-        id: e.target.value,
+        idArticulo: e.target.value,
         nombre: e.target.options[e.target.selectedIndex].text,
         datosArticulo: {
           costoCompra: 0,
@@ -210,7 +213,7 @@ const AltaProveedor = () => {
           >
             <option value=''>Seleccionar articulo</option>
             {articulos.map((art) => (
-              <option key={art.codigo} value={art.codigo}>
+              <option key={art.id} value={art.id}>
                 {art.nombre}
               </option>
             ))}
