@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 const AltaProveedor = () => {
   //Datos temporales para cargar Articulo en el Alta de Proveedor
   const [articulos] = useState([
-    { id: 13443, nombre: 'Articulo 1' },
+    { id: 1, nombre: 'Articulo 1' },
     { id: 2, nombre: 'Articulo 2' }
   ])
 
