@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { toast } from 'sonner'
 
@@ -12,7 +12,7 @@ const EditarProveedor = () => {
     telefono: '123456789',
     articulos: [
       {
-        id: 13443,
+        id: 1,
         nombre: 'Articulo 1',
         costoCompra: 100,
         costoPedido: 150,
@@ -23,7 +23,7 @@ const EditarProveedor = () => {
   })
 
   //Datos temporales para Articulos, esto hay que traerlo de la API
-  const [articulos] = useState([
+  const [articulos, setArticulos] = useState([
     { id: 1, nombre: 'Articulo 1' },
     { id: 2, nombre: 'Articulo 2' }
   ])
@@ -48,6 +48,17 @@ const EditarProveedor = () => {
     })
   }
 
+  // Eliminar un articulo del proveedor
+  const handleDeleteArticulo = (e, id) => {
+    e.preventDefault()
+    setProveedor((prevState) => {
+      return {
+        ...prevState,
+        articulos: prevState.articulos.filter((articulo) => articulo.id !== id)
+      }
+    })
+  }
+
   //Dar de alta el nuevo Proveedor
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -68,6 +79,15 @@ const EditarProveedor = () => {
     e.preventDefault()
     const { value } = e.target
 
+    if (!value) return toast.warning('Seleccione un articulo')
+
+    const alreadyExists = proveedor.articulos.some(
+      (articulo) => articulo.id === parseInt(value)
+    )
+    if (alreadyExists) {
+      return toast.warning('Articulo ya añadido en la lista')
+    }
+
     setProveedor((prevState) => {
       return {
         ...prevState,
@@ -76,12 +96,10 @@ const EditarProveedor = () => {
           {
             id: value,
             nombre: e.target.options[e.target.selectedIndex].text,
-            datosArticulo: {
-              costoCompra: 0,
-              costoPedido: 0,
-              demoraEntrega: 0,
-              precioUnitario: 0
-            }
+            costoCompra: 0,
+            costoPedido: 0,
+            demoraEntrega: 0,
+            precioUnitario: 0
           }
         ]
       }
@@ -179,7 +197,15 @@ const EditarProveedor = () => {
             <ul className='list-disc pl-5'>
               {proveedor.articulos.map((articulo) => (
                 <li key={articulo.id} className='text-sm text-marron'>
-                  {articulo.nombre}
+                  <div className='flex items-center justify-between mb-2'>
+                    <span className='font-bold'> {articulo.nombre}</span>
+                    <button
+                      onClick={(e) => handleDeleteArticulo(e, articulo.id)}
+                      className='bg-red-500 text-white p-1 rounded-md hover:bg-red-600'
+                    >
+                      Eliminar
+                    </button>
+                  </div>
                   <label className='block text-sm font-medium text-orange-800'>
                     Costo de compra
                     <input
