@@ -12,92 +12,24 @@ const AltaProveedor = () => {
   //Datos de cada Articulo del Proveedor
   const [articuloDatos, setArticuloDatos] = useState([])
 
-  // Actualizar el costo de compra del articulo
-  const handleChangeCosto = (e, id) => {
+  // Actualizar campos del articulo
+  const handleChangeArticulo = (e, id) => {
     e.preventDefault()
-    const { value } = e.target
-    const findArticulo = articuloDatos.find((art) => art.id === id)
-    if (findArticulo) {
-      setArticuloDatos((prevState) =>
-        prevState.map((articulo) =>
-          articulo.id === id
-            ? {
-                ...articulo,
-                datosArticulo: {
-                  ...articulo.datosArticulo,
-                  costoCompra: parseFloat(value)
-                }
-              }
-            : articulo
-        )
-      )
-    }
-  }
+    const { value, name } = e.target
 
-  // Actualizar el costo de compra del articulo
-  const handleChangeCostoPedido = (e, id) => {
-    e.preventDefault()
-    const { value } = e.target
-    const findArticulo = articuloDatos.find((art) => art.id === id)
-    if (findArticulo) {
-      setArticuloDatos((prevState) =>
-        prevState.map((articulo) =>
-          articulo.id === id
-            ? {
-                ...articulo,
-                datosArticulo: {
-                  ...articulo.datosArticulo,
-                  costoPedido: parseFloat(value)
-                }
+    setArticuloDatos((prevState) =>
+      prevState.map((articulo) =>
+        articulo.idArticulo === id
+          ? {
+              ...articulo,
+              datosArticulo: {
+                ...articulo.datosArticulo,
+                [name]: parseFloat(value)
               }
-            : articulo
-        )
+            }
+          : articulo
       )
-    }
-  }
-
-  // Actualizar la demora de entrega del articulo
-  const handleChangeDemoraEntrega = (e, id) => {
-    e.preventDefault()
-    const { value } = e.target
-    const findArticulo = articuloDatos.find((art) => art.id === id)
-    if (findArticulo) {
-      setArticuloDatos((prevState) =>
-        prevState.map((articulo) =>
-          articulo.id === id
-            ? {
-                ...articulo,
-                datosArticulo: {
-                  ...articulo.datosArticulo,
-                  demoraEntrega: parseFloat(value)
-                }
-              }
-            : articulo
-        )
-      )
-    }
-  }
-
-  // Actualizar el precio unitario del articulo
-  const handleChangePrecioUnitario = (e, id) => {
-    e.preventDefault()
-    const { value } = e.target
-    const findArticulo = articuloDatos.find((art) => art.id === id)
-    if (findArticulo) {
-      setArticuloDatos((prevState) =>
-        prevState.map((articulo) =>
-          articulo.id === id
-            ? {
-                ...articulo,
-                datosArticulo: {
-                  ...articulo.datosArticulo,
-                  precioUnitario: parseFloat(value)
-                }
-              }
-            : articulo
-        )
-      )
-    }
+    )
   }
 
   //Dar de alta el nuevo Proveedor
@@ -129,10 +61,19 @@ const AltaProveedor = () => {
   //Actualizar el estado de los articulos selecciondos
   const handleChange = (e) => {
     e.preventDefault()
+    const { value } = e.target
+
+    const alreadyExists = articuloDatos.some(
+      (articulo) => articulo.idArticulo == value
+    )
+    if (alreadyExists) {
+      return toast.warning('Articulo ya seleccionado')
+    }
+    if (!value) return toast.warning('Seleccione un articulo')
     setArticuloDatos((prevState) => [
       ...prevState,
       {
-        idArticulo: e.target.value,
+        idArticulo: value,
         nombre: e.target.options[e.target.selectedIndex].text,
         datosArticulo: {
           costoCompra: 0,
@@ -143,6 +84,8 @@ const AltaProveedor = () => {
       }
     ])
   }
+
+  console.log(articuloDatos)
 
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
@@ -216,7 +159,7 @@ const AltaProveedor = () => {
             </h3>
             <ul className='list-disc pl-5'>
               {articuloDatos.map((articulo) => (
-                <li key={articulo.id} className='text-sm text-marron'>
+                <li key={articulo.idArticulo} className='text-sm text-marron'>
                   {articulo.nombre}
                   <label className='block text-sm font-medium text-orange-800'>
                     Costo de compra
@@ -225,7 +168,9 @@ const AltaProveedor = () => {
                       type='number'
                       name='costoCompra'
                       value={articulo.datosArticulo.costoCompra}
-                      onChange={(e) => handleChangeCosto(e, articulo.id)}
+                      onChange={(e) =>
+                        handleChangeArticulo(e, articulo.idArticulo)
+                      }
                       className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
                     />
                   </label>
@@ -236,7 +181,9 @@ const AltaProveedor = () => {
                       type='number'
                       name='costoPedido'
                       value={articulo.datosArticulo.costoPedido}
-                      onChange={(e) => handleChangeCostoPedido(e, articulo.id)}
+                      onChange={(e) =>
+                        handleChangeArticulo(e, articulo.idArticulo)
+                      }
                       className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
                     />
                   </label>
@@ -248,7 +195,7 @@ const AltaProveedor = () => {
                       name='demoraEntrega'
                       value={articulo.datosArticulo.demoraEntrega}
                       onChange={(e) =>
-                        handleChangeDemoraEntrega(e, articulo.id)
+                        handleChangeArticulo(e, articulo.idArticulo)
                       }
                       className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
                     />
@@ -261,7 +208,7 @@ const AltaProveedor = () => {
                       name='precioUnitario'
                       value={articulo.datosArticulo.precioUnitario}
                       onChange={(e) =>
-                        handleChangePrecioUnitario(e, articulo.id)
+                        handleChangeArticulo(e, articulo.idArticulo)
                       }
                       className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
                     />
@@ -271,7 +218,9 @@ const AltaProveedor = () => {
             </ul>
           </div>
         ) : (
-          <p className='text-orange-500'>No hay articulos seleccionados!</p>
+          <p className='col-span-full text-orange-500'>
+            No hay articulos seleccionados!
+          </p>
         )}
 
         <div className='flex items-end justify-start'>
