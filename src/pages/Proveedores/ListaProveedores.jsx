@@ -2,7 +2,16 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { obtenerProveedores } from '../../services/apiProveedores'
-import { MdEmail, MdPhone, MdPerson, MdAdd, MdAddCircle } from 'react-icons/md'
+import {
+  MdEmail,
+  MdPhone,
+  MdPerson,
+  MdAdd,
+  MdAddCircle,
+  MdEdit,
+  MdDelete
+} from 'react-icons/md'
+import { IoMdPaper } from 'react-icons/io'
 
 const ListaProveedores = () => {
   const [proveedores, setProveedores] = useState([])
@@ -86,20 +95,23 @@ const ListaProveedores = () => {
                     <Link
                       to={`/proveedores/detalle/${prov.id}`}
                       state={{ proveedor: prov }}
-                      className='ml-2 text-green-600 hover:underline'
+                      className='flex items-center justify-center ml-2 text-green-600 hover:underline'
                     >
+                      <IoMdPaper className='text-lg text-green-500 mr-2' />
                       Ver Detalle
                     </Link>
                     <Link
                       to={`/proveedores/editar/${prov.id}`}
-                      className='ml-2 text-blue-600 hover:underline'
+                      className='ml-2 text-blue-600 hover:underline flex items-center'
                     >
+                      <MdEdit className='text-lg text-blue-500 mr-2' />
                       Editar
                     </Link>
                     <button
-                      className='cursor-pointer ml-2 text-red-600 hover:underline'
+                      className='cursor-pointer ml-2 text-red-600 hover:underline flex items-center justify-center'
                       onClick={() => handleBorrarProveedor(prov.id)}
                     >
+                      <MdDelete className='text-lg text-red-500 mr-2' />
                       Borrar
                     </button>
                   </div>
