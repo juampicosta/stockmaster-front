@@ -1,13 +1,17 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { registrarProveedor } from '../../services/apiProveedores'
 import { toast } from 'sonner'
+import { obtenerArticulos } from '../../services/apiArticulos'
 
 const AltaProveedor = () => {
   //Datos temporales para cargar Articulo en el Alta de Proveedor
-  const [articulos] = useState([
-    { id: 1, nombre: 'Articulo 1' },
-    { id: 2, nombre: 'Articulo 2' }
-  ])
+  //const [articulos] = useState([
+   // { id: 1, nombre: 'Articulo 1' },
+  //  { id: 2, nombre: 'Articulo 2' }
+ // ])
+
+  //Datos de los Articulos para el proveedor
+  const [articulos, setArticulos] = useState([]);
 
   //Datos de cada Articulo del Proveedor
   const [articuloDatos, setArticuloDatos] = useState([])
@@ -57,6 +61,22 @@ const AltaProveedor = () => {
     e.target.reset() // Reiniciar el formulario
     setArticuloDatos([]) // Reiniciar los articulos seleccionados
   }
+
+
+
+  //Llamar al servicio para traer los articulos
+
+  useEffect(() => {
+    const fetchArticulos = async () => {
+      const { errorMsg, data } = await obtenerArticulos();
+      if (errorMsg) {
+        return toast.error(errorMsg);
+      }
+      // Aquí está el cambio:
+      setArticulos(Array.isArray(data?.content) ? data.content : []);
+    };
+    fetchArticulos();
+  }, []);
 
   //Actualizar el estado de los articulos selecciondos
   const handleChange = (e) => {
@@ -146,8 +166,8 @@ const AltaProveedor = () => {
           >
             <option value=''>Seleccionar articulo</option>
             {articulos.map((art) => (
-              <option key={art.id} value={art.id}>
-                {art.nombre}
+              <option key={art.codigo} value={art.codigo}>
+                {art.descripcion}
               </option>
             ))}
           </select>
