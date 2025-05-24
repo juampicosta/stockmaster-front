@@ -4,12 +4,6 @@ import { toast } from 'sonner'
 import { obtenerArticulos } from '../../services/apiArticulos'
 
 const AltaProveedor = () => {
-  //Datos temporales para cargar Articulo en el Alta de Proveedor
-  //const [articulos] = useState([
-  // { id: 1, nombre: 'Articulo 1' },
-  //  { id: 2, nombre: 'Articulo 2' }
-  // ])
-
   //Datos de los Articulos para el proveedor
   const [articulos, setArticulos] = useState([])
 
@@ -70,7 +64,6 @@ const AltaProveedor = () => {
       if (errorMsg) {
         return toast.error(errorMsg)
       }
-      // Aquí está el cambio:
       setArticulos(Array.isArray(data?.content) ? data.content : [])
     }
     fetchArticulos()
