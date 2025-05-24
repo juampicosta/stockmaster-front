@@ -103,13 +103,11 @@ const AltaProveedor = () => {
     ])
   }
 
-  console.log(articuloDatos)
-
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
-      <h2 className='text-xl font-semibold text-orange-800 mb-4'>
+      <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>
         Nuevo Proveedor
-      </h2>
+      </h1>
 
       {/* Formulario */}
       <form

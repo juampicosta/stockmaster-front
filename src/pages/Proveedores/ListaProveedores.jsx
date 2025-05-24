@@ -29,7 +29,7 @@ const ListaProveedores = () => {
 
   return (
     <div className='bg-white min-h-screen p-8'>
-      <h1 className='text-3xl font-bold text-orange-900 mb-6'>
+      <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>
         Gestión de Proveedores
       </h1>
 
