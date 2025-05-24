@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { toast } from 'sonner'
+import { obtenerArticulos } from '../../services/apiArticulos'
 
 const EditarProveedor = () => {
   const { id } = useParams()
@@ -10,26 +11,14 @@ const EditarProveedor = () => {
     email: 'proveedor@example.com',
     razonSocial: 'Proveedor S.A.',
     telefono: '123456789',
-    articulos: [
-      {
-        id: 1,
-        nombre: 'Articulo 1',
-        costoCompra: 100,
-        costoPedido: 150,
-        demoraEntrega: 5,
-        precioUnitario: 200
-      }
-    ]
+    articulos: []
   })
 
   //Datos temporales para Articulos, esto hay que traerlo de la API
-  const [articulos, setArticulos] = useState([
-    { id: 1, nombre: 'Articulo 1' },
-    { id: 2, nombre: 'Articulo 2' }
-  ])
+  const [articulos, setArticulos] = useState([])
 
   // Actualizar cualquier campo de un articulo del proveedor
-  const handleChangeArticulo = (e, id) => {
+  const handleChangeArticulo = (e, codigo) => {
     e.preventDefault()
     const { value, name } = e.target
 
@@ -37,7 +26,7 @@ const EditarProveedor = () => {
       return {
         ...prevState,
         articulos: prevState.articulos.map((articulo) =>
-          articulo.id === id
+          articulo.codigo === codigo
             ? {
                 ...articulo,
                 [name]: parseFloat(value)
@@ -49,12 +38,14 @@ const EditarProveedor = () => {
   }
 
   // Eliminar un articulo del proveedor
-  const handleDeleteArticulo = (e, id) => {
+  const handleDeleteArticulo = (e, codigo) => {
     e.preventDefault()
     setProveedor((prevState) => {
       return {
         ...prevState,
-        articulos: prevState.articulos.filter((articulo) => articulo.id !== id)
+        articulos: prevState.articulos.filter(
+          (articulo) => articulo.codigo !== codigo
+        )
       }
     })
   }
@@ -82,7 +73,7 @@ const EditarProveedor = () => {
     if (!value) return toast.warning('Seleccione un articulo')
 
     const alreadyExists = proveedor.articulos.some(
-      (articulo) => articulo.id === parseInt(value)
+      (articulo) => articulo.codigo === parseInt(value)
     )
     if (alreadyExists) {
       return toast.warning('Articulo ya añadido en la lista')
@@ -94,8 +85,8 @@ const EditarProveedor = () => {
         articulos: [
           ...prevState.articulos,
           {
-            id: value,
-            nombre: e.target.options[e.target.selectedIndex].text,
+            codigo: value,
+            descripcion: e.target.options[e.target.selectedIndex].text,
             costoCompra: 0,
             costoPedido: 0,
             demoraEntrega: 0,
@@ -117,6 +108,18 @@ const EditarProveedor = () => {
       }
     })
   }
+
+  useEffect(() => {
+    // Llamar al servicio para obtener articulos
+    const fetchArticulos = async () => {
+      const { errorMsg, data } = await obtenerArticulos()
+      if (errorMsg) {
+        return toast.error(errorMsg)
+      }
+      setArticulos(Array.isArray(data.content) ? data.content : [])
+    }
+    fetchArticulos()
+  }, [])
 
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
@@ -183,8 +186,8 @@ const EditarProveedor = () => {
           >
             <option value=''>Seleccionar articulo</option>
             {articulos.map((art) => (
-              <option key={art.id} value={art.id}>
-                {art.nombre}
+              <option key={art.codigo} value={art.codigo}>
+                {art.descripcion}
               </option>
             ))}
           </select>
@@ -196,11 +199,11 @@ const EditarProveedor = () => {
             </h3>
             <ul className='list-disc pl-5 space-y-3'>
               {proveedor.articulos.map((articulo) => (
-                <li key={articulo.id} className='text-sm text-marron'>
+                <li key={articulo.codigo} className='text-sm text-marron'>
                   <div className='flex items-center justify-between mb-2'>
-                    <span className='font-bold'> {articulo.nombre}</span>
+                    <span className='font-bold'> {articulo.descripcion}</span>
                     <button
-                      onClick={(e) => handleDeleteArticulo(e, articulo.id)}
+                      onClick={(e) => handleDeleteArticulo(e, articulo.codigo)}
                       className='bg-red-500 text-white p-1 rounded-md hover:bg-red-600'
                     >
                       Eliminar
@@ -213,7 +216,7 @@ const EditarProveedor = () => {
                       type='number'
                       name='costoCompra'
                       value={articulo.costoCompra}
-                      onChange={(e) => handleChangeArticulo(e, articulo.id)}
+                      onChange={(e) => handleChangeArticulo(e, articulo.codigo)}
                       className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
                     />
                   </label>
@@ -224,7 +227,7 @@ const EditarProveedor = () => {
                       type='number'
                       name='costoPedido'
                       value={articulo.costoPedido}
-                      onChange={(e) => handleChangeArticulo(e, articulo.id)}
+                      onChange={(e) => handleChangeArticulo(e, articulo.codigo)}
                       className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
                     />
                   </label>
@@ -235,7 +238,7 @@ const EditarProveedor = () => {
                       type='number'
                       name='demoraEntrega'
                       value={articulo.demoraEntrega}
-                      onChange={(e) => handleChangeArticulo(e, articulo.id)}
+                      onChange={(e) => handleChangeArticulo(e, articulo.codigo)}
                       className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
                     />
                   </label>
@@ -246,7 +249,7 @@ const EditarProveedor = () => {
                       type='number'
                       name='precioUnitario'
                       value={articulo.precioUnitario}
-                      onChange={(e) => handleChangeArticulo(e, articulo.id)}
+                      onChange={(e) => handleChangeArticulo(e, articulo.codigo)}
                       className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
                     />
                   </label>
