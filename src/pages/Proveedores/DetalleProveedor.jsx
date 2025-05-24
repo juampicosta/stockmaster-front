@@ -51,14 +51,14 @@ const DetalleProveedor = () => {
 
       <h2 className='text-2xl font-bold text-orange-800 mb-4'>Artículos</h2>
       {proveedor.articulos?.length > 0 ? (
-        proveedor.articulos.map((art, idx) => (
+        proveedor.articulos.map((art) => (
           <div
-            key={art.id || art.idArticulo || idx}
+            key={art.codigo}
             className='bg-white shadow border-l-4 border-orange-400 text-orange-900 p-5 rounded-lg mb-6 ml-8'
           >
             <p className='font-semibold text-lg mb-2 flex items-center'>
               <MdInventory className='text-2xl text-brown-600 mr-2' />
-              {art.nombre}
+              {art.descripcion}
             </p>
             <ul className='space-y-1 pl-7 text-md'>
               <li className='flex items-center'>

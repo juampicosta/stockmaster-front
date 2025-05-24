@@ -69,6 +69,8 @@ const AltaProveedor = () => {
     fetchArticulos()
   }, [])
 
+  console.log(articuloDatos)
+
   //Actualizar el estado de los articulos selecciondos
   const handleChange = (e) => {
     e.preventDefault()
@@ -85,7 +87,7 @@ const AltaProveedor = () => {
       ...prevState,
       {
         idArticulo: value,
-        nombre: e.target.options[e.target.selectedIndex].text,
+        descripcion: e.target.options[e.target.selectedIndex].text,
         datosArticulo: {
           costoCompra: 0,
           costoPedido: 0,
@@ -170,7 +172,7 @@ const AltaProveedor = () => {
               {articuloDatos.map((articulo) => (
                 <li key={articulo.idArticulo} className='text-sm text-marron'>
                   <span className='text-lg font-semibold'>
-                    {articulo.nombre}
+                    {articulo.descripcion}
                   </span>
                   <label className='block text-sm font-medium text-orange-800'>
                     Costo de compra
