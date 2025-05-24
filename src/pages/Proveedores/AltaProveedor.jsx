@@ -6,12 +6,12 @@ import { obtenerArticulos } from '../../services/apiArticulos'
 const AltaProveedor = () => {
   //Datos temporales para cargar Articulo en el Alta de Proveedor
   //const [articulos] = useState([
-   // { id: 1, nombre: 'Articulo 1' },
+  // { id: 1, nombre: 'Articulo 1' },
   //  { id: 2, nombre: 'Articulo 2' }
- // ])
+  // ])
 
   //Datos de los Articulos para el proveedor
-  const [articulos, setArticulos] = useState([]);
+  const [articulos, setArticulos] = useState([])
 
   //Datos de cada Articulo del Proveedor
   const [articuloDatos, setArticuloDatos] = useState([])
@@ -62,21 +62,19 @@ const AltaProveedor = () => {
     setArticuloDatos([]) // Reiniciar los articulos seleccionados
   }
 
-
-
   //Llamar al servicio para traer los articulos
 
   useEffect(() => {
     const fetchArticulos = async () => {
-      const { errorMsg, data } = await obtenerArticulos();
+      const { errorMsg, data } = await obtenerArticulos()
       if (errorMsg) {
-        return toast.error(errorMsg);
+        return toast.error(errorMsg)
       }
       // Aquí está el cambio:
-      setArticulos(Array.isArray(data?.content) ? data.content : []);
-    };
-    fetchArticulos();
-  }, []);
+      setArticulos(Array.isArray(data?.content) ? data.content : [])
+    }
+    fetchArticulos()
+  }, [])
 
   //Actualizar el estado de los articulos selecciondos
   const handleChange = (e) => {
@@ -174,13 +172,15 @@ const AltaProveedor = () => {
         </div>
         {articuloDatos.length > 0 ? (
           <div className='col-span-full'>
-            <h3 className='text-lg font-semibold text-orange-800 mb-2'>
+            <h3 className='text-xl font-semibold text-orange-800 mb-2'>
               Articulos Seleccionados
             </h3>
-            <ul className='list-disc pl-5'>
+            <ul className='flex flex-col gap-4 pl-5'>
               {articuloDatos.map((articulo) => (
                 <li key={articulo.idArticulo} className='text-sm text-marron'>
-                  {articulo.nombre}
+                  <span className='text-lg font-semibold'>
+                    {articulo.nombre}
+                  </span>
                   <label className='block text-sm font-medium text-orange-800'>
                     Costo de compra
                     <input
@@ -243,7 +243,7 @@ const AltaProveedor = () => {
           </p>
         )}
 
-        <div className='flex items-end justify-start'>
+        <div className='flex items-end justify-end w-full col-span-full mt-2'>
           <button
             type='submit'
             className='px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-md transition-colors duration-200'
