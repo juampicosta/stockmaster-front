@@ -3,6 +3,7 @@ import { registrarArticulo } from '../../services/apiArticulos';
 import { toast } from 'sonner';
 import { obtenerProveedores } from '../../services/apiProveedores';
 
+
 const AltaArticulos = () => {
   const [proveedores, setProveedores] = useState([]);
   const [articulos, setArticulos] = useState([]);
@@ -221,6 +222,7 @@ const AltaArticulos = () => {
         </button>
       </form>
     </section>
+    
   );
 };
 
