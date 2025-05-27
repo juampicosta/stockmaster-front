@@ -1,5 +1,5 @@
-
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { obtenerArticulos } from '../../services/apiArticulos'
 
 const filters = [
   {
@@ -13,35 +13,7 @@ const filters = [
 ]
 
 const Articulos = () => {
-  const [articulos, setArticulos] = useState([
-    {
-      id: 1,
-      nombre: 'Clavos',
-      descripcion: 'Clavos de acero galvanizado',
-      stock: 50,
-      minimoStock: 100,
-      proveedorId: 101,
-      provedorPredeterminado: 'Proveedor A'
-    },
-    {
-      id: 2,
-      nombre: 'Cemento',
-      descripcion: 'Bolsa de cemento x50kg',
-      stock: 0,
-      minimoStock: 5,
-      proveedorId: 102,
-      provedorPredeterminado: 'Proveedor B'
-    },
-    {
-      id: 3,
-      nombre: 'Tornillos',
-      descripcion: 'Tornillos hexagonales M6',
-      stock: 80,
-      minimoStock: 100,
-      proveedorId: 101,
-      provedorPredeterminado: 'Proveedor A'
-    }
-  ])
+  const [articulos, setArticulos] = useState([])
   const [filter, setFilter] = useState('')
 
   const handleEliminar = (id) => {
@@ -56,6 +28,18 @@ const Articulos = () => {
     const selectedFilter = e.target.value
     setFilter(selectedFilter)
   }
+
+  useEffect(() => {
+    const fetchArticulos = async () => {
+      const { data } = await obtenerArticulos()
+      const { content } = data
+      setArticulos(content)
+    }
+
+    fetchArticulos()
+  }, [])
+
+  console.log(articulos)
 
   return (
     <div className='bg-white min-h-screen p-8'>
@@ -106,28 +90,28 @@ const Articulos = () => {
         <ul className='space-y-2 mt-6'>
           {articulos.map((a) => (
             <li
-              key={a.id}
+              key={a.codigo}
               className='bg-white border-l-4 border-orange-300 text-orange-800 p-4 rounded shadow-sm flex justify-between items-center'
             >
               <span>
-                <strong>{a.nombre}</strong> - {a.descripcion} | Stock: {a.stock}{' '}
-                | Proveedor Predeterminado: {a.provedorPredeterminado}
+                <strong>{a.descripcion}</strong> | Stock: {a.stock} | Proveedor
+                Predeterminado: {a.provPredeterminado}
               </span>
               <div className='space-x-2'>
                 <a
-                  href={`/articulos/detalle/${a.id}`}
+                  href={`/articulos/detalle/${a.codigo}`}
                   className='text-green-600 hover:text-green-800'
                 >
                   Ver detalle
                 </a>
                 <a
-                  href={`/articulos/editar/${a.id}`}
+                  href={`/articulos/editar/${a.codigo}`}
                   className='text-blue-600 hover:text-blue-800'
                 >
                   Editar
                 </a>
                 <button
-                  onClick={() => handleEliminar(a.id)}
+                  onClick={() => handleEliminar(a.codigo)}
                   className='text-red-600 hover:text-red-800'
                 >
                   Eliminar
