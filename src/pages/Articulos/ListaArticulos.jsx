@@ -94,8 +94,7 @@ const Articulos = () => {
               className='bg-white border-l-4 border-orange-300 text-orange-800 p-4 rounded shadow-sm flex justify-between items-center'
             >
               <span>
-                <strong>{a.descripcion}</strong> | Stock: {a.stock} | Proveedor
-                Predeterminado: {a.provPredeterminado}
+                <strong>{a.descripcion}</strong> | Stock: {a.stock}
               </span>
               <div className='space-x-2'>
                 <a
