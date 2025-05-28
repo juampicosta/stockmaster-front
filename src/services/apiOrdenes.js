@@ -73,3 +73,24 @@ export const obtenerOrden = async (id) => {
     return { errorMsg: error.message } // Devuelve un objeto con el mensaje de error
   }
 }
+
+export const editarOrden = async (datos, id) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datos)
+    })
+
+    if (!response.ok) {
+      const data = await response.json()
+      throw new Error(data[0].mensaje || 'Error al editar la orden')
+    }
+    return { data: null }
+  } catch (error) {
+    console.error('Error en editarOrden:', error)
+    return { errorMsg: error.message } // Devuelve un objeto con el mensaje de error
+  }
+}
