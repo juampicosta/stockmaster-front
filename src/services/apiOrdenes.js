@@ -56,3 +56,20 @@ export const sugerirOrdenCompra = async (articuloId) => {
     return { errorMsg: error.message } // Devuelve un objeto con el mensaje de error
   }
 }
+
+export const obtenerOrden = async (id) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}`)
+
+    if (!response.ok) {
+      const data = await response.json()
+      throw new Error(data[0].mensaje || 'Error al obtener la orden')
+    }
+
+    const data = await response.json()
+    return { data }
+  } catch (error) {
+    console.error('Error en obtenerOrden:', error)
+    return { errorMsg: error.message } // Devuelve un objeto con el mensaje de error
+  }
+}

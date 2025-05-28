@@ -8,6 +8,7 @@ import { LuBoxes } from 'react-icons/lu'
 import { BsCash, BsClock } from 'react-icons/bs'
 import { BiUser } from 'react-icons/bi'
 import { AiFillProduct } from 'react-icons/ai'
+import { getOrderStateColor } from '../../utils/getOrderStateColor'
 
 const ListaOrdenes = () => {
   const [ordenes, setOrdenes] = useState([])
@@ -31,19 +32,6 @@ const ListaOrdenes = () => {
 
     fetchOrdenes()
   }, [])
-
-  const getStateColor = (estado) => {
-    switch (estado) {
-      case 'Pendiente':
-        return 'bg-yellow-200 text-yellow-800'
-      case 'Finalizada':
-        return 'bg-green-200 text-green-800'
-      case 'Cancelada':
-        return 'bg-red-200 text-red-800'
-      default:
-        return 'bg-sky-200 text-sky-800'
-    }
-  }
 
   return (
     <div className='bg-white min-h-screen p-8'>
@@ -111,7 +99,7 @@ const ListaOrdenes = () => {
                       </span>
                     </div>
                     <div
-                      className={`flex items-center justify-center p-2 px-4 rounded-3xl border ${getStateColor(
+                      className={`flex items-center justify-center p-2 px-4 rounded-3xl border ${getOrderStateColor(
                         ord.estadoOrdenCompra.descripcion
                       )}`}
                     >
