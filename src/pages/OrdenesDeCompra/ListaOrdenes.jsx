@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import { MdAddCircle, MdEdit, MdDelete } from 'react-icons/md'
+import { MdAddCircle, MdEdit } from 'react-icons/md'
 import { IoMdPaper } from 'react-icons/io'
 import { obtenerOrdenes } from '../../services/apiOrdenes'
 import { LuBoxes } from 'react-icons/lu'
@@ -12,12 +12,6 @@ import { getOrderStateColor } from '../../utils/getOrderStateColor'
 
 const ListaOrdenes = () => {
   const [ordenes, setOrdenes] = useState([])
-
-  //Para dar de baja la orden
-  const handleBorrarOrden = (index) => {
-    setOrdenes((prev) => prev.filter((_, idx) => idx !== index))
-    toast.success('Orden de compra eliminada correctamente')
-  }
 
   useEffect(() => {
     // llamada a la API para obtener las ordenes
@@ -32,6 +26,51 @@ const ListaOrdenes = () => {
 
     fetchOrdenes()
   }, [])
+
+  const states = {
+    Pendiente: {
+      nextStates: [
+        {
+          id: 2,
+          nombre: 'Enviar',
+          descripcion: 'Enviada'
+        },
+        {
+          id: 4,
+          nombre: 'Cancelar',
+          descripcion: 'Cancelada'
+        }
+      ]
+    },
+    Enviada: {
+      nextStates: [
+        {
+          id: 3,
+          nombre: 'Finalizar',
+          descripcion: 'Finalizada'
+        }
+      ]
+    }
+  }
+
+  const handleChangeState = async (id, newStateId) => {
+    /* const { data, errorMsg } = await cambiarEstadoOrden(id, newStateId)
+    if (errorMsg) {
+      return toast.error(errorMsg)
+    } */
+    if (newStateId === 4) {
+      const confirm = window.confirm(
+        '¿Estás seguro de que deseas cancelar esta orden?'
+      )
+      if (!confirm) return
+      /* const { data, errorMsg } = await cancelarOrden(id, newStateId)
+          if (errorMsg) {
+          return toast.error(errorMsg)
+    } */
+    }
+
+    toast.success('Estado de la orden actualizado correctamente')
+  }
 
   return (
     <div className='bg-white min-h-screen p-8'>
@@ -108,11 +147,11 @@ const ListaOrdenes = () => {
                       </span>
                     </div>
                   </div>
-                  <div>
+                  <div className='flex flex-col items-center justify-center gap-1'>
                     <Link
                       to={`/ordenes-de-compra/detalle/${ord.id}`}
                       state={{ orden: ord }}
-                      className='flex items-center justify-center ml-2 text-green-600 hover:underline'
+                      className='flex items-center justify-center text-green-600 hover:underline'
                     >
                       <IoMdPaper className='text-lg text-green-500 mr-2' />
                       Ver Detalle
@@ -120,19 +159,29 @@ const ListaOrdenes = () => {
                     {ord.estadoOrdenCompra.descripcion === 'Pendiente' && (
                       <Link
                         to={`/ordenes-de-compra/editar/${ord.id}`}
-                        className='ml-2 text-blue-600 hover:underline flex items-center'
+                        className=' text-blue-600 hover:underline flex items-center'
                       >
                         <MdEdit className='text-lg text-blue-500 mr-2' />
                         Editar
                       </Link>
                     )}
-                    <button
-                      className='cursor-pointer ml-2 text-red-600 hover:underline flex items-center justify-center'
-                      onClick={() => handleBorrarOrden(ord.id)}
-                    >
-                      <MdDelete className='text-lg text-red-500 mr-2' />
-                      Borrar
-                    </button>
+                    <div className='flex items-center justify-center gap-1'>
+                      {states[
+                        ord.estadoOrdenCompra.descripcion
+                      ]?.nextStates.map((nextState) => (
+                        <button
+                          key={nextState.descripcion}
+                          className={`cursor-pointer hover:underline flex items-center justify-center p-2 rounded-full ${getOrderStateColor(
+                            nextState.descripcion
+                          )}`}
+                          onClick={() =>
+                            handleChangeState(ord.id, nextState.id)
+                          }
+                        >
+                          {nextState.nombre}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </li>
               ))}
