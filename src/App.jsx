@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router'
 import './App.css'
 import ListaArticulos from './pages/Articulos/ListaArticulos'
-import OrdenesDeCompra from './pages/OrdenesDeCompra'
 import Ventas from './pages/Ventas'
 import Layout from './layouts/Layout'
 import Inicio from './pages/Inicio'
@@ -13,6 +12,10 @@ import AltaArticulos from './pages/Articulos/AltaArticulos'
 import DetalleArticulo from './pages/Articulos/DetalleArticulo'
 import EditarArticulo from './pages/Articulos/EditarArticulo'
 import { Toaster } from 'sonner'
+import ListaOrdenes from './pages/OrdenesDeCompra/ListaOrdenes'
+import AltaOrden from './pages/OrdenesDeCompra/AltaOrden'
+import EditarOrdenes from './pages/OrdenesDeCompra/EditarOrden'
+import DetalleOrdenes from './pages/OrdenesDeCompra/DetalleOrden'
 
 function App() {
   return (
@@ -28,7 +31,16 @@ function App() {
         <Route path='/articulos/alta' element={<AltaArticulos />} />
         <Route path='/articulos/editar/:id' element={<EditarArticulo />} />
         <Route path='/articulos/detalle/:id' element={<DetalleArticulo />} />
-        <Route path='/ordenes-de-compra' element={<OrdenesDeCompra />} />
+        <Route path='/ordenes-de-compra' element={<ListaOrdenes />} />
+        <Route path='/ordenes-de-compra/alta' element={<AltaOrden />} />
+        <Route
+          path='/ordenes-de-compra/editar/:id'
+          element={<EditarOrdenes />}
+        />
+        <Route
+          path='/ordenes-de-compra/detalle/:id'
+          element={<DetalleOrdenes />}
+        />
         <Route path='/ventas' element={<Ventas />} />
         <Route path='/inicio' element={<Inicio />} />
       </Routes>
