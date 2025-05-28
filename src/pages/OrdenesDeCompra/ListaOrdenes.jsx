@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { MdAddCircle, MdEdit } from 'react-icons/md'
 import { IoMdPaper } from 'react-icons/io'
-import { obtenerOrdenes } from '../../services/apiOrdenes'
+import { cancelarOrden, obtenerOrdenes } from '../../services/apiOrdenes'
 import { LuBoxes } from 'react-icons/lu'
 import { BsCash, BsClock } from 'react-icons/bs'
 import { BiUser } from 'react-icons/bi'
@@ -63,11 +63,30 @@ const ListaOrdenes = () => {
         '¿Estás seguro de que deseas cancelar esta orden?'
       )
       if (!confirm) return
-      /* const { data, errorMsg } = await cancelarOrden(id, newStateId)
-          if (errorMsg) {
-          return toast.error(errorMsg)
-    } */
+      const { errorMsg } = await cancelarOrden(id)
+      if (errorMsg) {
+        return toast.error(errorMsg)
+      }
     }
+
+    // Actualizar el estado de la orden en el frontend
+    setOrdenes((prevOrdenes) =>
+      prevOrdenes.map((ord) =>
+        ord.id === id
+          ? {
+              ...ord,
+              estadoOrdenCompra: {
+                ...ord.estadoOrdenCompra,
+                id: newStateId,
+                descripcion: states[
+                  ord.estadoOrdenCompra.descripcion
+                ].nextStates.find((state) => state.id === newStateId)
+                  .descripcion
+              }
+            }
+          : ord
+      )
+    )
 
     toast.success('Estado de la orden actualizado correctamente')
   }

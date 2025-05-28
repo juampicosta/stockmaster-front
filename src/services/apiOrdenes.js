@@ -94,3 +94,24 @@ export const editarOrden = async (datos, id) => {
     return { errorMsg: error.message } // Devuelve un objeto con el mensaje de error
   }
 }
+
+export const cancelarOrden = async (id) => {
+  try {
+    const response = await fetch(`${API_URL}/cancelar/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    if (!response.ok) {
+      const data = await response.json()
+      throw new Error(data[0].mensaje || 'Error al cancelar la orden')
+    }
+
+    return { data: null }
+  } catch (error) {
+    console.error('Error en cancelarOrden:', error)
+    return { errorMsg: error.message } // Devuelve un objeto con el mensaje de error
+  }
+}
