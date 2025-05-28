@@ -42,6 +42,10 @@ const DetalleOrden = () => {
       <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>
         Detalle de Orden
       </h1>
+      <h2 className='text-2xl font-bold text-orange-800 mb-4'>
+        Orden de Compra #{id}
+      </h2>
+
       <div className='space-y-2 bg-white shadow-lg border border-yellow-200 rounded-xl p-6 mb-8'>
         <div className='flex items-center justify-start gap-2'>
           <BsClock className='text-xl text-orange-700' />
