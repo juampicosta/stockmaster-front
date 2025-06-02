@@ -1,6 +1,30 @@
 const API_URL = "http://localhost:8080/articulos";
 
-// Registrar artículo (POST)
+// Obtener artículos con filtro opcional
+export const obtenerArticulos = async (tieneProveedor) => {
+  let url = API_URL;
+
+  if (tieneProveedor !== undefined) {
+    url += `?predeterminado=${tieneProveedor}`;
+  }
+
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error al obtener los artículos");
+    }
+
+    const data = await response.json();
+    return { data };
+  } catch (error) {
+    console.error("Error en obtenerArticulos:", error);
+    return { errorMsg: error.message };
+  }
+};
+
+// Registrar artículo
 export const registrarArticulo = async (datos) => {
   try {
     const response = await fetch(API_URL, {
@@ -11,20 +35,20 @@ export const registrarArticulo = async (datos) => {
       body: JSON.stringify(datos),
     });
 
-    const data = await response.json();
-
     if (!response.ok) {
-      throw new Error(data[0]?.mensaje || "Error al registrar el artículo");
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error al registrar el artículo");
     }
 
-    return { data }; // Devuelve ArticuloCreadoDTO
+    const data = await response.json();
+    return { data };
   } catch (error) {
     console.error("Error en registrarArticulo:", error);
     return { errorMsg: error.message };
   }
 };
 
-// Eliminar artículo (DELETE)
+// Eliminar artículo
 export const eliminarArticulo = async (id) => {
   try {
     const response = await fetch(`${API_URL}/${id}`, {
@@ -33,7 +57,7 @@ export const eliminarArticulo = async (id) => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData[0]?.mensaje || "Error al eliminar el artículo");
+      throw new Error(errorData.message || "Error al eliminar el artículo");
     }
 
     return { success: true };
@@ -43,20 +67,40 @@ export const eliminarArticulo = async (id) => {
   }
 };
 
-// Obtener todos los artículos (GET)
-export const obtenerArticulos = async () => {
+// Obtener proveedores
+export const obtenerProveedores = async () => {
+  const PROVEEDORES_URL = "http://localhost:8080/proveedores";
+
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(PROVEEDORES_URL);
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData[0]?.mensaje || "Error al obtener los artículos");
+      throw new Error(errorData.message || "Error al obtener proveedores");
     }
 
     const data = await response.json();
-    return { data }; // Ahora es un array plano
+    return { data };
   } catch (error) {
-    console.error("Error en obtenerArticulos:", error);
+    console.error("Error en obtenerProveedores:", error);
+    return { errorMsg: error.message };
+  }
+};
+
+// Obtener artículo por ID
+export const obtenerArticuloPorId = async (id) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}`);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Error al obtener el artículo con ID ${id}`);
+    }
+
+    const data = await response.json();
+    return { data };
+  } catch (error) {
+    console.error("Error en obtenerArticuloPorId:", error);
     return { errorMsg: error.message };
   }
 };

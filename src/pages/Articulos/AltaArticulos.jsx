@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registrarArticulo } from '../../services/apiArticulos';
-import { obtenerProveedores } from '../../services/apiProveedores';
+import { registrarArticulo, obtenerProveedores } from '../../services/apiArticulos';
 import { toast } from 'sonner';
 
 const AltaArticulos = () => {
@@ -26,7 +25,9 @@ const AltaArticulos = () => {
       isNaN(data.stock) ||
       !data.tipoModelo
     ) {
-      return toast.error('Los campos obligatorios no pueden estar vacíos o deben ser números válidos');
+      return toast.error(
+        'Los campos obligatorios no pueden estar vacíos o deben ser números válidos'
+      );
     }
 
     if (data.demandaArticulo <= 0 || data.costoAlmacenamiento <= 0 || data.stock < 0) {
@@ -80,7 +81,7 @@ const AltaArticulos = () => {
         return toast.error(errorMsg);
       }
 
-      setProveedores(data); // Directamente el array de proveedores
+      setProveedores(data); // Debe devolver un array plano de proveedores
     };
 
     fetchProveedores();
@@ -90,7 +91,7 @@ const AltaArticulos = () => {
     <section className='min-h-screen p-8'>
       <form
         onSubmit={handleSubmit}
-        className='flex flex-col items-center gap-4 max-w-2xl mx-auto bg-beige p-8 rounded-lg shadow-md'
+        className='flex flex-col items-center gap-4 max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md'
       >
         <h1 className='text-2xl font-bold text-orange-800 mb-4 text-center'>
           Alta de Artículos

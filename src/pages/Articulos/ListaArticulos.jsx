@@ -1,49 +1,53 @@
 import { useEffect, useState } from 'react';
-import { obtenerArticulos, eliminarArticulo } from '../../services/apiArticulos';
+import { obtenerArticulos } from '../../services/apiArticulos';
 import { toast } from 'sonner';
 
 const Articulos = () => {
   const [articulos, setArticulos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [filter, setFilter] = useState('');
+
+  const handleEliminar = (id) => {
+    if (window.confirm('¿Estás seguro de eliminar este artículo?')) {
+      setArticulos(articulos.filter((a) => a.codigo !== id));
+    }
+  };
+
+  const handleChangeFilter = (e) => {
+    setFilter(e.target.value);
+  };
 
   useEffect(() => {
     const fetchArticulos = async () => {
       setLoading(true);
-      setError(null);
 
-      try {
-        const { data, errorMsg } = await obtenerArticulos();
-
-        if (errorMsg) throw new Error(errorMsg);
-
-        setArticulos(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+      let filtroProveedor;
+      switch (filter) {
+        case 'con-proveedor':
+          filtroProveedor = true;
+          break;
+        case 'sin-proveedor':
+          filtroProveedor = false;
+          break;
+        default:
+          filtroProveedor = undefined;
       }
+
+      const { data, errorMsg } = await obtenerArticulos(filtroProveedor);
+
+      if (errorMsg) {
+        toast.error(errorMsg);
+      } else {
+        setArticulos(data);
+      }
+
+      setLoading(false);
     };
 
     fetchArticulos();
-  }, []);
-
-  const handleEliminar = async (id) => {
-    if (!window.confirm('¿Estás seguro de eliminar este artículo?')) return;
-
-    const result = await eliminarArticulo(id);
-
-    if (result.success) {
-      setArticulos(articulos.filter((a) => a.id !== id));
-      toast.success("Artículo eliminado correctamente");
-    } else {
-      toast.error(result.errorMsg || "No se pudo eliminar el artículo");
-    }
-  };
+  }, [filter]);
 
   if (loading) return <p>Cargando artículos...</p>;
-  if (error) return <p className="text-red-600">Error: {error}</p>;
-  if (articulos.length === 0) return <p>No hay artículos disponibles.</p>;
 
   return (
     <div className='bg-white min-h-screen p-8'>
@@ -56,38 +60,58 @@ const Articulos = () => {
         Crear Artículo
       </a>
 
+      {/* Filtros */}
       <section className='mt-6'>
-        <ul className='space-y-4'>
-          {articulos.map((a) => (
-            <li
-              key={a.id}
-              className='bg-white border-l-4 border-orange-300 text-orange-800 p-4 rounded shadow-sm flex justify-between items-center'
-            >
-              <span>
-                <strong>{a.descripcion}</strong> | Stock: {a.stock}
-              </span>
-              <div className='space-x-2'>
-                <a
-                  href={`/articulos/detalle/${a.id}`}
-                  className='text-green-600 hover:text-green-800'
-                >
-                  Ver detalle
-                </a>
-                <a
-                  href={`/articulos/editar/${a.id}`}
-                  className='text-blue-600 hover:text-blue-800'
-                >
-                  Editar
-                </a>
-                <button
-                  onClick={() => handleEliminar(a.id)}
-                  className='text-red-600 hover:text-red-800'
-                >
-                  Eliminar
-                </button>
-              </div>
-            </li>
-          ))}
+        <label htmlFor='filtro' className='block text-sm font-medium text-orange-800 mb-2'>
+          Filtrar por proveedor
+        </label>
+        <select
+          id='filtro'
+          value={filter}
+          onChange={handleChangeFilter}
+          className='border-orange-300 bg-white text-orange-800 rounded-md px-4 py-2 mb-4 w-full max-w-xs focus:outline-none focus:ring-2 focus:ring-orange-400'
+        >
+          <option value=''>Todos</option>
+          <option value='con-proveedor'>Con Proveedor</option>
+          <option value='sin-proveedor'>Sin Proveedor</option>
+        </select>
+
+        {/* Listado */}
+        <ul className='space-y-4 mt-6'>
+          {articulos.length > 0 ? (
+            articulos.map((a) => (
+              <li
+                key={a.codigo}
+                className='bg-white border-l-4 border-orange-300 text-orange-800 p-4 rounded shadow-sm flex justify-between items-center'
+              >
+                <span>
+                  <strong>{a.descripcion}</strong> | Stock: {a.stock} | Tipo modelo: {a.tipoModelo}
+                </span>
+                <div className='space-x-2'>
+                  <a
+                    href={`/articulos/detalle/${a.codigo}`}
+                    className='text-green-600 hover:text-green-800'
+                  >
+                    Ver detalle
+                  </a>
+                  <a
+                    href={`/articulos/editar/${a.codigo}`}
+                    className='text-blue-600 hover:text-blue-800'
+                  >
+                    Editar
+                  </a>
+                  <button
+                    onClick={() => handleEliminar(a.codigo)}
+                    className='text-red-600 hover:text-red-800'
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </li>
+            ))
+          ) : (
+            <p>No hay artículos disponibles.</p>
+          )}
         </ul>
       </section>
     </div>
