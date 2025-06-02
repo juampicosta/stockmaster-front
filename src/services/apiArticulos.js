@@ -104,3 +104,28 @@ export const obtenerArticuloPorId = async (id) => {
     return { errorMsg: error.message };
   }
 };
+// Actualizar artículo
+export const actualizarArticulo = async (id, datos) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(datos),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.message || `Error al actualizar el artículo con ID ${id}`
+      );
+    }
+
+    const data = await response.json();
+    return { data };
+  } catch (error) {
+    console.error('Error en actualizarArticulo:', error);
+    return { errorMsg: error.message };
+  }
+};
