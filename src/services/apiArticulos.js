@@ -1,4 +1,3 @@
-
 const API_URL = "http://localhost:8080/articulos";
 
 // Registrar artículo (POST)
@@ -15,13 +14,13 @@ export const registrarArticulo = async (datos) => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data[0].mensaje || "Error al registrar el artículo");
+      throw new Error(data[0]?.mensaje || "Error al registrar el artículo");
     }
 
     return { data }; // Devuelve ArticuloCreadoDTO
   } catch (error) {
     console.error("Error en registrarArticulo:", error);
-    return { errorMsg: error.message }; // Devuelve un objeto con el mensaje de error
+    return { errorMsg: error.message };
   }
 };
 
@@ -32,29 +31,32 @@ export const eliminarArticulo = async (id) => {
       method: "DELETE",
     });
 
-    if (!response.ok) throw new Error("Error al eliminar");
-    return true; // Éxito
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData[0]?.mensaje || "Error al eliminar el artículo");
+    }
+
+    return { success: true };
   } catch (error) {
     console.error("Error en eliminarArticulo:", error);
-    throw error;
+    return { errorMsg: error.message };
   }
 };
 
-//Obtener articulos
-
-// src/services/apiArticulos.js
+// Obtener todos los artículos (GET)
 export const obtenerArticulos = async () => {
   try {
     const response = await fetch(API_URL);
-    const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data[0].mensaje || "Error al obtener los artículos");
+      const errorData = await response.json();
+      throw new Error(errorData[0]?.mensaje || "Error al obtener los artículos");
     }
 
-    return { data }; // Devuelve ArticuloDTO
+    const data = await response.json();
+    return { data }; // Ahora es un array plano
   } catch (error) {
     console.error("Error en obtenerArticulos:", error);
-    return { errorMsg: error.message }; // Devuelve un objeto con el mensaje de error
+    return { errorMsg: error.message };
   }
-}
+};
