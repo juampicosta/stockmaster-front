@@ -18,6 +18,8 @@ const AltaOrden = () => {
     const articuloId = formData.get('articuloId')
     const proveedorId = formData.get('proveedorId')
 
+    console.log('proveedorId', proveedorId)
+
     const dataToSend = {
       lote: parseInt(lote),
       codigoArticulo: parseInt(articuloId),
@@ -37,11 +39,12 @@ const AltaOrden = () => {
   //Llamar al servicio para traer los articulos
   useEffect(() => {
     const fetchArticulos = async () => {
+      // Pasar  el parametro predeterminado = true para que traiga los articulos con proveedores predeterminados
       const { errorMsg, data } = await obtenerArticulos()
       if (errorMsg) {
         return toast.error(errorMsg)
       }
-      setArticulos(Array.isArray(data?.content) ? data.content : [])
+      setArticulos(Array.isArray(data) ? data : [])
     }
     fetchArticulos()
   }, [])
@@ -65,7 +68,7 @@ const AltaOrden = () => {
     setSugerirOrden(data)
   }
 
-  console.log(sugerirOrden)
+  console.log(selectedArticulo)
 
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
@@ -131,7 +134,7 @@ const AltaOrden = () => {
               className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-orange-200 focus:border-orange-500 transition-colors duration-200'
             >
               {selectedArticulo.articuloProveedores.map((prov) => (
-                <option key={prov.id} value={prov.id}>
+                <option key={prov.proveedor.id} value={prov.proveedor.id}>
                   {prov.proveedor.razonSocial}
                 </option>
               ))}

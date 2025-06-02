@@ -14,7 +14,7 @@ export const registrarOrden = async (datos) => {
     const data = await response.json()
 
     if (!response.ok) {
-      throw new Error(data[0].mensaje || 'Error al registrar la orden')
+      throw new Error(data.mensaje || 'Error al registrar la orden')
     }
 
     return { data }
@@ -30,7 +30,7 @@ export const obtenerOrdenes = async () => {
     const data = await response.json()
 
     if (!response.ok) {
-      throw new Error(data[0].mensaje || 'Error al obtener las ordenes')
+      throw new Error(data.mensaje || 'Error al obtener las ordenes')
     }
 
     return { data }
@@ -46,7 +46,7 @@ export const sugerirOrdenCompra = async (articuloId) => {
 
     if (!response.ok) {
       const data = await response.json()
-      throw new Error(data[0].mensaje || 'Error al sugerir orden de compra')
+      throw new Error(data.mensaje || 'Error al sugerir orden de compra')
     }
 
     const data = await response.json()
@@ -63,7 +63,7 @@ export const obtenerOrden = async (id) => {
 
     if (!response.ok) {
       const data = await response.json()
-      throw new Error(data[0].mensaje || 'Error al obtener la orden')
+      throw new Error(data.mensaje || 'Error al obtener la orden')
     }
 
     const data = await response.json()
@@ -86,7 +86,7 @@ export const editarOrden = async (datos, id) => {
 
     if (!response.ok) {
       const data = await response.json()
-      throw new Error(data[0].mensaje || 'Error al editar la orden')
+      throw new Error(data.mensaje || 'Error al editar la orden')
     }
     return { data: null }
   } catch (error) {
@@ -106,12 +106,33 @@ export const cancelarOrden = async (id) => {
 
     if (!response.ok) {
       const data = await response.json()
-      throw new Error(data[0].mensaje || 'Error al cancelar la orden')
+      throw new Error(data.mensaje || 'Error al cancelar la orden')
     }
 
     return { data: null }
   } catch (error) {
     console.error('Error en cancelarOrden:', error)
+    return { errorMsg: error.message } // Devuelve un objeto con el mensaje de error
+  }
+}
+
+export const advanceOrderState = async (id) => {
+  try {
+    const response = await fetch(`${API_URL}/avanzar/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    if (!response.ok) {
+      const data = await response.json()
+      throw new Error(data?.mensaje || 'Error al avanzar el estado de la orden')
+    }
+
+    return { data: null }
+  } catch (error) {
+    console.error('Error en advanceOrderState:', error)
     return { errorMsg: error.message } // Devuelve un objeto con el mensaje de error
   }
 }
