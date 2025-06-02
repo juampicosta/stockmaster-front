@@ -1,18 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { toast } from 'sonner'
-import { obtenerArticulos } from '../../services/apiArticulos'
+import {obtenerArticulos } from '../../services/apiArticulos'
+import {editProveedor, obtenerProveedorPorId} from '../../services/apiProveedores'
 
 const EditarProveedor = () => {
   const { id } = useParams()
-  // Datos temporales para cargar Proveedor, esto hay que traerlo de la API
-  const [proveedor, setProveedor] = useState({
-    id,
-    email: 'proveedor@example.com',
-    razonSocial: 'Proveedor S.A.',
-    telefono: '123456789',
-    articulos: []
-  })
+ const [proveedor, setProveedor] = useState(null)
+
 
   //Datos temporales para Articulos, esto hay que traerlo de la API
   const [articulos, setArticulos] = useState([])
@@ -55,10 +50,10 @@ const EditarProveedor = () => {
     e.preventDefault()
 
     // Llamar al servicio
-    /* const { errorMsg, data } = await editarProveedor(proveedor)
+   const { errorMsg, data } = await editProveedor(id, proveedor)
     if (errorMsg) {
       return toast.error(errorMsg)
-    } */
+    } 
 
     toast.success('Proveedor editado correctamente')
     e.target.reset() // Reiniciar el formulario
@@ -109,8 +104,8 @@ const EditarProveedor = () => {
     })
   }
 
+  // Llamar al servicio para obtener articulos
   useEffect(() => {
-    // Llamar al servicio para obtener articulos
     const fetchArticulos = async () => {
       const { errorMsg, data } = await obtenerArticulos()
       if (errorMsg) {
@@ -120,6 +115,28 @@ const EditarProveedor = () => {
     }
     fetchArticulos()
   }, [])
+
+  // Llamar al servicio para obtener el proveedor por ID
+useEffect(() => {
+  const fetchProveedor = async () => {
+    const { errorMsg, data } = await obtenerProveedorPorId(id);
+    if (errorMsg) {
+      return toast.error(errorMsg);
+    }
+    setProveedor(data);
+  };
+  fetchProveedor();
+}, [id]);
+  if (!proveedor) {
+    return (
+      <section className="bg-white p-6 rounded-lg shadow-md">
+        <h1 className="text-4xl font-extrabold text-orange-900 mb-8 tracking-tight">
+          Editar Proveedor
+        </h1>
+        <p className="text-orange-600">Cargando proveedor...</p>
+      </section>
+    );
+  }
 
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
@@ -180,7 +197,7 @@ const EditarProveedor = () => {
           </label>
           <select
             onChange={(e) => handleChangeSelect(e)}
-            required
+           required
             name='articuloId'
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-orange-200 focus:border-orange-500 transition-colors duration-200'
           >
