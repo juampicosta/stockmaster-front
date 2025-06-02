@@ -1,26 +1,23 @@
 import { useEffect, useState } from 'react';
-import { registrarArticulo } from '../../services/apiArticulos';
+import { useNavigate } from 'react-router-dom';
+import { registrarArticulo, obtenerProveedores } from '../../services/apiArticulos';
 import { toast } from 'sonner';
-import { obtenerProveedores } from '../../services/apiProveedores';
-
 
 const AltaArticulos = () => {
   const [proveedores, setProveedores] = useState([]);
-  const [articulos, setArticulos] = useState([]);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
-    // Convertir tipos numéricos
+    // Convertir tipos
     data.demandaArticulo = parseFloat(data.demandaArticulo);
     data.costoAlmacenamiento = parseFloat(data.costoAlmacenamiento);
     data.stock = parseInt(data.stock, 10);
 
-    console.log('Datos del formulario:', data); // Para depuración
-
-    // Validar campos obligatorios
+    // Validaciones básicas
     if (
       !data.descripcion ||
       isNaN(data.demandaArticulo) ||
@@ -33,36 +30,28 @@ const AltaArticulos = () => {
       );
     }
 
-    // Construir articuloDTO
-    const articuloDTO = {
-      descripcion: data.descripcion,
-      demandaArticulo: data.demandaArticulo,
-      costoAlmacenamiento: data.costoAlmacenamiento,
-      stock: data.stock,
-    };
+    if (data.demandaArticulo <= 0 || data.costoAlmacenamiento <= 0 || data.stock < 0) {
+      return toast.error('Los valores numéricos deben ser mayores a cero.');
+    }
 
-    // Preparar payload final
+    // Construir payload
     const payload = {
-      articuloDTO,
+      articuloDTO: {
+        descripcion: data.descripcion,
+        demandaArticulo: data.demandaArticulo,
+        costoAlmacenamiento: data.costoAlmacenamiento,
+        stock: data.stock,
+      },
       tipoModelo: data.tipoModelo,
     };
 
-    // Verificar si se seleccionó un proveedor
     if (data.proveedorId) {
       payload.idProveedor = parseInt(data.proveedorId, 10);
 
-      // Validar campos relacionados con el proveedor
-      if (
-        !data.precioUnitario ||
-        !data.costoCompra ||
-        !data.demoraEntrega
-      ) {
-        return toast.error(
-          'Cuando se selecciona un proveedor, es necesario completar los campos de precio unitario, costo de compra y demora de entrega.'
-        );
+      if (!data.precioUnitario || !data.costoCompra || !data.demoraEntrega) {
+        return toast.error('Cuando seleccionas un proveedor, debes completar todos sus campos.');
       }
 
-      // Agregar articuloProveedorDTO
       payload.articuloProveedorDTO = {
         precioUnitario: parseFloat(data.precioUnitario),
         costoCompra: parseFloat(data.costoCompra),
@@ -70,25 +59,29 @@ const AltaArticulos = () => {
       };
     }
 
-    console.log('Payload enviado al backend:', payload); // Confirmar estructura
+    try {
+      const { errorMsg } = await registrarArticulo(payload);
 
-    const { errorMsg, data: articuloCreado } = await registrarArticulo(payload);
-    if (errorMsg) {
-      return toast.error(errorMsg);
+      if (errorMsg) throw new Error(errorMsg);
+
+      toast.success('Artículo creado correctamente');
+      e.target.reset();
+      document.querySelector('.proveedor-fields').style.display = 'none';
+      navigate('/articulos'); // Redirige a la lista
+    } catch (error) {
+      toast.error(error.message || 'Error al crear el artículo');
     }
-
-    // Actualizar estado local
-    setArticulos([...articulos, articuloCreado]);
-    toast.success('Artículo creado correctamente');
   };
 
   useEffect(() => {
     const fetchProveedores = async () => {
       const { data, errorMsg } = await obtenerProveedores();
+
       if (errorMsg) {
         return toast.error(errorMsg);
       }
-      setProveedores(data.content);
+
+      setProveedores(data); // Debe devolver un array plano de proveedores
     };
 
     fetchProveedores();
@@ -98,13 +91,13 @@ const AltaArticulos = () => {
     <section className='min-h-screen p-8'>
       <form
         onSubmit={handleSubmit}
-        className='flex flex-col items-center gap-4 max-w-2xl mx-auto bg-beige p-8 rounded-lg shadow-md'
+        className='flex flex-col items-center gap-4 max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md'
       >
         <h1 className='text-2xl font-bold text-orange-800 mb-4 text-center'>
           Alta de Artículos
         </h1>
 
-        {/* Campo: Descripción */}
+        {/* Campos del formulario */}
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Descripción
           <input
@@ -114,7 +107,6 @@ const AltaArticulos = () => {
           />
         </label>
 
-        {/* Campo: Demanda del Artículo */}
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Demanda del Artículo
           <input
@@ -125,7 +117,6 @@ const AltaArticulos = () => {
           />
         </label>
 
-        {/* Campo: Costo de Almacenamiento */}
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Costo de Almacenamiento
           <input
@@ -136,7 +127,6 @@ const AltaArticulos = () => {
           />
         </label>
 
-        {/* Campo: Stock */}
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Stock
           <input
@@ -146,14 +136,12 @@ const AltaArticulos = () => {
           />
         </label>
 
-        {/* Campo: Proveedor (Opcional) */}
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Proveedor (Opcional)
           <select
             name='proveedorId'
-            className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-orange-200 focus:border-orange-500 transition-colors duration-200'
+            className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
             onChange={(e) => {
-              // Mostrar/ocultar campos relacionados con el proveedor
               document.querySelector('.proveedor-fields').style.display =
                 e.target.value ? 'block' : 'none';
             }}
@@ -167,7 +155,6 @@ const AltaArticulos = () => {
           </select>
         </label>
 
-        {/* Campos relacionados con el proveedor */}
         <div className='proveedor-fields' style={{ display: 'none' }}>
           <label className='block text-sm font-medium text-orange-800 w-full'>
             Precio Unitario
@@ -200,12 +187,11 @@ const AltaArticulos = () => {
           </label>
         </div>
 
-        {/* Campo: Tipo de Modelo */}
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Tipo de Modelo
           <select
             name='tipoModelo'
-            className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-orange-200 focus:border-orange-500 transition-colors duration-200'
+            className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
             <option value=''>Seleccionar tipo de modelo</option>
             <option value='Intervalo Lote Fijo'>Intervalo Lote Fijo</option>
@@ -213,7 +199,6 @@ const AltaArticulos = () => {
           </select>
         </label>
 
-        {/* Botón de envío */}
         <button
           type='submit'
           className='w-full px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-md transition-colors duration-200'
@@ -222,7 +207,6 @@ const AltaArticulos = () => {
         </button>
       </form>
     </section>
-    
   );
 };
 

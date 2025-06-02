@@ -1,51 +1,57 @@
-import { useEffect, useState } from 'react'
-import { obtenerArticulos } from '../../services/apiArticulos'
-
-const filters = [
-  {
-    id: 1,
-    nombre: 'A reponer'
-  },
-  {
-    id: 2,
-    nombre: 'Faltantes'
-  }
-]
+import { useEffect, useState } from 'react';
+import { obtenerArticulos } from '../../services/apiArticulos';
+import { toast } from 'sonner';
 
 const Articulos = () => {
-  const [articulos, setArticulos] = useState([])
-  const [filter, setFilter] = useState('')
+  const [articulos, setArticulos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('');
 
   const handleEliminar = (id) => {
     if (window.confirm('¿Estás seguro de eliminar este artículo?')) {
-      setArticulos(articulos.filter((a) => a.id !== id))
-      // falta llamada a la API para eliminar el artículo
+      setArticulos(articulos.filter((a) => a.codigo !== id));
     }
-  }
+  };
 
   const handleChangeFilter = (e) => {
-    e.preventDefault()
-    const selectedFilter = e.target.value
-    setFilter(selectedFilter)
-  }
+    setFilter(e.target.value);
+  };
 
   useEffect(() => {
     const fetchArticulos = async () => {
-      const { data } = await obtenerArticulos()
-      const { content } = data
-      setArticulos(content)
-    }
+      setLoading(true);
 
-    fetchArticulos()
-  }, [])
+      let filtroProveedor;
+      switch (filter) {
+        case 'con-proveedor':
+          filtroProveedor = true;
+          break;
+        case 'sin-proveedor':
+          filtroProveedor = false;
+          break;
+        default:
+          filtroProveedor = undefined;
+      }
 
-  console.log(articulos)
+      const { data, errorMsg } = await obtenerArticulos(filtroProveedor);
+
+      if (errorMsg) {
+        toast.error(errorMsg);
+      } else {
+        setArticulos(data);
+      }
+
+      setLoading(false);
+    };
+
+    fetchArticulos();
+  }, [filter]);
+
+  if (loading) return <p>Cargando artículos...</p>;
 
   return (
     <div className='bg-white min-h-screen p-8'>
-      <h1 className='text-3xl font-bold text-orange-900 mb-6'>
-        Lista de Artículos
-      </h1>
+      <h1 className='text-3xl font-bold text-orange-900 mb-6'>Lista de Artículos</h1>
 
       <a
         href='/articulos/alta'
@@ -54,74 +60,62 @@ const Articulos = () => {
         Crear Artículo
       </a>
 
-      <section>
-        {/* Proveedores asociados
-        <div>
-          <h2 className='text-xl font-semibold text-orange-800 mb-4'>
-            Proveedores Asociados
-          </h2>
-          <ul className='space-y-2'>
-            {articulos.map((a) => (
-              <li
-                key={a.id}
-                className='bg-gray-50 border-l-4 border-orange-300 text-orange-800 p-4 rounded shadow-sm'
-              >
-                <strong>{a.nombre}</strong> - Proveedor:{' '}
-                {proveedorAsociado(a.proveedorId)}
-              </li>
-            ))}
-          </ul>
-        </div> */}
-
-        {/* Todos los artículos */}
+      {/* Filtros */}
+      <section className='mt-6'>
+        <label htmlFor='filtro' className='block text-sm font-medium text-orange-800 mb-2'>
+          Filtrar por proveedor
+        </label>
         <select
-          onChange={handleChangeFilter}
+          id='filtro'
           value={filter}
-          className='rounded-md border-1 p-1 text-black mt-4'
-          name='filter'
+          onChange={handleChangeFilter}
+          className='border-orange-300 bg-white text-orange-800 rounded-md px-4 py-2 mb-4 w-full max-w-xs focus:outline-none focus:ring-2 focus:ring-orange-400'
         >
-          <option value=''>Seleccionar filtro</option>
-          {filters.map((f) => (
-            <option key={f.id} value={f.id}>
-              {f.nombre}
-            </option>
-          ))}
+          <option value=''>Todos</option>
+          <option value='con-proveedor'>Con Proveedor</option>
+          <option value='sin-proveedor'>Sin Proveedor</option>
         </select>
-        <ul className='space-y-2 mt-6'>
-          {articulos.map((a) => (
-            <li
-              key={a.codigo}
-              className='bg-white border-l-4 border-orange-300 text-orange-800 p-4 rounded shadow-sm flex justify-between items-center'
-            >
-              <span>
-                <strong>{a.descripcion}</strong> | Stock: {a.stock}
-              </span>
-              <div className='space-x-2'>
-                <a
-                  href={`/articulos/detalle/${a.codigo}`}
-                  className='text-green-600 hover:text-green-800'
-                >
-                  Ver detalle
-                </a>
-                <a
-                  href={`/articulos/editar/${a.codigo}`}
-                  className='text-blue-600 hover:text-blue-800'
-                >
-                  Editar
-                </a>
-                <button
-                  onClick={() => handleEliminar(a.codigo)}
-                  className='text-red-600 hover:text-red-800'
-                >
-                  Eliminar
-                </button>
-              </div>
-            </li>
-          ))}
+
+        {/* Listado */}
+        <ul className='space-y-4 mt-6'>
+          {articulos.length > 0 ? (
+            articulos.map((a) => (
+              <li
+                key={a.codigo}
+                className='bg-white border-l-4 border-orange-300 text-orange-800 p-4 rounded shadow-sm flex justify-between items-center'
+              >
+                <span>
+                  <strong>{a.descripcion}</strong> | Stock: {a.stock} | Tipo modelo: {a.tipoModelo}
+                </span>
+                <div className='space-x-2'>
+                  <a
+                    href={`/articulos/detalle/${a.codigo}`}
+                    className='text-green-600 hover:text-green-800'
+                  >
+                    Ver detalle
+                  </a>
+                  <a
+                    href={`/articulos/editar/${a.codigo}`}
+                    className='text-blue-600 hover:text-blue-800'
+                  >
+                    Editar
+                  </a>
+                  <button
+                    onClick={() => handleEliminar(a.codigo)}
+                    className='text-red-600 hover:text-red-800'
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </li>
+            ))
+          ) : (
+            <p>No hay artículos disponibles.</p>
+          )}
         </ul>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default Articulos
+export default Articulos;
