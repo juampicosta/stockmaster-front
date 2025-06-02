@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import { obtenerProveedores } from '../../services/apiProveedores'
+import { obtenerProveedores, eliminarProveedor } from '../../services/apiProveedores'
 import {
   MdEmail,
   MdPhone,
@@ -17,24 +17,37 @@ const ListaProveedores = () => {
   const [proveedores, setProveedores] = useState([])
 
   //Para dar de baja el proveedor
-  const handleBorrarProveedor = (index) => {
-    setProveedores((prev) => prev.filter((_, idx) => idx !== index))
+  const handleBorrarProveedor = async (id) => {
+    if (!window.confirm('¿Estás seguro de que quieres eliminar este proveedor?')) {
+      return
+    }
+
+    const { errorMsg } = await eliminarProveedor(id)
+    if (errorMsg) {
+      return toast.error(errorMsg)
+    }
+
+    setProveedores((prevState) => prevState.filter((prov) => prov.id !== id))
     toast.success('Proveedor eliminado correctamente')
   }
 
+
+// Llamar al servicio para obtener los proveedores
   useEffect(() => {
-    // llamada a la API para obtener los proveedores
     const fetchProveedores = async () => {
       const { data, errorMsg } = await obtenerProveedores()
       if (errorMsg) {
         return toast.error(errorMsg)
       }
 
-      setProveedores(data.content)
+      setProveedores(data)
     }
 
     fetchProveedores()
   }, [])
+
+
+
 
   return (
     <div className='bg-white min-h-screen p-8'>
