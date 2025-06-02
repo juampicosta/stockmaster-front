@@ -64,7 +64,7 @@ const AltaProveedor = () => {
       if (errorMsg) {
         return toast.error(errorMsg)
       }
-      setArticulos(Array.isArray(data?.content) ? data.content : [])
+      setArticulos(Array.isArray(data) ? data : [])
     }
     fetchArticulos()
   }, [])

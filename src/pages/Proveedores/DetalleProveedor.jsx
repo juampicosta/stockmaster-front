@@ -1,4 +1,7 @@
-import { useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { obtenerProveedorPorId } from '../../services/apiProveedores'
+
 import {
   MdEmail,
   MdPhone,
@@ -11,8 +14,32 @@ import {
 } from 'react-icons/md'
 
 const DetalleProveedor = () => {
-  const location = useLocation()
-  const proveedor = location.state?.proveedor
+
+// Obtener el ID del proveedor desde los parámetros de la URL
+ const { id } = useParams()
+
+ // Llamar al servicio para obtener el proveedor por ID
+ const [proveedor, setProveedor] = useState(null)
+  useEffect(() => {
+    const fetchProveedor = async () => {
+      const { data, errorMsg } = await obtenerProveedorPorId(id)
+      if (errorMsg) {
+        return toast.error(errorMsg);
+      }
+      console.log('Proveedor recibido:', data);
+      setProveedor(data)
+    }
+    fetchProveedor()
+  }, [id])
+
+
+if (!proveedor) {
+  return (
+    <div className="bg-white min-h-screen p-8 flex items-center justify-center">
+      <span className="text-orange-600 text-lg">Cargando proveedor...</span>
+    </div>
+  );
+}
 
   return (
     <div className='bg-gradient-to-br from-orange-50 to-white min-h-screen p-8'>

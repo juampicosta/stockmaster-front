@@ -67,7 +67,7 @@ const EditarProveedor = () => {
 
     if (!value) return toast.warning('Seleccione un articulo')
 
-    const alreadyExists = proveedor.articulos.some(
+    const alreadyExists = (proveedor.articulos ?? []).some(
       (articulo) => articulo.codigo === parseInt(value)
     )
     if (alreadyExists) {
@@ -111,7 +111,7 @@ const EditarProveedor = () => {
       if (errorMsg) {
         return toast.error(errorMsg)
       }
-      setArticulos(Array.isArray(data.content) ? data.content : [])
+      setArticulos(Array.isArray(data) ? data : [])
     }
     fetchArticulos()
   }, [])
@@ -123,7 +123,11 @@ useEffect(() => {
     if (errorMsg) {
       return toast.error(errorMsg);
     }
-    setProveedor(data);
+    console.log('Proveedor recibido:', data);
+      setProveedor({
+    ...data,
+    articulos: Array.isArray(data.articulos) ? data.articulos : []
+  });
   };
   fetchProveedor();
 }, [id]);

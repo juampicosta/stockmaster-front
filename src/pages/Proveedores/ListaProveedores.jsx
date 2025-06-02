@@ -17,20 +17,27 @@ const ListaProveedores = () => {
   const [proveedores, setProveedores] = useState([])
 
   //Para dar de baja el proveedor
-  const handleBorrarProveedor = async (id) => {
-    if (!window.confirm('¿Estás seguro de que quieres eliminar este proveedor?')) {
-      return
-    }
-
-    const { errorMsg } = await eliminarProveedor(id)
-    if (errorMsg) {
-      return toast.error(errorMsg)
-    }
-
-    setProveedores((prevState) => prevState.filter((prov) => prov.id !== id))
-    toast.success('Proveedor eliminado correctamente')
+const handleBorrarProveedor = async (id) => {
+  if (!window.confirm('¿Estás seguro de que quieres eliminar este proveedor?')) {
+    return
   }
 
+  const { errorMsg } = await eliminarProveedor(id)
+  console.log('Error al eliminar proveedor:', errorMsg)
+  if (errorMsg) {
+    if (errorMsg.includes("Orden de Compra asociada")) {
+      return toast.error("No se puede eliminar el proveedor porque tiene una Orden de Compra asociada en estado 'Pendiente' o 'En curso'.")
+    }
+    if (errorMsg.includes("proveedor predeterminado")) {
+      return toast.error("No se puede eliminar el proveedor porque es proveedor predeterminado de uno o más Artículos.")
+    }
+    // Mensaje genérico para otros errores
+    return toast.error('No se pudo eliminar el proveedor. ' + errorMsg)
+  }
+
+  setProveedores((prevState) => prevState.filter((prov) => prov.id !== id))
+  toast.success('Proveedor eliminado correctamente')
+}
 
 // Llamar al servicio para obtener los proveedores
   useEffect(() => {
