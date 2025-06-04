@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { toast } from 'sonner'
-import {obtenerArticulos } from '../../services/apiArticulos'
-import {editProveedor, obtenerProveedorPorId, obtenerArticulosProveedor} from '../../services/apiProveedores'
+import { obtenerArticulos } from '../../services/apiArticulos'
+import {
+  editProveedor,
+  obtenerProveedorPorId,
+  obtenerArticulosProveedor
+} from '../../services/apiProveedores'
 
 const EditarProveedor = () => {
   const { id } = useParams()
- const [proveedor, setProveedor] = useState(null)
+  const [proveedor, setProveedor] = useState(null)
 
   // Actualizar cualquier campo de un articulo del proveedor
   const handleChangeArticulo = (e, codigo) => {
@@ -46,10 +50,10 @@ const EditarProveedor = () => {
     e.preventDefault()
 
     // Llamar al servicio
-   const { errorMsg, data } = await editProveedor(id, proveedor)
+    const { errorMsg, data } = await editProveedor(id, proveedor)
     if (errorMsg) {
       return toast.error(errorMsg)
-    } 
+    }
 
     toast.success('Proveedor editado correctamente')
     e.target.reset() // Reiniciar el formulario
@@ -114,43 +118,43 @@ const EditarProveedor = () => {
 
   // Llamar al servicio para obtener el proveedor por ID
   const [articulos, setArticulos] = useState([])
-useEffect(() => {
-  const fetchProveedor = async () => {
-    const { errorMsg, data } = await obtenerProveedorPorId(id);
-    if (errorMsg) {
-      return toast.error(errorMsg);
-    }
-   
-      setProveedor({
-    ...data,
-    articulos: Array.isArray(data.articulos) ? data.articulos : []
-  });
-  };
-  fetchProveedor();
-}, [id]);
+  useEffect(() => {
+    const fetchProveedor = async () => {
+      const { errorMsg, data } = await obtenerProveedorPorId(id)
+      if (errorMsg) {
+        return toast.error(errorMsg)
+      }
 
- // Llamar al servicio para obtener Articulos de un proveedor por ID
-const [articulosProv, setArticulosProv] = useState([])
+      setProveedor({
+        ...data,
+        articulos: Array.isArray(data.articulos) ? data.articulos : []
+      })
+    }
+    fetchProveedor()
+  }, [id])
+
+  // Llamar al servicio para obtener Articulos de un proveedor por ID
+  const [articulosProv, setArticulosProv] = useState([])
   useEffect(() => {
     const fetchArticulosProv = async () => {
       const { data, errorMsg } = await obtenerArticulosProveedor(id)
+      console.log(data)
+
       if (errorMsg) return toast.error(errorMsg)
-      setArticulosProv(data[0]?.articuloProveedores || []) // Array dentro del objeto de Articulos (ArticuloProveedor)
-    console.log(data)
+      setArticulosProv(data) // Array dentro del objeto de Articulos (ArticuloProveedor)
     }
     fetchArticulosProv()
   }, [id])
 
-
   if (!proveedor) {
     return (
-      <section className="bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-4xl font-extrabold text-orange-900 mb-8 tracking-tight">
+      <section className='bg-white p-6 rounded-lg shadow-md'>
+        <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>
           Editar Proveedor
         </h1>
-        <p className="text-orange-600">Cargando proveedor...</p>
+        <p className='text-orange-600'>Cargando proveedor...</p>
       </section>
-    );
+    )
   }
 
   return (
@@ -212,7 +216,7 @@ const [articulosProv, setArticulosProv] = useState([])
           </label>
           <select
             onChange={(e) => handleChangeSelect(e)}
-           required
+            required
             name='articuloId'
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-orange-200 focus:border-orange-500 transition-colors duration-200'
           >
@@ -230,70 +234,80 @@ const [articulosProv, setArticulosProv] = useState([])
               Articulos Seleccionados
             </h3>
             <ul className='list-disc pl-5 space-y-3'>
-              {articulosProv.map((articulo) => (
-                
-                <li key={articulo.codigo} className='text-sm text-marron'>
-                  <div className='flex items-center justify-between mb-2'>
-                    <span className='font-bold'> 
-                        {
-                         articulos.find(a => Number(a.codigo) === Number(articulo.codigo))?.descripcion
-                          || 'Nada'
-                          }
-                          
-                                          </span>
-                    <button
-                      onClick={(e) => handleDeleteArticulo(e, articulo.codigo)}
-                      className='bg-red-500 text-white p-1 rounded-md hover:bg-red-600'
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                  <label className='block text-sm font-medium text-orange-800'>
-                    Costo de compra
-                    <input
-                      required
-                      type='number'
-                      name='costoCompra'
-                      value={articulo.costoCompra}
-                      onChange={(e) => handleChangeArticulo(e, articulo.codigo)}
-                      className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-                    />
-                  </label>
-                  <label className='block text-sm font-medium text-orange-800'>
-                    Costo de pedido
-                    <input
-                      required
-                      type='number'
-                      name='costoPedido'
-                      value={articulo.costoPedido}
-                      onChange={(e) => handleChangeArticulo(e, articulo.codigo)}
-                      className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-                    />
-                  </label>
-                  <label className='block text-sm font-medium text-orange-800'>
-                    Demora de Entrega
-                    <input
-                      required
-                      type='number'
-                      name='demoraEntrega'
-                      value={articulo.demoraEntrega}
-                      onChange={(e) => handleChangeArticulo(e, articulo.codigo)}
-                      className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-                    />
-                  </label>
-                  <label className='block text-sm font-medium text-orange-800'>
-                    Precio Unitario
-                    <input
-                      required
-                      type='number'
-                      name='precioUnitario'
-                      value={articulo.preciounitario}
-                      onChange={(e) => handleChangeArticulo(e, articulo.codigo)}
-                      className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-                    />
-                  </label>
-                </li>
-              ))}
+              {articulosProv.map((articulo) => {
+                const proveedorIntermedia = articulo.articuloProveedores.find(
+                  (prov) => prov.proveedor.id === parseInt(id)
+                )
+                return (
+                  <li key={articulo.codigo} className='text-sm text-marron'>
+                    <div className='flex items-center justify-between mb-2'>
+                      <span className='font-bold'>
+                        {articulo.descripcion} (Código: {articulo.codigo})
+                      </span>
+                      <button
+                        onClick={(e) =>
+                          handleDeleteArticulo(e, articulo.codigo)
+                        }
+                        className='bg-red-500 text-white p-1 rounded-md hover:bg-red-600'
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                    <label className='block text-sm font-medium text-orange-800'>
+                      Costo de compra
+                      <input
+                        required
+                        type='number'
+                        name='costoCompra'
+                        value={proveedorIntermedia.costoCompra}
+                        onChange={(e) =>
+                          handleChangeArticulo(e, articulo.codigo)
+                        }
+                        className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+                      />
+                    </label>
+                    <label className='block text-sm font-medium text-orange-800'>
+                      Costo de pedido
+                      <input
+                        required
+                        type='number'
+                        name='costoPedido'
+                        value={proveedorIntermedia.costoPedido}
+                        onChange={(e) =>
+                          handleChangeArticulo(e, articulo.codigo)
+                        }
+                        className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+                      />
+                    </label>
+                    <label className='block text-sm font-medium text-orange-800'>
+                      Demora de Entrega
+                      <input
+                        required
+                        type='number'
+                        name='demoraEntrega'
+                        value={proveedorIntermedia.demoraEntrega}
+                        onChange={(e) =>
+                          handleChangeArticulo(e, articulo.codigo)
+                        }
+                        className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+                      />
+                    </label>
+                    <label className='block text-sm font-medium text-orange-800'>
+                      Precio Unitario
+                      <input
+                        required
+                        type='number'
+                        name='precioUnitario'
+                        value={proveedorIntermedia.preciounitario}
+                        onChange={(e) =>
+                          handleChangeArticulo(e, articulo.codigo)
+                        }
+                        className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+                      />
+                    </label>
+                  </li>
+                )
+              })}
             </ul>
           </div>
         ) : (
