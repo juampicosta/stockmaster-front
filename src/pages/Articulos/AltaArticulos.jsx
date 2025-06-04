@@ -213,8 +213,8 @@ const AltaArticulos = () => {
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
             <option value=''>Seleccionar tipo de modelo</option>
-            <option value='Intervalo Lote Fijo'>Intervalo Lote Fijo</option>
-            <option value='Otro'>Otro</option>
+            <option value='Lote Fijo'>Lote Fijo</option>
+            <option value='Intervalo Fijo'>Intervalo Fijo</option>
           </select>
         </label>
 
