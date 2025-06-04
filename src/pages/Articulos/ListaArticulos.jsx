@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react'
 import { obtenerArticulos } from '../../services/apiArticulos'
 import { toast } from 'sonner'
+import {
+  MdAddCircle,
+  MdEdit,
+  MdDelete
+} from 'react-icons/md'
+import { IoMdPaper } from 'react-icons/io'
+import { BsFillBoxSeamFill } from "react-icons/bs";
 
 const Articulos = () => {
   const [articulos, setArticulos] = useState([])
@@ -42,8 +49,9 @@ const Articulos = () => {
       </h1>
       <a
         href='/articulos/alta'
-        className='bg-orange-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-orange-600 transition duration-200'
+        className='bg-orange-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-orange-600 transition duration-200 flex items-center w-fit gap-2'
       >
+        <MdAddCircle />
         Crear Artículo
       </a>
 
@@ -77,29 +85,43 @@ const Articulos = () => {
             articulos?.map((a) => (
               <li
                 key={a.codigo}
-                className='bg-white border-l-4 border-orange-300 text-orange-800 p-4 rounded shadow-sm flex justify-between items-center'
+                className='bg-white border-1 border-l-4 border-yellow-200 rounded-xl text-orange-800 p-4 shadow-sm flex justify-between items-center'
               >
-                <span>
+                {/* <span>
                   <strong>{a.descripcion}</strong> | Stock: {a.stock} | Tipo
                   modelo: {a.tipoModelo}
-                </span>
-                <div className='space-x-2'>
+                </span> */}
+                <div>
+                  <p className='flex items-center text-xl font-semibold text-orange-800 gap-2'>
+                    <span className='flex items-center justify-center size-10 bg-orange-200 rounded-full'>
+                      <BsFillBoxSeamFill className='' />
+                    </span>
+                    {a.descripcion}
+                  </p>
+                  <div className='ml-3 text-md'>
+                    <p>Stock: {a.stock} | Modelo Inventario: {a.tipoModelo}</p>
+                  </div>
+                </div>
+                <div className='flex flex-col items-start'>
                   <a
                     href={`/articulos/detalle/${a.codigo}`}
-                    className='text-green-600 hover:text-green-800'
+                    className='text-green-600 hover:text-green-800 flex items-center'
                   >
+                    <IoMdPaper className='text-lg text-green-500 mr-2' />
                     Ver detalle
                   </a>
                   <a
                     href={`/articulos/editar/${a.codigo}`}
-                    className='text-blue-600 hover:text-blue-800'
+                    className='text-blue-600 hover:text-blue-800 flex items-center'
                   >
+                    <MdEdit className='text-lg text-blue-500 mr-2' />
                     Editar
                   </a>
                   <button
                     onClick={() => handleEliminar(a.codigo)}
-                    className='text-red-600 hover:text-red-800'
+                    className='text-red-600 hover:text-red-800 cursor-pointer flex items-center'
                   >
+                    <MdDelete className='text-lg text-red-500 mr-2' />
                     Eliminar
                   </button>
                 </div>
