@@ -2,15 +2,11 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { toast } from 'sonner'
 import {obtenerArticulos } from '../../services/apiArticulos'
-import {editProveedor, obtenerProveedorPorId} from '../../services/apiProveedores'
+import {editProveedor, obtenerProveedorPorId, obtenerArticulosProveedor} from '../../services/apiProveedores'
 
 const EditarProveedor = () => {
   const { id } = useParams()
  const [proveedor, setProveedor] = useState(null)
-
-
-  //Datos temporales para Articulos, esto hay que traerlo de la API
-  const [articulos, setArticulos] = useState([])
 
   // Actualizar cualquier campo de un articulo del proveedor
   const handleChangeArticulo = (e, codigo) => {
@@ -117,13 +113,14 @@ const EditarProveedor = () => {
   }, [])
 
   // Llamar al servicio para obtener el proveedor por ID
+  const [articulos, setArticulos] = useState([])
 useEffect(() => {
   const fetchProveedor = async () => {
     const { errorMsg, data } = await obtenerProveedorPorId(id);
     if (errorMsg) {
       return toast.error(errorMsg);
     }
-    console.log('Proveedor recibido:', data);
+   
       setProveedor({
     ...data,
     articulos: Array.isArray(data.articulos) ? data.articulos : []
@@ -131,6 +128,20 @@ useEffect(() => {
   };
   fetchProveedor();
 }, [id]);
+
+ // Llamar al servicio para obtener Articulos de un proveedor por ID
+const [articulosProv, setArticulosProv] = useState([])
+  useEffect(() => {
+    const fetchArticulosProv = async () => {
+      const { data, errorMsg } = await obtenerArticulosProveedor(id)
+      if (errorMsg) return toast.error(errorMsg)
+      setArticulosProv(data[0]?.articuloProveedores || []) // Array dentro del objeto de Articulos (ArticuloProveedor)
+    console.log(data)
+    }
+    fetchArticulosProv()
+  }, [id])
+
+
   if (!proveedor) {
     return (
       <section className="bg-white p-6 rounded-lg shadow-md">
@@ -213,16 +224,23 @@ useEffect(() => {
             ))}
           </select>
         </div>
-        {proveedor.articulos && proveedor.articulos.length > 0 ? (
+        {articulosProv && articulosProv.length > 0 ? (
           <div className='col-span-full'>
             <h3 className='text-lg font-semibold text-orange-800 mb-2'>
               Articulos Seleccionados
             </h3>
             <ul className='list-disc pl-5 space-y-3'>
-              {proveedor.articulos.map((articulo) => (
+              {articulosProv.map((articulo) => (
+                
                 <li key={articulo.codigo} className='text-sm text-marron'>
                   <div className='flex items-center justify-between mb-2'>
-                    <span className='font-bold'> {articulo.descripcion}</span>
+                    <span className='font-bold'> 
+                        {
+                         articulos.find(a => Number(a.codigo) === Number(articulo.codigo))?.descripcion
+                          || 'Nada'
+                          }
+                          
+                                          </span>
                     <button
                       onClick={(e) => handleDeleteArticulo(e, articulo.codigo)}
                       className='bg-red-500 text-white p-1 rounded-md hover:bg-red-600'
@@ -269,7 +287,7 @@ useEffect(() => {
                       required
                       type='number'
                       name='precioUnitario'
-                      value={articulo.precioUnitario}
+                      value={articulo.preciounitario}
                       onChange={(e) => handleChangeArticulo(e, articulo.codigo)}
                       className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
                     />

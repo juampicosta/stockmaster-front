@@ -100,3 +100,20 @@ export const eliminarProveedor = async (id) => {
     return { errorMsg: error.message };
   }
 }
+
+// Obtener Articulos de un Proveedor por ID (GET)
+export const obtenerArticulosProveedor = async (idProveedor) => {
+  try {
+    const response = await fetch(`${API_URL}/${idProveedor}/articulos`);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data[0].mensaje || 'Error al obtener los artículos del proveedor');
+    }
+
+    return { data };
+  } catch (error) {
+    console.error('Error en obtenerArticulosProveedor:', error);
+    return { errorMsg: error.message }; // Devuelve un objeto con el mensaje de error
+  }
+}

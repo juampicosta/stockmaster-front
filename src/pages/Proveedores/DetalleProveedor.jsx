@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { obtenerProveedorPorId } from '../../services/apiProveedores'
+import { obtenerProveedorPorId, obtenerArticulosProveedor } from '../../services/apiProveedores'
 
 import {
   MdEmail,
@@ -18,7 +18,7 @@ const DetalleProveedor = () => {
 // Obtener el ID del proveedor desde los parámetros de la URL
  const { id } = useParams()
 
- // Llamar al servicio para obtener el proveedor por ID
+// Llamar al servicio para obtener el proveedor por ID
  const [proveedor, setProveedor] = useState(null)
   useEffect(() => {
     const fetchProveedor = async () => {
@@ -26,13 +26,24 @@ const DetalleProveedor = () => {
       if (errorMsg) {
         return toast.error(errorMsg);
       }
-      console.log('Proveedor recibido:', data);
       setProveedor(data)
     }
     fetchProveedor()
   }, [id])
 
+ // Llamar al servicio para obtener Articulos de un proveedor por ID
+const [articulos, setArticulos] = useState([])
+  useEffect(() => {
+    const fetchArticulos = async () => {
+      const { data, errorMsg } = await obtenerArticulosProveedor(id)
+      if (errorMsg) return toast.error(errorMsg)
+      setArticulos(data[0]?.articuloProveedores || []) // Array dentro del objeto de Articulos (ArticuloProveedor)
+    }
+    fetchArticulos()
+  }, [id])
 
+
+  //Para mostrar un mensaje de carga mientras se obtiene el proveedor y no de error
 if (!proveedor) {
   return (
     <div className="bg-white min-h-screen p-8 flex items-center justify-center">
@@ -77,8 +88,8 @@ if (!proveedor) {
       </div>
 
       <h2 className='text-2xl font-bold text-orange-800 mb-4'>Artículos</h2>
-      {proveedor.articulos?.length > 0 ? (
-        proveedor.articulos.map((art) => (
+      {articulos.length > 0 ? (
+        articulos.map((art) => (
           <div
             key={art.codigo}
             className='bg-white shadow border-l-4 border-orange-400 text-orange-900 p-5 rounded-lg mb-6 ml-8'
@@ -92,28 +103,28 @@ if (!proveedor) {
                 <MdMonetizationOn className='text-lg text-green-500 mr-2' />
                 <span>
                   <strong>Costo de Compra:</strong>{' '}
-                  {art.datosArticulo?.costoCompra}
+                  {art.costoCompra}
                 </span>
               </li>
               <li className='flex items-center'>
                 <MdLocalShipping className='text-lg text-blue-500 mr-2' />
                 <span>
                   <strong>Costo de Pedido:</strong>{' '}
-                  {art.datosArticulo?.costoPedido}
+                  {art.costoPedido}
                 </span>
               </li>
               <li className='flex items-center'>
                 <MdAccessTime className='text-lg text-yellow-600 mr-2' />
                 <span>
                   <strong>Demora de Entrega:</strong>{' '}
-                  {art.datosArticulo?.demoraEntrega}
+                  {art.demoraEntrega}
                 </span>
               </li>
               <li className='flex items-center'>
                 <MdAttachMoney className='text-lg text-green-700 mr-2' />
                 <span>
                   <strong>Precio Unitario:</strong>{' '}
-                  {art.datosArticulo?.precioUnitario}
+                  {art.preciounitario}
                 </span>
               </li>
             </ul>
