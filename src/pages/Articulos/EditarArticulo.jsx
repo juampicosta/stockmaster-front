@@ -18,82 +18,101 @@ const EditarArticulo = () => {
   // Cargar artículo y proveedores al montar el componente
   useEffect(() => {
     const cargarDatos = async () => {
-      const [{ data: articuloData }, { data: proveedoresData }] = await Promise.all([
-        obtenerArticuloPorId(id),
-        obtenerProveedores(),
-      ]);
+      try {
+        const [{ data: articuloData, errorMsg: errorArticulo }, { data: proveedoresData, errorMsg: errorProveedores }] = await Promise.all([
+          obtenerArticuloPorId(id),
+          obtenerProveedores(),
+        ]);
 
-      if (articuloData) {
-        setArticulo({
-          descripcion: articuloData.descripcion,
-          demandaArticulo: articuloData.demandaArticulo,
-          costoAlmacenamiento: articuloData.costoAlmacenamiento,
-          stock: articuloData.stock,
-          tipoModelo: articuloData.tipoModelo,
-          proveedorId: articuloData.provPredeterminado?.id || '',
-          precioUnitario: articuloData.articuloProveedores?.[0]?.precioUnitario || '',
-          costoCompra: articuloData.articuloProveedores?.[0]?.costoCompra || '',
-          demoraEntrega: articuloData.articuloProveedores?.[0]?.demoraEntrega || '',
-        });
+        if (errorArticulo) {
+          toast.error(errorArticulo);
+          return;
+        }
+
+        if (errorProveedores) {
+          toast.error(errorProveedores);
+          return;
+        }
+
+        if (articuloData) {
+          setArticulo({
+            descripcion: articuloData.descripcion,
+            demandaArticulo: articuloData.demandaArticulo,
+            costoAlmacenamiento: articuloData.costoAlmacenamiento,
+            stock: articuloData.stock,
+            tipoModelo: articuloData.tipoModelo,
+            proveedorId: articuloData.provPredeterminado?.id || '',
+            precioUnitario: articuloData.articuloProveedores?.[0]?.precioUnitario || '',
+            costoCompra: articuloData.articuloProveedores?.[0]?.costoCompra || '',
+            demoraEntrega: articuloData.articuloProveedores?.[0]?.demoraEntrega || '',
+          });
+        }
+
+        if (proveedoresData) {
+          setProveedores(proveedoresData);
+        }
+      } catch (error) {
+        toast.error(`Error al cargar los datos: ${error.message}`);
+      } finally {
+        setLoading(false);
       }
-
-      if (proveedoresData) {
-        setProveedores(proveedoresData);
-      }
-
-      setLoading(false);
     };
 
     cargarDatos();
   }, [id]);
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setArticulo(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-
-    // Convertir tipos
-    data.demandaArticulo = parseFloat(data.demandaArticulo);
-    data.costoAlmacenamiento = parseFloat(data.costoAlmacenamiento);
-    data.stock = parseInt(data.stock, 10);
 
     // Validaciones básicas
     if (
-      !data.descripcion ||
-      isNaN(data.demandaArticulo) ||
-      isNaN(data.costoAlmacenamiento) ||
-      isNaN(data.stock) ||
-      !data.tipoModelo
+      !articulo.descripcion ||
+      isNaN(parseFloat(articulo.demandaArticulo)) ||
+      isNaN(parseFloat(articulo.costoAlmacenamiento)) ||
+      isNaN(parseInt(articulo.stock)) ||
+      !articulo.tipoModelo
     ) {
       return toast.error('Los campos obligatorios no pueden estar vacíos o deben ser números válidos');
     }
 
-    if (data.demandaArticulo <= 0 || data.costoAlmacenamiento <= 0 || data.stock < 0) {
+    const demanda = parseFloat(articulo.demandaArticulo);
+    const costo = parseFloat(articulo.costoAlmacenamiento);
+    const stock = parseInt(articulo.stock);
+
+    if (demanda <= 0 || costo <= 0 || stock < 0) {
       return toast.error('Los valores numéricos deben ser mayores a cero.');
     }
 
     // Construir payload
     const payload = {
       articuloDTO: {
-        descripcion: data.descripcion,
-        demandaArticulo: data.demandaArticulo,
-        costoAlmacenamiento: data.costoAlmacenamiento,
-        stock: data.stock,
+        descripcion: articulo.descripcion,
+        demandaArticulo: demanda,
+        costoAlmacenamiento: costo,
+        stock: stock,
       },
-      tipoModelo: data.tipoModelo,
+      tipoModelo: articulo.tipoModelo,
     };
 
-    if (data.proveedorId) {
-      payload.idProveedor = parseInt(data.proveedorId, 10);
+    if (articulo.proveedorId) {
+      payload.idProveedor = parseInt(articulo.proveedorId, 10);
 
-      if (!data.precioUnitario || !data.costoCompra || !data.demoraEntrega) {
+      if (!articulo.precioUnitario || !articulo.costoCompra || !articulo.demoraEntrega) {
         return toast.error('Cuando seleccionas un proveedor, debes completar todos sus campos.');
       }
 
       payload.articuloProveedorDTO = {
-        precioUnitario: parseFloat(data.precioUnitario),
-        costoCompra: parseFloat(data.costoCompra),
-        demoraEntrega: parseFloat(data.demoraEntrega),
+        precioUnitario: parseFloat(articulo.precioUnitario),
+        costoCompra: parseFloat(articulo.costoCompra),
+        demoraEntrega: parseFloat(articulo.demoraEntrega),
       };
     }
 
@@ -127,7 +146,8 @@ const EditarArticulo = () => {
           <input
             type='text'
             name='descripcion'
-            defaultValue={articulo.descripcion}
+            value={articulo.descripcion}
+            onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
         </label>
@@ -138,7 +158,8 @@ const EditarArticulo = () => {
             type='number'
             name='demandaArticulo'
             step='any'
-            defaultValue={articulo.demandaArticulo}
+            value={articulo.demandaArticulo}
+            onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
         </label>
@@ -149,7 +170,8 @@ const EditarArticulo = () => {
             type='number'
             name='costoAlmacenamiento'
             step='any'
-            defaultValue={articulo.costoAlmacenamiento}
+            value={articulo.costoAlmacenamiento}
+            onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
         </label>
@@ -159,7 +181,8 @@ const EditarArticulo = () => {
           <input
             type='number'
             name='stock'
-            defaultValue={articulo.stock}
+            value={articulo.stock}
+            onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
         </label>
@@ -168,12 +191,15 @@ const EditarArticulo = () => {
           Proveedor (Opcional)
           <select
             name='proveedorId'
-            defaultValue={articulo.proveedorId}
-            className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
+            value={articulo.proveedorId}
             onChange={(e) => {
-              document.querySelector('.proveedor-fields-edit').style.display =
-                e.target.value ? 'block' : 'none';
+              handleInputChange(e);
+              const proveedorFields = document.querySelector('.proveedor-fields-edit');
+              if (proveedorFields) {
+                proveedorFields.style.display = e.target.value ? 'block' : 'none';
+              }
             }}
+            className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
             <option value=''>Seleccionar proveedor</option>
             {proveedores.map((prov) => (
@@ -185,38 +211,41 @@ const EditarArticulo = () => {
         </label>
 
         <div
-          className='proveedor-fields-edit'
+          className='proveedor-fields-edit w-full'
           style={{ display: articulo.proveedorId ? 'block' : 'none' }}
         >
-          <label className='block text-sm font-medium text-orange-800 w-full'>
+          <label className='block text-sm font-medium text-orange-800 w-full mb-2'>
             Precio Unitario
             <input
               type='number'
               name='precioUnitario'
               step='any'
-              defaultValue={articulo.precioUnitario}
+              value={articulo.precioUnitario}
+              onChange={handleInputChange}
               className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
             />
           </label>
 
-          <label className='block text-sm font-medium text-orange-800 w-full'>
+          <label className='block text-sm font-medium text-orange-800 w-full mb-2'>
             Costo de Compra
             <input
               type='number'
               name='costoCompra'
               step='any'
-              defaultValue={articulo.costoCompra}
+              value={articulo.costoCompra}
+              onChange={handleInputChange}
               className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
             />
           </label>
 
-          <label className='block text-sm font-medium text-orange-800 w-full'>
+          <label className='block text-sm font-medium text-orange-800 w-full mb-2'>
             Demora de Entrega
             <input
               type='number'
               name='demoraEntrega'
               step='any'
-              defaultValue={articulo.demoraEntrega}
+              value={articulo.demoraEntrega}
+              onChange={handleInputChange}
               className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
             />
           </label>
@@ -226,7 +255,8 @@ const EditarArticulo = () => {
           Tipo de Modelo
           <select
             name='tipoModelo'
-            defaultValue={articulo.tipoModelo}
+            value={articulo.tipoModelo}
+            onChange={handleInputChange}
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
             <option value=''>Seleccionar tipo de modelo</option>
@@ -247,4 +277,3 @@ const EditarArticulo = () => {
 };
 
 export default EditarArticulo;
-//NO se Guardan los cambios
