@@ -16,6 +16,8 @@ import ListaOrdenes from './pages/OrdenesDeCompra/ListaOrdenes'
 import AltaOrden from './pages/OrdenesDeCompra/AltaOrden'
 import EditarOrdenes from './pages/OrdenesDeCompra/EditarOrden'
 import DetalleOrdenes from './pages/OrdenesDeCompra/DetalleOrden'
+import EditarArticuloProveedor from './pages/Proveedores/EditarArticuloProveedor'
+import AgregarArticulosProveedor from './pages/Proveedores/AgregarArticulosProveedor'
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
         <Route path='/proveedores/alta-proveedor' element={<AltaProveedor />} />
         <Route path='/proveedores/editar/:id' element={<EditarProveedor />} />
         <Route path='/proveedores/detalle/:id' element={<DetalleProveedor />} />
+        <Route path="/proveedores/:id/articulos/:codigo" element={<EditarArticuloProveedor />} />
+       <Route path="/agregar-articulos/:id" element={<AgregarArticulosProveedor />} />
         <Route path='/' element={<ListaArticulos />} />
         <Route path='/articulos' element={<ListaArticulos />} />
         <Route path='/articulos/alta' element={<AltaArticulos />} />
@@ -33,6 +37,7 @@ function App() {
         <Route path='/articulos/detalle/:id' element={<DetalleArticulo />} />
         <Route path='/ordenes-de-compra' element={<ListaOrdenes />} />
         <Route path='/ordenes-de-compra/alta' element={<AltaOrden />} />
+        
         <Route
           path='/ordenes-de-compra/editar/:id'
           element={<EditarOrdenes />}
