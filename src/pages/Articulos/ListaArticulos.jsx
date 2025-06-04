@@ -87,10 +87,6 @@ const Articulos = () => {
                 key={a.codigo}
                 className='bg-white border-1 border-l-4 border-yellow-200 rounded-xl text-orange-800 p-4 shadow-sm flex justify-between items-center'
               >
-                {/* <span>
-                  <strong>{a.descripcion}</strong> | Stock: {a.stock} | Tipo
-                  modelo: {a.tipoModelo}
-                </span> */}
                 <div>
                   <p className='flex items-center text-xl font-semibold text-orange-800 gap-2'>
                     <span className='flex items-center justify-center size-10 bg-orange-200 rounded-full'>
