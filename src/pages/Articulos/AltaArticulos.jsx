@@ -1,38 +1,26 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { registrarArticulo, obtenerProveedores } from '../../services/apiArticulos';
-import { toast } from 'sonner';
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import {
+  registrarArticulo,
+  obtenerProveedores
+} from '../../services/apiArticulos'
+import { toast } from 'sonner'
 
 const AltaArticulos = () => {
-  const [proveedores, setProveedores] = useState([]);
-  const navigate = useNavigate();
+  const [proveedores, setProveedores] = useState([])
+  const [selectedProveedor, setSelectedProveedor] = useState(null)
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
+    e.preventDefault()
+    const formData = new FormData(e.target)
+    const data = Object.fromEntries(formData.entries())
 
     // Convertir tipos
-    data.demandaArticulo = parseFloat(data.demandaArticulo);
-    data.costoAlmacenamiento = parseFloat(data.costoAlmacenamiento);
-    data.stock = parseInt(data.stock, 10);
-
-    // Validaciones básicas
-    if (
-      !data.descripcion ||
-      isNaN(data.demandaArticulo) ||
-      isNaN(data.costoAlmacenamiento) ||
-      isNaN(data.stock) ||
-      !data.tipoModelo
-    ) {
-      return toast.error(
-        'Los campos obligatorios no pueden estar vacíos o deben ser números válidos'
-      );
-    }
-
-    if (data.demandaArticulo <= 0 || data.costoAlmacenamiento <= 0 || data.stock < 0) {
-      return toast.error('Los valores numéricos deben ser mayores a cero.');
-    }
+    data.demandaArticulo = parseFloat(data.demandaArticulo)
+    data.costoAlmacenamiento = parseFloat(data.costoAlmacenamiento)
+    data.stock = parseInt(data.stock, 10)
+    data.stockSeguridad = parseInt(data.stockSeguridad, 10)
 
     // Construir payload
     const payload = {
@@ -41,51 +29,58 @@ const AltaArticulos = () => {
         demandaArticulo: data.demandaArticulo,
         costoAlmacenamiento: data.costoAlmacenamiento,
         stock: data.stock,
+        stockSeguridad: data.stockSeguridad
       },
-      tipoModelo: data.tipoModelo,
-    };
+      tipoModelo: data.tipoModelo
+    }
 
     if (data.proveedorId) {
-      payload.idProveedor = parseInt(data.proveedorId, 10);
-
-      if (!data.precioUnitario || !data.costoCompra || !data.demoraEntrega) {
-        return toast.error('Cuando seleccionas un proveedor, debes completar todos sus campos.');
-      }
+      payload.idProveedor = parseInt(data.proveedorId, 10)
 
       payload.articuloProveedorDTO = {
         precioUnitario: parseFloat(data.precioUnitario),
         costoCompra: parseFloat(data.costoCompra),
-        demoraEntrega: parseFloat(data.demoraEntrega),
-      };
+        demoraEntrega: parseFloat(data.demoraEntrega)
+      }
     }
 
     try {
-      const { errorMsg } = await registrarArticulo(payload);
+      const { errorMsg } = await registrarArticulo(payload)
 
-      if (errorMsg) throw new Error(errorMsg);
+      if (errorMsg) throw new Error(errorMsg)
 
-      toast.success('Artículo creado correctamente');
-      e.target.reset();
-      document.querySelector('.proveedor-fields').style.display = 'none';
-      navigate('/articulos'); // Redirige a la lista
+      toast.success('Artículo creado correctamente')
+      e.target.reset()
+      navigate('/articulos') // Redirige a la lista
     } catch (error) {
-      toast.error(error.message || 'Error al crear el artículo');
+      toast.error(error.message || 'Error al crear el artículo')
     }
-  };
+  }
 
   useEffect(() => {
     const fetchProveedores = async () => {
-      const { data, errorMsg } = await obtenerProveedores();
+      const { data, errorMsg } = await obtenerProveedores()
 
       if (errorMsg) {
-        return toast.error(errorMsg);
+        return toast.error(errorMsg)
       }
 
-      setProveedores(data); // Debe devolver un array plano de proveedores
-    };
+      setProveedores(data) // Debe devolver un array plano de proveedores
+    }
 
-    fetchProveedores();
-  }, []);
+    fetchProveedores()
+  }, [])
+  // Actualizar campos del proveedor
+  const handleChangeProveedor = (e) => {
+    e.preventDefault()
+    const { name, value } = e.target
+    setSelectedProveedor((prevState) => {
+      return {
+        ...prevState,
+        [name]: value
+      }
+    })
+  }
 
   return (
     <section className='min-h-screen p-8'>
@@ -101,6 +96,7 @@ const AltaArticulos = () => {
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Descripción
           <input
+            required
             type='text'
             name='descripcion'
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
@@ -110,6 +106,8 @@ const AltaArticulos = () => {
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Demanda del Artículo
           <input
+            required
+            min={0}
             type='number'
             name='demandaArticulo'
             step='any'
@@ -120,6 +118,8 @@ const AltaArticulos = () => {
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Costo de Almacenamiento
           <input
+            required
+            min={0}
             type='number'
             name='costoAlmacenamiento'
             step='any'
@@ -130,8 +130,21 @@ const AltaArticulos = () => {
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Stock
           <input
+            required
+            min={0}
             type='number'
             name='stock'
+            className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+          />
+        </label>
+
+        <label className='block text-sm font-medium text-orange-800 w-full'>
+          Stock de Seguridad
+          <input
+            required
+            min={0}
+            type='number'
+            name='stockSeguridad'
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
         </label>
@@ -141,10 +154,7 @@ const AltaArticulos = () => {
           <select
             name='proveedorId'
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
-            onChange={(e) => {
-              document.querySelector('.proveedor-fields').style.display =
-                e.target.value ? 'block' : 'none';
-            }}
+            onChange={handleChangeProveedor}
           >
             <option value=''>Seleccionar proveedor</option>
             {proveedores.map((prov) => (
@@ -155,41 +165,50 @@ const AltaArticulos = () => {
           </select>
         </label>
 
-        <div className='proveedor-fields' style={{ display: 'none' }}>
-          <label className='block text-sm font-medium text-orange-800 w-full'>
-            Precio Unitario
-            <input
-              type='number'
-              name='precioUnitario'
-              step='any'
-              className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-            />
-          </label>
+        {selectedProveedor?.proveedorId && (
+          <div>
+            <label className='block text-sm font-medium text-orange-800 w-full'>
+              Precio Unitario
+              <input
+                required
+                min={0}
+                type='number'
+                name='precioUnitario'
+                step='any'
+                className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+              />
+            </label>
 
-          <label className='block text-sm font-medium text-orange-800 w-full'>
-            Costo de Compra
-            <input
-              type='number'
-              name='costoCompra'
-              step='any'
-              className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-            />
-          </label>
+            <label className='block text-sm font-medium text-orange-800 w-full'>
+              Costo de Compra
+              <input
+                required
+                min={0}
+                type='number'
+                name='costoCompra'
+                step='any'
+                className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+              />
+            </label>
 
-          <label className='block text-sm font-medium text-orange-800 w-full'>
-            Demora de Entrega
-            <input
-              type='number'
-              name='demoraEntrega'
-              step='any'
-              className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-            />
-          </label>
-        </div>
+            <label className='block text-sm font-medium text-orange-800 w-full'>
+              Demora de Entrega
+              <input
+                required
+                min={0}
+                type='number'
+                name='demoraEntrega'
+                step='any'
+                className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+              />
+            </label>
+          </div>
+        )}
 
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Tipo de Modelo
           <select
+            required
             name='tipoModelo'
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
@@ -207,7 +226,7 @@ const AltaArticulos = () => {
         </button>
       </form>
     </section>
-  );
-};
+  )
+}
 
-export default AltaArticulos;
+export default AltaArticulos
