@@ -13,7 +13,7 @@ const AltaVenta = () => {
     const idArticulo = formData.get('idArticulo')
 
     const dataToSend = {
-      cantidad,
+      cantidad: parseInt(cantidad),
       idArticulo
     }
 
