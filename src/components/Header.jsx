@@ -1,12 +1,12 @@
 const Header = () => {
   return (
     <>
-      <header className='bg-beige text-orange-900 rounded-b-lg rounded-bl-none sticky top-0 z-50 h-24 flex items-center justify-between px-6 shadow-xl'>
+      <header className='bg-beige text-orange-900 rounded-b-lg rounded-bl-none sticky top-0 z-50 h-20 flex items-center justify-between px-6 shadow-xl'>
         <div className='flex items-center space-x-4'>
           <img
             src='/LogoSM.jpg'
             alt='Logo'
-            className='w-20 h-20 rounded-full shadow-md'
+            className='size-16 rounded-full shadow-md'
           />
 
           <span className='text-md font-bold'>Gestor de Inventarios</span>
@@ -15,31 +15,31 @@ const Header = () => {
         <nav className='flex items-center space-x-6'>
           <a
             href='/inicio'
-            className='text-lg font-semibold hover:text-orange-600'
+            className='text-base font-semibold hover:text-orange-600'
           >
             Inicio
           </a>
           <a
             href='/articulos'
-            className='text-lg font-semibold hover:text-orange-600'
+            className='text-base font-semibold hover:text-orange-600'
           >
             Artículos
           </a>
           <a
             href='/ordenes-de-compra'
-            className='text-lg font-semibold hover:text-orange-600'
+            className='text-base font-semibold hover:text-orange-600'
           >
             Órdenes de Compra
           </a>
           <a
             href='/proveedores'
-            className='text-lg font-semibold hover:text-orange-600'
+            className='text-base font-semibold hover:text-orange-600'
           >
             Proveedores
           </a>
           <a
             href='/ventas'
-            className='text-lg font-semibold hover:text-orange-600'
+            className='text-base font-semibold hover:text-orange-600'
           >
             Ventas
           </a>
