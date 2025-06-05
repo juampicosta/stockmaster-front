@@ -86,12 +86,10 @@ const EditarArticulo = () => {
 
     // Construir payload
     const payload = {
-      articuloDTO: {
-        descripcion: articulo.descripcion,
-        demandaArticulo: demanda,
-        costoAlmacenamiento: costo,
-        stock: stock
-      },
+      descripcion: articulo.descripcion,
+      demandaArticulo: demanda,
+      costoAlmacenamiento: costo,
+      stock: stock,
       tipoModelo: articulo.tipoModelo
     }
 
