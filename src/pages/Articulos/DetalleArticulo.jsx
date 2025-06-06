@@ -139,7 +139,7 @@ const DetalleArticulo = () => {
                 <div>
                   <h3 className='text-lg font-semibold text-orange-800 mb-2'>
                     {articuloProveedor.proveedor?.razonSocial ||
-                      `Proveedor ${index + 1}`}
+                      `Proveedor ${articuloProveedor.proveedor.id}`}
                   </h3>
                   <div className='grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-orange-700'>
                     <div>
