@@ -115,7 +115,7 @@ const DetalleProveedor = () => {
                 );
               return (
                 <li
-                  key={articulo.codigo}
+                  key={articulo.articulo.codigo}
                   className="flex justify-between items-center bg-crema shadow-lg border border-yellow-200 rounded-xl p-6"
                 >
                   <div className="flex flex-col justify-center items-start">
@@ -168,7 +168,7 @@ const DetalleProveedor = () => {
                   </div>
                   <div className="flex flex-col items-end gap-2">
                     <Link
-                      to={`/proveedores/${id}/articulos/${articulo.codigo}`}
+                      to={`/proveedores/${id}/articulos/${articulo.articulo.codigo}`}
                       className="flex items-center text-blue-600 hover:underline"
                     >
                       <MdEdit className="text-lg text-blue-500 mr-2" />

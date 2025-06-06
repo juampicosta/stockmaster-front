@@ -132,6 +132,7 @@ export const editArticuloProveedor = async (idProveedor, codigoArticulo, datos) 
 
    
   if (!response.ok) {
+
       const data = await response.json()
       throw new Error(data?.mensaje || 'Error al editar el artículo del proveedor')
     }
