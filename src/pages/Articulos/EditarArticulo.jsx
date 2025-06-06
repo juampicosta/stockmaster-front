@@ -1,37 +1,38 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import {
   obtenerArticuloPorId,
   obtenerProveedores,
-  actualizarArticulo,
-} from '../../services/apiArticulos';
-import { toast } from 'sonner';
+  actualizarArticulo
+} from '../../services/apiArticulos'
+import { toast } from 'sonner'
 
 const EditarArticulo = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id } = useParams()
 
-  const [articulo, setArticulo] = useState(null);
-  const [proveedores, setProveedores] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
+
+  const [articulo, setArticulo] = useState(null)
+  const [proveedores, setProveedores] = useState([])
+  const [loading, setLoading] = useState(true)
 
   // Cargar artículo y proveedores al montar el componente
   useEffect(() => {
     const cargarDatos = async () => {
       try {
-        const [{ data: articuloData, errorMsg: errorArticulo }, { data: proveedoresData, errorMsg: errorProveedores }] = await Promise.all([
-          obtenerArticuloPorId(id),
-          obtenerProveedores(),
-        ]);
+        const [
+          { data: articuloData, errorMsg: errorArticulo },
+          { data: proveedoresData, errorMsg: errorProveedores }
+        ] = await Promise.all([obtenerArticuloPorId(id), obtenerProveedores()])
 
         if (errorArticulo) {
-          toast.error(errorArticulo);
-          return;
+          toast.error(errorArticulo)
+          return
         }
 
         if (errorProveedores) {
-          toast.error(errorProveedores);
-          return;
+          toast.error(errorProveedores)
+          return
         }
 
         if (articuloData) {
@@ -41,94 +42,68 @@ const EditarArticulo = () => {
             costoAlmacenamiento: articuloData.costoAlmacenamiento,
             stock: articuloData.stock,
             tipoModelo: articuloData.tipoModelo,
-            proveedorId: articuloData.provPredeterminado?.id || '',
-            precioUnitario: articuloData.articuloProveedores?.[0]?.precioUnitario || '',
-            costoCompra: articuloData.articuloProveedores?.[0]?.costoCompra || '',
-            demoraEntrega: articuloData.articuloProveedores?.[0]?.demoraEntrega || '',
-          });
+            proveedorId: articuloData.provPredeterminado?.id || ''
+          })
         }
 
         if (proveedoresData) {
-          setProveedores(proveedoresData);
+          setProveedores(proveedoresData)
         }
       } catch (error) {
-        toast.error(`Error al cargar los datos: ${error.message}`);
+        toast.error(`Error al cargar los datos: ${error.message}`)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-
-    cargarDatos();
-  }, [id]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setArticulo(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Validaciones básicas
-    if (
-      !articulo.descripcion ||
-      isNaN(parseFloat(articulo.demandaArticulo)) ||
-      isNaN(parseFloat(articulo.costoAlmacenamiento)) ||
-      isNaN(parseInt(articulo.stock)) ||
-      !articulo.tipoModelo
-    ) {
-      return toast.error('Los campos obligatorios no pueden estar vacíos o deben ser números válidos');
     }
 
-    const demanda = parseFloat(articulo.demandaArticulo);
-    const costo = parseFloat(articulo.costoAlmacenamiento);
-    const stock = parseInt(articulo.stock);
+    cargarDatos()
+  }, [id])
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setArticulo((prev) => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    const demanda = parseFloat(articulo.demandaArticulo)
+    const costo = parseFloat(articulo.costoAlmacenamiento)
+    const stock = parseInt(articulo.stock)
 
     if (demanda <= 0 || costo <= 0 || stock < 0) {
-      return toast.error('Los valores numéricos deben ser mayores a cero.');
+      return toast.error('Los valores numéricos deben ser mayores a cero.')
     }
 
     // Construir payload
     const payload = {
-      articuloDTO: {
-        descripcion: articulo.descripcion,
-        demandaArticulo: demanda,
-        costoAlmacenamiento: costo,
-        stock: stock,
-      },
-      tipoModelo: articulo.tipoModelo,
-    };
+      descripcion: articulo.descripcion,
+      demandaArticulo: demanda,
+      costoAlmacenamiento: costo,
+      stock: stock,
+      tipoModelo: articulo.tipoModelo
+    }
 
     if (articulo.proveedorId) {
-      payload.idProveedor = parseInt(articulo.proveedorId, 10);
-
-      if (!articulo.precioUnitario || !articulo.costoCompra || !articulo.demoraEntrega) {
-        return toast.error('Cuando seleccionas un proveedor, debes completar todos sus campos.');
-      }
-
-      payload.articuloProveedorDTO = {
-        precioUnitario: parseFloat(articulo.precioUnitario),
-        costoCompra: parseFloat(articulo.costoCompra),
-        demoraEntrega: parseFloat(articulo.demoraEntrega),
-      };
+      payload.idProvPredeterminado = parseInt(articulo.proveedorId, 10)
     }
 
     try {
-      const { errorMsg } = await actualizarArticulo(id, payload);
+      const { errorMsg } = await actualizarArticulo(id, payload)
 
-      if (errorMsg) throw new Error(errorMsg);
+      if (errorMsg) throw new Error(errorMsg)
 
-      toast.success('Artículo actualizado correctamente');
-      navigate('/articulos'); // Redirige al listado
+      toast.success('Artículo actualizado correctamente')
+      navigate('/articulos') // Redirige al listado
     } catch (error) {
-      toast.error(error.message || 'Error al actualizar el artículo');
+      toast.error(error.message || 'Error al actualizar el artículo')
     }
-  };
+  }
 
-  if (loading || !articulo) return <p>Cargando datos...</p>;
+  if (loading || !articulo) return <p>Cargando datos...</p>
 
   return (
     <section className='min-h-screen p-8'>
@@ -144,9 +119,10 @@ const EditarArticulo = () => {
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Descripción
           <input
+            required
             type='text'
             name='descripcion'
-            value={articulo.descripcion}
+            value={articulo?.descripcion}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -155,10 +131,12 @@ const EditarArticulo = () => {
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Demanda del Artículo
           <input
+            required
             type='number'
             name='demandaArticulo'
             step='any'
-            value={articulo.demandaArticulo}
+            min={0}
+            value={articulo?.demandaArticulo}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -167,10 +145,12 @@ const EditarArticulo = () => {
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Costo de Almacenamiento
           <input
+            required
             type='number'
+            min={0}
             name='costoAlmacenamiento'
             step='any'
-            value={articulo.costoAlmacenamiento}
+            value={articulo?.costoAlmacenamiento}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -179,9 +159,11 @@ const EditarArticulo = () => {
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Stock
           <input
+            required
+            min={0}
             type='number'
             name='stock'
-            value={articulo.stock}
+            value={articulo?.stock}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -191,13 +173,9 @@ const EditarArticulo = () => {
           Proveedor (Opcional)
           <select
             name='proveedorId'
-            value={articulo.proveedorId}
+            value={articulo?.proveedorId}
             onChange={(e) => {
-              handleInputChange(e);
-              const proveedorFields = document.querySelector('.proveedor-fields-edit');
-              if (proveedorFields) {
-                proveedorFields.style.display = e.target.value ? 'block' : 'none';
-              }
+              handleInputChange(e)
             }}
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
@@ -210,52 +188,11 @@ const EditarArticulo = () => {
           </select>
         </label>
 
-        <div
-          className='proveedor-fields-edit w-full'
-          style={{ display: articulo.proveedorId ? 'block' : 'none' }}
-        >
-          <label className='block text-sm font-medium text-orange-800 w-full mb-2'>
-            Precio Unitario
-            <input
-              type='number'
-              name='precioUnitario'
-              step='any'
-              value={articulo.precioUnitario}
-              onChange={handleInputChange}
-              className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-            />
-          </label>
-
-          <label className='block text-sm font-medium text-orange-800 w-full mb-2'>
-            Costo de Compra
-            <input
-              type='number'
-              name='costoCompra'
-              step='any'
-              value={articulo.costoCompra}
-              onChange={handleInputChange}
-              className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-            />
-          </label>
-
-          <label className='block text-sm font-medium text-orange-800 w-full mb-2'>
-            Demora de Entrega
-            <input
-              type='number'
-              name='demoraEntrega'
-              step='any'
-              value={articulo.demoraEntrega}
-              onChange={handleInputChange}
-              className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-            />
-          </label>
-        </div>
-
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Tipo de Modelo
           <select
             name='tipoModelo'
-            value={articulo.tipoModelo}
+            value={articulo?.tipoModelo}
             onChange={handleInputChange}
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
@@ -273,7 +210,7 @@ const EditarArticulo = () => {
         </button>
       </form>
     </section>
-  );
-};
+  )
+}
 
-export default EditarArticulo;
+export default EditarArticulo
