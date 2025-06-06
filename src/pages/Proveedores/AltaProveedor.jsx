@@ -89,10 +89,10 @@ const AltaProveedor = () => {
         idArticulo: value,
         descripcion: e.target.options[e.target.selectedIndex].text,
         datosArticulo: {
-          costoCompra: 0,
-          costoPedido: 0,
-          demoraEntrega: 0,
-          precioUnitario: 0
+          costoCompra: '',
+          costoPedido: '',
+          demoraEntrega: '',
+          precioUnitario: '',
         }
       }
     ])

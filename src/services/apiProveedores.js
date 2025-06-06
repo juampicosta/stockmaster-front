@@ -100,3 +100,87 @@ export const eliminarProveedor = async (id) => {
     return { errorMsg: error.message };
   }
 }
+
+// Obtener Articulos de un Proveedor por ID (GET)
+export const obtenerArticulosProveedor = async (idProveedor) => {
+  try {
+    const response = await fetch(`${API_URL}/${idProveedor}/articulos`);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data[0].mensaje || 'Error al obtener los artículos del proveedor');
+    }
+
+    return { data };
+  } catch (error) {
+    console.error('Error en obtenerArticulosProveedor:', error);
+    return { errorMsg: error.message }; // Devuelve un objeto con el mensaje de error
+  }
+}
+
+// Editar Articulo de un Proveedor (PUT)
+export const editArticuloProveedor = async (idProveedor, codigoArticulo, datos) => {
+  try {
+    const response = await fetch(`${API_URL}/${idProveedor}/articulos/${codigoArticulo}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datos)
+    });
+
+   
+  if (!response.ok) {
+      const data = await response.json()
+      throw new Error(data?.mensaje || 'Error al editar el artículo del proveedor')
+    }
+
+    return {ok: true};
+  } catch (error) {
+    console.error('Error en editarArticuloProveedor:', error);
+    return { errorMsg: error.message }; // Devuelve un objeto con el mensaje de error
+  }
+}
+
+
+//Obtener articulos ajenos (PUT)
+export const obtenerArticulosAjenos = async (idProveedor) => {
+  try {
+    const response = await fetch(`${API_URL}/${idProveedor}/articulos-ajenos`);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data[0]?.mensaje || 'Error al obtener los artículos ajenos');
+    }
+
+    return { data };
+  } catch (error) {
+    console.error('Error en obtenerArticulosAjenos:', error);
+    return { errorMsg: error.message };
+  }
+};
+
+
+//Para agregar un artículo ajeno a un proveedor (PUT)
+export const vincularArticuloProveedor = async (idArticulo, idProveedor, datos) => {
+  try {
+const url = `http://localhost:8080/vincular/${idArticulo}/${idProveedor}`;
+    console.log("Enviando a:", url); // <-- Esto te muestra la URL en la consola
+    const response = await fetch(url, {
+      method: 'PUT', 
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datos)
+    });
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data?.mensaje || 'Error al vincular el artículo al proveedor');
+    }
+
+    return { ok: true };
+  } catch (error) {
+    console.error('Error en vincularArticuloProveedor:', error);
+    return { errorMsg: error.message };
+  }
+};
