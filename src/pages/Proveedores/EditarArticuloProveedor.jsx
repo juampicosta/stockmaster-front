@@ -37,24 +37,24 @@ const EditarArticuloProveedor = () => {
         return;
       }
       // Buscar el artículo correcto por código
-      const articulo = data.find((a) => String(a.codigo) === String(codigo));
+      const articulo = data.find((a) => String(a.articulo.codigo) === String(codigo));
       if (!articulo) {
         toast.error("No se encontró el artículo para este proveedor");
         return;
       }
-      // Extraer los datos de la relación (puede variar según tu backend)
-      const datosRelacion = Array.isArray(articulo.articuloProveedores)
-        ? articulo.articuloProveedores.find(
+      // Extraer los datos de la relación 
+      const datosRelacion = Array.isArray(articulo.articulo.articuloProveedores)
+        ? articulo.articulo.articuloProveedores.find(
             (rel) => String(rel.proveedor.id) === String(id)
           )
-        : articulo.articuloProveedores;
+        : articulo.articulo.articuloProveedores;
 
       setRelacion({
         costoPedido: datosRelacion?.costoPedido ?? "",
         demoraEntrega: datosRelacion?.demoraEntrega ?? "",
         precioUnitario: datosRelacion?.preciounitario ?? "",
       });
-      setArticuloNombre(articulo.descripcion || articulo.nombre || "");
+      setArticuloNombre(articulo.articulo.descripcion || "");
       setProveedor(datosRelacion?.proveedor || null);
     };
     fetchRelacion();
