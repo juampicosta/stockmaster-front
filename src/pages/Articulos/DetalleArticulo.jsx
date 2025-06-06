@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom' 
+import { useParams, Link } from 'react-router-dom' 
 import { obtenerArticuloPorId } from '../../services/apiArticulos'
 import { toast } from 'sonner'
 import { BsFillBoxSeamFill, BsGraphUpArrow } from 'react-icons/bs'
@@ -15,13 +15,9 @@ import { GiPriceTag } from 'react-icons/gi'
 
 const DetalleArticulo = () => {
   const { id } = useParams()
-  const navigate = useNavigate()
   const [articulo, setArticulo] = useState(null)
   const [loading, setLoading] = useState(true)
 
-    const handleEditarArticuloProveedor = (proveedorId, articuloCodigo) => {
-    navigate(`/proveedores/${proveedorId}/articulos/editar/${articuloCodigo}`)
-  }
 
   useEffect(() => {
     const fetchArticulo = async () => {
@@ -172,18 +168,12 @@ const DetalleArticulo = () => {
                   </div>
                 </div>
                 <div className='flex gap-2'>
-                  <button 
+                  <Link 
+                    to={`/proveedores/${id}/articulos/${articulo.codigo}`}
                     className='text-blue-600 hover:text-blue-800 px-3 py-1 rounded border border-blue-300 hover:bg-blue-50 transition duration-200'
-                    onClick={() => handleEditarArticuloProveedor(
-                      articuloProveedor.proveedor.id, 
-                      articulo.codigo
-                    )}
                   >
                     Editar
-                  </button>
-                  <button className='text-red-600 hover:text-red-800 px-3 py-1 rounded border border-red-300 hover:bg-red-50 transition duration-200'>
-                    Eliminar
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
