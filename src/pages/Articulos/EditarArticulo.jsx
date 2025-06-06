@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 
 const EditarArticulo = () => {
   const { id } = useParams()
+
   const navigate = useNavigate()
 
   const [articulo, setArticulo] = useState(null)
@@ -34,8 +35,8 @@ const EditarArticulo = () => {
           return
         }
 
-        const proveedorPredeterminado = articuloData.articuloProveedores?.find(
-          (prov) => articuloData.provPredeterminado.id === prov.proveedor.id
+        const proveedorPredeterminado = articuloData?.articuloProveedores?.find(
+          (prov) => articuloData?.provPredeterminado?.id === prov?.proveedor.id
         )
 
         if (articuloData) {
@@ -134,7 +135,7 @@ const EditarArticulo = () => {
             required
             type='text'
             name='descripcion'
-            value={articulo.descripcion}
+            value={articulo?.descripcion}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -148,7 +149,7 @@ const EditarArticulo = () => {
             name='demandaArticulo'
             step='any'
             min={0}
-            value={articulo.demandaArticulo}
+            value={articulo?.demandaArticulo}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -162,7 +163,7 @@ const EditarArticulo = () => {
             min={0}
             name='costoAlmacenamiento'
             step='any'
-            value={articulo.costoAlmacenamiento}
+            value={articulo?.costoAlmacenamiento}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -175,7 +176,7 @@ const EditarArticulo = () => {
             min={0}
             type='number'
             name='stock'
-            value={articulo.stock}
+            value={articulo?.stock}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -185,7 +186,7 @@ const EditarArticulo = () => {
           Proveedor (Opcional)
           <select
             name='proveedorId'
-            value={articulo.proveedorId}
+            value={articulo?.proveedorId}
             onChange={(e) => {
               handleInputChange(e)
             }}
@@ -209,7 +210,7 @@ const EditarArticulo = () => {
                 type='number'
                 name='precioUnitario'
                 step='any'
-                value={articulo.precioUnitario}
+                value={articulo?.precioUnitario}
                 onChange={handleInputChange}
                 className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
               />
@@ -222,7 +223,7 @@ const EditarArticulo = () => {
                 type='number'
                 name='costoCompra'
                 step='any'
-                value={articulo.costoCompra}
+                value={articulo?.costoCompra}
                 onChange={handleInputChange}
                 className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
               />
@@ -234,7 +235,7 @@ const EditarArticulo = () => {
                 type='number'
                 name='demoraEntrega'
                 step='any'
-                value={articulo.demoraEntrega}
+                value={articulo?.demoraEntrega}
                 onChange={handleInputChange}
                 className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
               />
@@ -246,7 +247,7 @@ const EditarArticulo = () => {
           Tipo de Modelo
           <select
             name='tipoModelo'
-            value={articulo.tipoModelo}
+            value={articulo?.tipoModelo}
             onChange={handleInputChange}
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
