@@ -6,6 +6,7 @@ import {
   actualizarArticulo
 } from '../../services/apiArticulos'
 import { toast } from 'sonner'
+import { obtenerTipoModeloInventarios } from '../../services/apiTipoModeloInventario'
 
 const EditarArticulo = () => {
   const { id } = useParams()
@@ -14,6 +15,7 @@ const EditarArticulo = () => {
 
   const [articulo, setArticulo] = useState(null)
   const [proveedores, setProveedores] = useState([])
+  const [tipoModelos, setTipoModelos] = useState([])
   const [loading, setLoading] = useState(true)
 
   // Cargar artículo y proveedores al montar el componente
@@ -22,8 +24,13 @@ const EditarArticulo = () => {
       try {
         const [
           { data: articuloData, errorMsg: errorArticulo },
-          { data: proveedoresData, errorMsg: errorProveedores }
-        ] = await Promise.all([obtenerArticuloPorId(id), obtenerProveedores()])
+          { data: proveedoresData, errorMsg: errorProveedores },
+          { data: tipoModelosData, errorMsg: errorTipoModelos }
+        ] = await Promise.all([
+          obtenerArticuloPorId(id),
+          obtenerProveedores(),
+          obtenerTipoModeloInventarios()
+        ])
 
         if (errorArticulo) {
           toast.error(errorArticulo)
@@ -35,19 +42,21 @@ const EditarArticulo = () => {
           return
         }
 
+        if (errorTipoModelos) {
+          toast.error(errorTipoModelos)
+          return
+        }
+
         if (articuloData) {
-          setArticulo({
-            descripcion: articuloData.descripcion,
-            demandaArticulo: articuloData.demandaArticulo,
-            costoAlmacenamiento: articuloData.costoAlmacenamiento,
-            stock: articuloData.stock,
-            tipoModelo: articuloData.tipoModelo,
-            proveedorId: articuloData.provPredeterminado?.id || ''
-          })
+          setArticulo(articuloData)
         }
 
         if (proveedoresData) {
           setProveedores(proveedoresData)
+        }
+
+        if (tipoModelosData) {
+          setTipoModelos(tipoModelosData)
         }
       } catch (error) {
         toast.error(`Error al cargar los datos: ${error.message}`)
@@ -69,22 +78,27 @@ const EditarArticulo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    const form = new FormData(e.target)
+    const formValues = Object.fromEntries(form.entries())
 
-    const demanda = parseFloat(articulo.demandaArticulo)
-    const costo = parseFloat(articulo.costoAlmacenamiento)
-    const stock = parseInt(articulo.stock)
-
-    if (demanda <= 0 || costo <= 0 || stock < 0) {
-      return toast.error('Los valores numéricos deben ser mayores a cero.')
-    }
+    const demanda = parseFloat(formValues.demandaArticulo)
+    const costo = parseFloat(formValues.costoAlmacenamiento)
+    const stock = parseInt(formValues.stock)
+    const stockSeguridad = parseInt(formValues.stockSeguridad)
+    const precioVenta = parseFloat(formValues.precioVenta)
+    const idTipoModelo = parseInt(formValues.tipoModeloId)
+    const idProvPredeterminado = parseInt(formValues.proveedorId)
 
     // Construir payload
     const payload = {
       descripcion: articulo.descripcion,
       demandaArticulo: demanda,
       costoAlmacenamiento: costo,
-      stock: stock,
-      tipoModelo: articulo.tipoModelo
+      stock,
+      stockSeguridad,
+      precioVenta,
+      idTipoModelo,
+      idProvPredeterminado
     }
 
     if (articulo.proveedorId) {
@@ -122,7 +136,7 @@ const EditarArticulo = () => {
             required
             type='text'
             name='descripcion'
-            value={articulo?.descripcion}
+            defaultValue={articulo?.descripcion}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -136,7 +150,7 @@ const EditarArticulo = () => {
             name='demandaArticulo'
             step='any'
             min={0}
-            value={articulo?.demandaArticulo}
+            defaultValue={articulo?.demandaArticulo}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -150,7 +164,7 @@ const EditarArticulo = () => {
             min={0}
             name='costoAlmacenamiento'
             step='any'
-            value={articulo?.costoAlmacenamiento}
+            defaultValue={articulo?.costoAlmacenamiento}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -163,7 +177,20 @@ const EditarArticulo = () => {
             min={0}
             type='number'
             name='stock'
-            value={articulo?.stock}
+            defaultValue={articulo?.stock}
+            onChange={handleInputChange}
+            className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+          />
+        </label>
+
+        <label className='block text-sm font-medium text-orange-800 w-full'>
+          Stock de Seguridad
+          <input
+            required
+            min={0}
+            type='number'
+            name='stockSeguridad'
+            defaultValue={articulo?.stock_seguridad}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -173,7 +200,7 @@ const EditarArticulo = () => {
           Proveedor (Opcional)
           <select
             name='proveedorId'
-            value={articulo?.proveedorId}
+            defaultValue={articulo?.provPredeterminado?.id || ''}
             onChange={(e) => {
               handleInputChange(e)
             }}
@@ -191,14 +218,17 @@ const EditarArticulo = () => {
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Tipo de Modelo
           <select
-            name='tipoModelo'
-            value={articulo?.tipoModelo}
+            name='tipoModeloId'
+            defaultValue={articulo?.tipoModeloInventario.id}
             onChange={handleInputChange}
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
             <option value=''>Seleccionar tipo de modelo</option>
-            <option value='Intervalo Lote Fijo'>Intervalo Lote Fijo</option>
-            <option value='Otro'>Otro</option>
+            {tipoModelos.map((modelo) => (
+              <option key={modelo.id} value={modelo.id}>
+                {modelo.descripcion}
+              </option>
+            ))}
           </select>
         </label>
 
