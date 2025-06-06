@@ -23,7 +23,6 @@ const DetalleOrden = () => {
   useEffect(() => {
     const fetchData = async () => {
       const { data, errorMsg } = await obtenerOrden(id)
-      console.log(data)
 
       if (errorMsg) {
         return toast.error(errorMsg)
@@ -34,8 +33,6 @@ const DetalleOrden = () => {
 
     fetchData()
   }, [id])
-
-  console.log(orden)
 
   return (
     <div className='bg-gradient-to-br from-orange-50 to-white min-h-screen p-8'>

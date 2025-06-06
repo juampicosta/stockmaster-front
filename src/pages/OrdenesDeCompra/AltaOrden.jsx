@@ -20,8 +20,6 @@ const AltaOrden = () => {
     const articuloId = formData.get('articuloId')
     const proveedorId = formData.get('proveedorId')
 
-    console.log('proveedorId', proveedorId)
-
     const dataToSend = {
       lote: parseInt(lote),
       codigoArticulo: parseInt(articuloId),

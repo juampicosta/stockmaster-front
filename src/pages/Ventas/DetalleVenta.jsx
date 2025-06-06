@@ -18,7 +18,6 @@ const DetalleVenta = () => {
       if (errorMsg) {
         return toast.error(errorMsg)
       }
-      console.log('Venta recibida:', data)
       setVenta(data)
     }
     fetchProveedor()

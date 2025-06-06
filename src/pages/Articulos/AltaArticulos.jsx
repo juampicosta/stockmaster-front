@@ -35,14 +35,17 @@ const AltaArticulos = () => {
         stockSeguridad: data.stockSeguridad,
         precioVenta: data.precioVenta
       },
-      articuloProveedorDTO: {
+      idTipoModelo: data.idTipoModelo
+    }
+
+    if (data.idProveedor) {
+      payload.articuloProveedorDTO = {
         id: data.idProveedor || null, // Si no hay proveedor seleccionado, se envía null
         precioUnitario: data.precioUnitario,
         costoCompra: data.costoCompra,
         costoPedido: data.costoPedido,
         demoraEntrega: data.demoraEntrega
-      },
-      idTipoModelo: data.idTipoModelo
+      }
     }
 
     try {

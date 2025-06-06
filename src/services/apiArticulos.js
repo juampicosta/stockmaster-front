@@ -37,8 +37,6 @@ export const registrarArticulo = async (datos) => {
 
     if (!response.ok) {
       const errorData = await response.json()
-      console.log('errorData', errorData)
-
       throw new Error(errorData.mensaje || 'Error al registrar el artículo')
     }
 
