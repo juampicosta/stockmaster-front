@@ -207,18 +207,6 @@ const AltaArticulos = () => {
             </label>
 
             <label className='block text-sm font-medium text-orange-800 w-full'>
-              Costo de Compra
-              <input
-                required
-                min={0}
-                type='number'
-                name='costoCompra'
-                step='any'
-                className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-              />
-            </label>
-
-            <label className='block text-sm font-medium text-orange-800 w-full'>
               Costo de Pedido
               <input
                 required
