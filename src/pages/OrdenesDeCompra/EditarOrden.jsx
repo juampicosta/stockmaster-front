@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
 import { editarOrden, obtenerOrden } from '../../services/apiOrdenes'
 
 const EditaOrden = () => {
   const { id } = useParams()
   const [orden, setOrden] = useState(null)
+  const navigate = useNavigate() // Hook para redirigir al usuario
 
   //Dar de alta el nuevo Proveedor
   const handleSubmit = async (e) => {
@@ -18,6 +19,7 @@ const EditaOrden = () => {
 
     toast.success('Orden editada correctamente')
     e.target.reset() // Reiniciar el formulario
+    navigate('/ordenes-de-compra') // Redirigir a la lista de ordenes
   }
 
   // Actualizar campos de la orden
@@ -62,6 +64,7 @@ const EditaOrden = () => {
           <input
             onChange={handleChangeOrden}
             value={orden?.lote || ''}
+            min={1}
             required
             type='number'
             name='lote'

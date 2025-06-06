@@ -96,8 +96,6 @@ const ListaOrdenes = () => {
     toast.success('Estado de la orden actualizado correctamente')
   }
 
-  console.log('Ordenes:', ordenes)
-
   return (
     <div className='bg-white min-h-screen p-8'>
       <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>

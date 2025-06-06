@@ -4,11 +4,13 @@ import { obtenerArticulos } from '../../services/apiArticulos'
 import { registrarOrden, sugerirOrdenCompra } from '../../services/apiOrdenes'
 import { LuBoxes } from 'react-icons/lu'
 import { BsCash } from 'react-icons/bs'
+import { useNavigate } from 'react-router'
 
 const AltaOrden = () => {
   const [articulos, setArticulos] = useState([]) // Estado para los articulos
   const [selectedArticulo, setSelectedArticulo] = useState(null) // Estado para el articulo seleccionado
   const [sugerirOrden, setSugerirOrden] = useState(null) // Estado para la sugerencia de orden
+  const navigate = useNavigate() // Hook para redirigir al usuario
 
   //Dar de alta el nuevo Proveedor
   const handleSubmit = async (e) => {
@@ -34,6 +36,7 @@ const AltaOrden = () => {
 
     toast.success('Orden creada correctamente')
     e.target.reset() // Reiniciar el formulario
+    navigate('/ordenes-de-compra') // Redirigir a la lista de ordenes
   }
 
   //Llamar al servicio para traer los articulos
@@ -67,8 +70,6 @@ const AltaOrden = () => {
 
     setSugerirOrden(data)
   }
-
-  console.log(selectedArticulo)
 
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
@@ -110,6 +111,7 @@ const AltaOrden = () => {
               onChange={() => {
                 setSugerirOrden(null)
               }}
+              min={1}
               defaultValue={sugerirOrden?.lote}
               required
               type='number'
@@ -149,7 +151,7 @@ const AltaOrden = () => {
             </p>
             <p className='flex items-center gap-2'>
               <BsCash className='text-xl text-orange-700' />
-              <strong>Monto total:</strong> {sugerirOrden.montoTotal}
+              <strong>Monto total:</strong> ${sugerirOrden.montoTotal}
             </p>
           </div>
         )}
