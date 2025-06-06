@@ -16,6 +16,7 @@ import {
   MdInventory,
   MdEdit,
 } from "react-icons/md";
+import { toast } from "sonner";
 
 const DetalleProveedor = () => {
   // Obtener el ID del proveedor desde los parámetros de la URL
