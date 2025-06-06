@@ -2,7 +2,6 @@ import { Route, Routes } from 'react-router'
 import './App.css'
 import ListaArticulos from './pages/Articulos/ListaArticulos'
 import Layout from './layouts/Layout'
-import Inicio from './pages/Inicio'
 import ListaProveedores from './pages/Proveedores/ListaProveedores'
 import AltaProveedor from './pages/Proveedores/AltaProveedor'
 import EditarProveedor from './pages/Proveedores/EditarProveedor'
@@ -30,8 +29,14 @@ function App() {
         <Route path='/proveedores/alta-proveedor' element={<AltaProveedor />} />
         <Route path='/proveedores/editar/:id' element={<EditarProveedor />} />
         <Route path='/proveedores/detalle/:id' element={<DetalleProveedor />} />
-        <Route path="/proveedores/:id/articulos/:codigo" element={<EditarArticuloProveedor />} />
-       <Route path="/agregar-articulos/:id" element={<AgregarArticulosProveedor />} />
+        <Route
+          path='/proveedores/:id/articulos/:codigo'
+          element={<EditarArticuloProveedor />}
+        />
+        <Route
+          path='/agregar-articulos/:id'
+          element={<AgregarArticulosProveedor />}
+        />
         <Route path='/' element={<ListaArticulos />} />
         <Route path='/articulos' element={<ListaArticulos />} />
         <Route path='/articulos/alta' element={<AltaArticulos />} />
@@ -39,7 +44,7 @@ function App() {
         <Route path='/articulos/detalle/:id' element={<DetalleArticulo />} />
         <Route path='/ordenes-de-compra' element={<ListaOrdenes />} />
         <Route path='/ordenes-de-compra/alta' element={<AltaOrden />} />
-        
+
         <Route
           path='/ordenes-de-compra/editar/:id'
           element={<EditarOrdenes />}
@@ -51,7 +56,6 @@ function App() {
         <Route path='/ventas' element={<ListaVentas />} />
         <Route path='/ventas/alta-venta' element={<AltaVenta />} />
         <Route path='/ventas/detalle/:id' element={<DetalleVenta />} />
-        <Route path='/inicio' element={<Inicio />} />
       </Routes>
     </Layout>
   )
