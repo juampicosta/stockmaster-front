@@ -35,10 +35,6 @@ const EditarArticulo = () => {
           return
         }
 
-        const proveedorPredeterminado = articuloData?.articuloProveedores?.find(
-          (prov) => articuloData?.provPredeterminado?.id === prov?.proveedor.id
-        )
-
         if (articuloData) {
           setArticulo({
             descripcion: articuloData.descripcion,
@@ -46,10 +42,7 @@ const EditarArticulo = () => {
             costoAlmacenamiento: articuloData.costoAlmacenamiento,
             stock: articuloData.stock,
             tipoModelo: articuloData.tipoModelo,
-            proveedorId: articuloData.provPredeterminado?.id || '',
-            precioUnitario: proveedorPredeterminado?.preciounitario || '',
-            costoCompra: proveedorPredeterminado?.costoCompra || '',
-            demoraEntrega: proveedorPredeterminado?.demoraEntrega || ''
+            proveedorId: articuloData.provPredeterminado?.id || ''
           })
         }
 
@@ -95,13 +88,7 @@ const EditarArticulo = () => {
     }
 
     if (articulo.proveedorId) {
-      payload.idProveedor = parseInt(articulo.proveedorId, 10)
-
-      payload.articuloProveedorDTO = {
-        precioUnitario: parseFloat(articulo.precioUnitario),
-        costoCompra: parseFloat(articulo.costoCompra),
-        demoraEntrega: parseFloat(articulo.demoraEntrega)
-      }
+      payload.idProvPredeterminado = parseInt(articulo.proveedorId, 10)
     }
 
     try {
@@ -200,48 +187,6 @@ const EditarArticulo = () => {
             ))}
           </select>
         </label>
-
-        {articulo.proveedorId && (
-          <div className='proveedor-fields-edit w-full'>
-            <label className='block text-sm font-medium text-orange-800 w-full mb-2'>
-              Precio Unitario
-              <input
-                required
-                type='number'
-                name='precioUnitario'
-                step='any'
-                value={articulo?.precioUnitario}
-                onChange={handleInputChange}
-                className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-              />
-            </label>
-
-            <label className='block text-sm font-medium text-orange-800 w-full mb-2'>
-              Costo de Compra
-              <input
-                required
-                type='number'
-                name='costoCompra'
-                step='any'
-                value={articulo?.costoCompra}
-                onChange={handleInputChange}
-                className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-              />
-            </label>
-
-            <label className='block text-sm font-medium text-orange-800 w-full mb-2'>
-              Demora de Entrega
-              <input
-                type='number'
-                name='demoraEntrega'
-                step='any'
-                value={articulo?.demoraEntrega}
-                onChange={handleInputChange}
-                className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
-              />
-            </label>
-          </div>
-        )}
 
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Tipo de Modelo
