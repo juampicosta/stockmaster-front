@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom' 
+import { useParams, Link, useNavigate } from 'react-router-dom' 
 import { obtenerArticuloPorId } from '../../services/apiArticulos'
 import { toast } from 'sonner'
 import { BsFillBoxSeamFill, BsGraphUpArrow } from 'react-icons/bs'
@@ -15,6 +15,7 @@ import { GiPriceTag } from 'react-icons/gi'
 
 const DetalleArticulo = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [articulo, setArticulo] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -117,11 +118,14 @@ const DetalleArticulo = () => {
       </div>
 
       {/* Sección de proveedores */}
-      <div className='flex gap-8 items-center mb-6'>
+      <div className='flex items-center justify-start gap-x-4 w-full mb-6'>
         <h2 className='text-2xl font-bold text-orange-800'>Proveedores</h2>
-        <button className='bg-green-500 text-white px-4 py-1.5 rounded-md shadow-md hover:bg-green-700 transition duration-200 flex items-center w-fit gap-2'>
+        <button 
+          onClick={() => navigate(`/agregar-proveedor/${id}`)}
+          className='bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600 transition-colors duration-200 flex items-center w-fit gap-2'
+        >
           <MdAddCircle className='text-lg' />
-          Agregar Proveedor
+          Añadir Proveedor
         </button>
       </div>
 
@@ -170,7 +174,7 @@ const DetalleArticulo = () => {
                 <div className='flex gap-2'>
                   <Link 
                     to={`/proveedores/${id}/articulos/${articulo.codigo}`}
-                    className='text-blue-600 hover:text-blue-800 px-3 py-1 rounded border border-blue-300 hover:bg-blue-50 transition duration-200'
+                    className="flex items-center text-blue-600 hover:underline"
                   >
                     Editar
                   </Link>
@@ -184,7 +188,7 @@ const DetalleArticulo = () => {
               No hay proveedores asociados a este artículo.
             </p>
             <p className='text-orange-500 text-sm mt-2'>
-              Puedes agregar un proveedor haciendo clic en el botón "Agregar
+              Puedes agregar un proveedor haciendo clic en el botón "Añadir
               Proveedor".
             </p>
           </div>

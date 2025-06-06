@@ -19,6 +19,7 @@ import AgregarArticulosProveedor from './pages/Proveedores/AgregarArticulosProve
 import ListaVentas from './pages/Ventas/ListaVentas'
 import AltaVenta from './pages/Ventas/AltaVenta'
 import DetalleVenta from './pages/Ventas/DetalleVenta'
+import AgregarProveedorArticulo from './pages/Articulos/AgregarProveedorArticulo'
 
 function App() {
   return (
@@ -33,10 +34,8 @@ function App() {
           path='/proveedores/:id/articulos/:codigo'
           element={<EditarArticuloProveedor />}
         />
-        <Route
-          path='/agregar-articulos/:id'
-          element={<AgregarArticulosProveedor />}
-        />
+        <Route path='/agregar-articulos/:id' element={<AgregarArticulosProveedor />} />
+        <Route path='/agregar-proveedor/:id' element={<AgregarProveedorArticulo />} /> 
         <Route path='/' element={<ListaArticulos />} />
         <Route path='/articulos' element={<ListaArticulos />} />
         <Route path='/articulos/alta' element={<AltaArticulos />} />
