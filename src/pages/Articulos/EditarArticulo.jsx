@@ -219,6 +219,7 @@ const EditarArticulo = () => {
           Tipo de Modelo
           <select
             name='tipoModeloId'
+            required
             defaultValue={articulo?.tipoModeloInventario.id}
             onChange={handleInputChange}
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
