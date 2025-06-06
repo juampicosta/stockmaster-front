@@ -2,9 +2,11 @@ import { toast } from 'sonner'
 import { obtenerArticulos } from '../../services/apiArticulos'
 import { registrarVenta } from '../../services/apiVentas'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 
 const AltaVenta = () => {
   const [articulos, setArticulos] = useState([]) // Estado para almacenar los articulos
+  const navigate = useNavigate()
   //Dar de alta el nuevo Proveedor
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -25,6 +27,7 @@ const AltaVenta = () => {
 
     toast.success('Venta creada correctamente')
     e.target.reset() // Reiniciar el formulario
+    navigate('/ventas') // Redirigir a la lista de ventas
   }
 
   // Obtener los articulos al cargar el componente
@@ -55,6 +58,7 @@ const AltaVenta = () => {
             Cantidad
           </label>
           <input
+            min={1}
             required
             type='number'
             name='cantidad'
