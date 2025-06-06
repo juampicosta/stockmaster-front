@@ -109,9 +109,10 @@ const DetalleProveedor = () => {
 
           <ul className="space-y-4">
             {articulosProv.map((articulo) => {
-              const proveedorIntermedia = articulo.articuloProveedores.find(
-                (prov) => prov.proveedor.id === parseInt(id)
-              );
+              const proveedorIntermedia =
+                articulo.articulo.articuloProveedores.find(
+                  (prov) => prov.proveedor.id === parseInt(id)
+                );
               return (
                 <li
                   key={articulo.codigo}
@@ -123,7 +124,7 @@ const DetalleProveedor = () => {
                         <MdInventory className="text-2xl text-orange-700" />
                       </div>
                       <span className="text-xl font-semibold text-orange-800">
-                        {articulo.descripcion}
+                        {articulo.articulo.descripcion}
                       </span>
                     </div>
                     <div className="flex flex-col ml-3 text-gray-700 text-md">
@@ -150,11 +151,17 @@ const DetalleProveedor = () => {
                           </span>
                         </li>
                         <li className="flex items-center mt-6">
-                          {proveedorIntermedia?.proveedor && (
-                            <span className="ml-3 px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">
-                              Predeterminado
-                            </span>
-                          )}
+                          <span
+                            className={`ml-3 px-2 py-1 rounded text-xs font-bold ${
+                              articulo.isPredeterminado
+                                ? "bg-green-100 text-green-700"
+                                : "bg-red-100 text-red-700"
+                            }`}
+                          >
+                            {articulo.isPredeterminado
+                              ? "Proveedor Predeterminado"
+                              : "Proveedor no predeterminado"}
+                          </span>
                         </li>
                       </ul>
                     </div>
