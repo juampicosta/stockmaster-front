@@ -11,7 +11,6 @@ const AgregarArticuloProveedor = () => {
   const [articulosDisponibles, setArticulosDisponibles] = useState([]);
   const [codigoSeleccionado, setCodigoSeleccionado] = useState("");
   const [relacion, setRelacion] = useState({
-    costoCompra: "",
     costoPedido: "",
     demoraEntrega: "",
     precioUnitario: "",
@@ -46,7 +45,6 @@ const AgregarArticuloProveedor = () => {
       setCodigoSeleccionado("");
       setArticuloSeleccionado(null);
       setRelacion({
-        costoCompra: "",
         costoPedido: "",
         demoraEntrega: "",
         precioUnitario: "",
@@ -60,7 +58,6 @@ const AgregarArticuloProveedor = () => {
     if (!codigoSeleccionado) {
       setArticuloSeleccionado(null);
       setRelacion({
-        costoCompra: "",
         costoPedido: "",
         demoraEntrega: "",
         precioUnitario: "",
@@ -72,7 +69,6 @@ const AgregarArticuloProveedor = () => {
     );
     setArticuloSeleccionado(articulo || null);
     setRelacion({
-      costoCompra: "",
       costoPedido: "",
       demoraEntrega: "",
       precioUnitario: "",
@@ -119,19 +115,6 @@ const AgregarArticuloProveedor = () => {
         {/* Inputs solo si hay artículo seleccionado */}
         {articuloSeleccionado && (
           <>
-            <label className="block text-sm font-medium text-orange-800">
-              Costo de compra
-              <input
-                required
-                type="number"
-                name="costoCompra"
-                value={relacion.costoCompra}
-                onChange={(e) =>
-                  setRelacion({ ...relacion, costoCompra: e.target.value })
-                }
-                className="w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400"
-              />
-            </label>
             <label className="block text-sm font-medium text-orange-800">
               Costo de pedido
               <input

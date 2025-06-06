@@ -14,7 +14,7 @@ export const registrarProveedor = async (datos) => {
     const data = await response.json()
 
     if (!response.ok) {
-      throw new Error(data[0].mensaje || 'Error al registrar el proveedor')
+      throw new Error(data?.mensaje || 'Error al registrar el proveedor')
     }
 
     return { data }
@@ -32,7 +32,7 @@ export const obtenerProveedores = async () => {
     const data = await response.json()
 
     if (!response.ok) {
-      throw new Error(data[0].mensaje || 'Error al obtener los proveedores')
+      throw new Error(data?.mensaje || 'Error al obtener los proveedores')
     }
 
     return { data }
@@ -49,7 +49,7 @@ export const obtenerProveedorPorId = async (id) => {
     const data = await response.json()
 
     if (!response.ok) {
-      throw new Error(data[0].mensaje || 'Error al obtener el proveedor')
+      throw new Error(data?.mensaje || 'Error al obtener el proveedor')
     }
 
     return { data }
@@ -73,7 +73,7 @@ export const editProveedor = async (id, datos) => {
     const data = await response.json()
 
     if (!response.ok) {
-      throw new Error(data[0].mensaje || 'Error al editar el proveedor')
+      throw new Error(data?.mensaje || 'Error al editar el proveedor')
     }
 
     return { data }
@@ -83,20 +83,21 @@ export const editProveedor = async (id, datos) => {
   }
 }
 
+
+
 //Eliminar proveedor (DELETE)
 export const eliminarProveedor = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    const response = await fetch(`${API_URL}/${id}`, 
+    { method: 'DELETE' });
+  
     if (!response.ok) {
-      let errorMsg = 'Error al eliminar el proveedor';
-      try {
-        const errorData = await response.json();
-        errorMsg = errorData?.mensaje || errorMsg;
-      } catch {}
-      return { errorMsg };
+      const errorData = await response.json()
+      throw new Error(errorData.mensaje || 'Error al eliminar el proveedor')
     }
-    return {};
+    return {success: true};
   } catch (error) {
+    console.error('Error en eliminarProveedor:', error)
     return { errorMsg: error.message };
   }
 }
@@ -108,7 +109,7 @@ export const obtenerArticulosProveedor = async (idProveedor) => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data[0].mensaje || 'Error al obtener los artículos del proveedor');
+      throw new Error(data?.mensaje || 'Error al obtener los artículos del proveedor');
     }
 
     return { data };
@@ -150,7 +151,7 @@ export const obtenerArticulosAjenos = async (idProveedor) => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data[0]?.mensaje || 'Error al obtener los artículos ajenos');
+      throw new Error(data?.mensaje || 'Error al obtener los artículos ajenos');
     }
 
     return { data };

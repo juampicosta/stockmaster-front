@@ -35,4 +35,9 @@
   animation: heartBeat 0.9s ease-in-out 1 ;
 }
 
+.rotate-90 {
+  transform: rotate(90deg);
+  transition: transform 0.4s;
+}
+
 }
