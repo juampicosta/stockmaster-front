@@ -14,12 +14,6 @@ const Header = () => {
 
         <nav className='flex items-center space-x-6'>
           <a
-            href='/inicio'
-            className='text-base font-semibold hover:text-orange-600'
-          >
-            Inicio
-          </a>
-          <a
             href='/articulos'
             className='text-base font-semibold hover:text-orange-600'
           >
