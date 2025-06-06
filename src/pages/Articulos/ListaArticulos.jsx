@@ -134,19 +134,13 @@
 
 // export default Articulos
 
-
-
 //Codigo para usar despues
 import { useEffect, useState } from 'react'
 import { obtenerArticulos, eliminarArticulo } from '../../services/apiArticulos'
 import { toast } from 'sonner'
-import {
-  MdAddCircle,
-  MdEdit,
-  MdDelete
-} from 'react-icons/md'
+import { MdAddCircle, MdEdit, MdDelete } from 'react-icons/md'
 import { IoMdPaper } from 'react-icons/io'
-import { BsFillBoxSeamFill } from "react-icons/bs";
+import { BsFillBoxSeamFill } from 'react-icons/bs'
 
 const Articulos = () => {
   const [articulos, setArticulos] = useState([])
@@ -156,18 +150,18 @@ const Articulos = () => {
   const handleEliminar = async (id) => {
     if (window.confirm('¿Estás seguro de eliminar este artículo?')) {
       try {
-        const { errorMsg } = await eliminarArticulo(id);
-        
+        const { errorMsg } = await eliminarArticulo(id)
+
         if (errorMsg) {
-          toast.error(errorMsg);
-          return;
+          toast.error(errorMsg)
+          return
         }
 
         // Actualizar la lista localmente después de eliminar exitosamente
-        setArticulos(articulos.filter((a) => a.codigo !== id));
-        toast.success('Artículo eliminado correctamente');
+        setArticulos(articulos.filter((a) => a.codigo !== id))
+        toast.success('Artículo eliminado correctamente')
       } catch (error) {
-        toast.error(error.message || 'Error al eliminar el artículo');
+        toast.error(error.message || 'Error al eliminar el artículo')
       }
     }
   }
@@ -252,7 +246,10 @@ const Articulos = () => {
                     {a.descripcion}
                   </p>
                   <div className='ml-3 text-md'>
-                    <p>Stock: {a.stock} | Modelo Inventario: {a.tipoModelo}</p>
+                    <p>
+                      Stock: {a.stock} | Modelo Inventario:{' '}
+                      {a.tipoModeloInventario.descripcion}
+                    </p>
                   </div>
                 </div>
                 <div className='flex flex-col gap-1'>
@@ -284,7 +281,9 @@ const Articulos = () => {
             <li className='text-gray-700 text-center py-8'>
               <p className='text-lg'>No hay artículos disponibles.</p>
               <p className='text-sm text-gray-500 mt-2'>
-                {filter ? 'Intenta cambiar el filtro o crear un nuevo artículo.' : 'Comienza creando tu primer artículo.'}
+                {filter
+                  ? 'Intenta cambiar el filtro o crear un nuevo artículo.'
+                  : 'Comienza creando tu primer artículo.'}
               </p>
             </li>
           )}

@@ -13,7 +13,7 @@ export const obtenerArticulos = async (tieneProveedor) => {
 
     if (!response.ok) {
       const errorData = await response.json()
-      throw new Error(errorData.message || 'Error al obtener los artículos')
+      throw new Error(errorData.mensaje || 'Error al obtener los artículos')
     }
 
     const data = await response.json()
@@ -37,7 +37,9 @@ export const registrarArticulo = async (datos) => {
 
     if (!response.ok) {
       const errorData = await response.json()
-      throw new Error(errorData.message || 'Error al registrar el artículo')
+      console.log('errorData', errorData)
+
+      throw new Error(errorData.mensaje || 'Error al registrar el artículo')
     }
 
     const data = await response.json()
@@ -57,7 +59,7 @@ export const eliminarArticulo = async (id) => {
 
     if (!response.ok) {
       const errorData = await response.json()
-      throw new Error(errorData.message || 'Error al eliminar el artículo')
+      throw new Error(errorData.mensaje || 'Error al eliminar el artículo')
     }
 
     return { success: true }
@@ -76,7 +78,7 @@ export const obtenerProveedores = async () => {
 
     if (!response.ok) {
       const errorData = await response.json()
-      throw new Error(errorData.message || 'Error al obtener proveedores')
+      throw new Error(errorData.mensaje || 'Error al obtener proveedores')
     }
 
     const data = await response.json()

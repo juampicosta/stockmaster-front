@@ -5,10 +5,12 @@ import {
   obtenerProveedores
 } from '../../services/apiArticulos'
 import { toast } from 'sonner'
+import { obtenerTipoModeloInventarios } from '../../services/apiTipoModeloInventario'
 
 const AltaArticulos = () => {
   const [proveedores, setProveedores] = useState([])
   const [selectedProveedor, setSelectedProveedor] = useState(null)
+  const [tipoModelos, setTipoModelos] = useState([])
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -21,6 +23,7 @@ const AltaArticulos = () => {
     data.costoAlmacenamiento = parseFloat(data.costoAlmacenamiento)
     data.stock = parseInt(data.stock, 10)
     data.stockSeguridad = parseInt(data.stockSeguridad, 10)
+    data.precioVenta = parseFloat(data.precioVenta)
 
     // Construir payload
     const payload = {
@@ -29,19 +32,17 @@ const AltaArticulos = () => {
         demandaArticulo: data.demandaArticulo,
         costoAlmacenamiento: data.costoAlmacenamiento,
         stock: data.stock,
-        stockSeguridad: data.stockSeguridad
+        stockSeguridad: data.stockSeguridad,
+        precioVenta: data.precioVenta
       },
-      tipoModelo: data.tipoModelo
-    }
-
-    if (data.proveedorId) {
-      payload.idProveedor = parseInt(data.proveedorId, 10)
-
-      payload.articuloProveedorDTO = {
-        precioUnitario: parseFloat(data.precioUnitario),
-        costoCompra: parseFloat(data.costoCompra),
-        demoraEntrega: parseFloat(data.demoraEntrega)
-      }
+      articuloProveedorDTO: {
+        id: data.idProveedor || null, // Si no hay proveedor seleccionado, se envía null
+        precioUnitario: data.precioUnitario,
+        costoCompra: data.costoCompra,
+        costoPedido: data.costoPedido,
+        demoraEntrega: data.demoraEntrega
+      },
+      idTipoModelo: data.idTipoModelo
     }
 
     try {
@@ -53,6 +54,8 @@ const AltaArticulos = () => {
       e.target.reset()
       navigate('/articulos') // Redirige a la lista
     } catch (error) {
+      console.log(error.message)
+
       toast.error(error.message || 'Error al crear el artículo')
     }
   }
@@ -68,8 +71,18 @@ const AltaArticulos = () => {
       setProveedores(data) // Debe devolver un array plano de proveedores
     }
 
+    const fetchTipoModelos = async () => {
+      const { data, errorMsg } = await obtenerTipoModeloInventarios()
+      if (errorMsg) {
+        return toast.error(errorMsg)
+      }
+      setTipoModelos(data) // Debe devolver un array plano de tipos de modelo
+    }
+
     fetchProveedores()
+    fetchTipoModelos()
   }, [])
+
   // Actualizar campos del proveedor
   const handleChangeProveedor = (e) => {
     e.preventDefault()
@@ -150,9 +163,20 @@ const AltaArticulos = () => {
         </label>
 
         <label className='block text-sm font-medium text-orange-800 w-full'>
+          Precio de Venta
+          <input
+            required
+            min={0}
+            type='number'
+            name='precioVenta'
+            className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+          />
+        </label>
+
+        <label className='block text-sm font-medium text-orange-800 w-full'>
           Proveedor (Opcional)
           <select
-            name='proveedorId'
+            name='idProveedor'
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
             onChange={handleChangeProveedor}
           >
@@ -165,7 +189,7 @@ const AltaArticulos = () => {
           </select>
         </label>
 
-        {selectedProveedor?.proveedorId && (
+        {selectedProveedor?.idProveedor && (
           <div>
             <label className='block text-sm font-medium text-orange-800 w-full'>
               Precio Unitario
@@ -192,6 +216,18 @@ const AltaArticulos = () => {
             </label>
 
             <label className='block text-sm font-medium text-orange-800 w-full'>
+              Costo de Pedido
+              <input
+                required
+                min={0}
+                type='number'
+                name='costoPedido'
+                step='any'
+                className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+              />
+            </label>
+
+            <label className='block text-sm font-medium text-orange-800 w-full'>
               Demora de Entrega
               <input
                 required
@@ -209,12 +245,15 @@ const AltaArticulos = () => {
           Tipo de Modelo
           <select
             required
-            name='tipoModelo'
+            name='idTipoModelo'
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
             <option value=''>Seleccionar tipo de modelo</option>
-            <option value='Lote Fijo'>Lote Fijo</option>
-            <option value='Intervalo Fijo'>Intervalo Fijo</option>
+            {tipoModelos.map((tipo) => (
+              <option key={tipo.id} value={tipo.id}>
+                {tipo.descripcion}
+              </option>
+            ))}
           </select>
         </label>
 
