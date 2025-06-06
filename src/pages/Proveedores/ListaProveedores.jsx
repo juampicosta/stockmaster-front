@@ -12,6 +12,7 @@ import {
   MdDelete
 } from 'react-icons/md'
 import { IoMdPaper } from 'react-icons/io'
+import { DiJava } from 'react-icons/di'
 
 const ListaProveedores = () => {
   const [proveedores, setProveedores] = useState([])
@@ -75,7 +76,12 @@ const handleBorrarProveedor = async (id) => {
             Lista de Proveedores
           </h2>
           {proveedores.length === 0 ? (
-            <p className='text-gray-500'>Aún no hay proveedores creados.</p>
+           <div className='text-gray-700 text-center py-8'>
+              <p className='text-lg'>No hay proveedores creados.</p>
+              <p className='text-sm text-gray-500 mt-2'>
+                Puedes crear un nuevo proveedor haciendo clic en el botón "Crear Proveedor"
+              </p>
+            </div>
           ) : (
             <ul className='space-y-4'>
               {proveedores.map((prov) => (

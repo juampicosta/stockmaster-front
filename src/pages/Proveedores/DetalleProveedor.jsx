@@ -100,7 +100,7 @@ const DetalleProveedor = () => {
             </h3>
             <button
               type="submit"
-               onClick={() => navigate(`/agregar-articulos/${id}`)}
+              onClick={() => navigate(`/agregar-articulos/${id}`)}
               className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition-colors duration-200"
             >
               Añadir Articulo
@@ -129,13 +129,6 @@ const DetalleProveedor = () => {
                     <div className="flex flex-col ml-3 text-gray-700 text-md">
                       <ul className="space-y-1 pl-7 text-md">
                         <li className="flex items-center">
-                          <MdMonetizationOn className="text-lg text-green-500 mr-2" />
-                          <span>
-                            <strong>Costo de Compra:</strong>{" "}
-                            {proveedorIntermedia?.costoCompra}
-                          </span>
-                        </li>
-                        <li className="flex items-center">
                           <MdLocalShipping className="text-lg text-blue-500 mr-2" />
                           <span>
                             <strong>Costo de Pedido:</strong>{" "}
@@ -155,6 +148,13 @@ const DetalleProveedor = () => {
                             <strong>Precio Unitario:</strong>{" "}
                             {proveedorIntermedia?.preciounitario}
                           </span>
+                        </li>
+                        <li className="flex items-center mt-6">
+                          {proveedorIntermedia?.proveedor && (
+                            <span className="ml-3 px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">
+                              Predeterminado
+                            </span>
+                          )}
                         </li>
                       </ul>
                     </div>
