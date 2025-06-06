@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   obtenerArticuloPorId,
-  obtenerProveedores,
   actualizarArticulo
 } from '../../services/apiArticulos'
 import { toast } from 'sonner'
@@ -14,7 +13,6 @@ const EditarArticulo = () => {
   const navigate = useNavigate()
 
   const [articulo, setArticulo] = useState(null)
-  const [proveedores, setProveedores] = useState([])
   const [tipoModelos, setTipoModelos] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -24,40 +22,17 @@ const EditarArticulo = () => {
       try {
         const [
           { data: articuloData, errorMsg: errorArticulo },
-          { data: proveedoresData, errorMsg: errorProveedores },
           { data: tipoModelosData, errorMsg: errorTipoModelos }
         ] = await Promise.all([
           obtenerArticuloPorId(id),
-          obtenerProveedores(),
           obtenerTipoModeloInventarios()
         ])
 
-        if (errorArticulo) {
-          toast.error(errorArticulo)
-          return
-        }
+        if (errorArticulo) return toast.error(errorArticulo)
+        if (errorTipoModelos) return toast.error(errorTipoModelos)
 
-        if (errorProveedores) {
-          toast.error(errorProveedores)
-          return
-        }
-
-        if (errorTipoModelos) {
-          toast.error(errorTipoModelos)
-          return
-        }
-
-        if (articuloData) {
-          setArticulo(articuloData)
-        }
-
-        if (proveedoresData) {
-          setProveedores(proveedoresData)
-        }
-
-        if (tipoModelosData) {
-          setTipoModelos(tipoModelosData)
-        }
+        setArticulo(articuloData)
+        setTipoModelos(tipoModelosData)
       } catch (error) {
         toast.error(`Error al cargar los datos: ${error.message}`)
       } finally {
@@ -81,28 +56,26 @@ const EditarArticulo = () => {
     const form = new FormData(e.target)
     const formValues = Object.fromEntries(form.entries())
 
-    const demanda = parseFloat(formValues.demandaArticulo)
-    const costo = parseFloat(formValues.costoAlmacenamiento)
+    const descripcion = formValues.descripcion.trim()
+    const demandaArticulo = parseFloat(formValues.demandaArticulo)
+    const costoAlmacenamiento = parseFloat(formValues.costoAlmacenamiento)
     const stock = parseInt(formValues.stock)
     const stockSeguridad = parseInt(formValues.stockSeguridad)
     const precioVenta = parseFloat(formValues.precioVenta)
-    const idTipoModelo = parseInt(formValues.tipoModeloId)
-    const idProvPredeterminado = parseInt(formValues.proveedorId)
+    const idTipoModelo = parseInt(formValues.idTipoModelo)
+    const idProvPredeterminado =
+      parseInt(formValues.idProvPredeterminado) || null
 
     // Construir payload
     const payload = {
-      descripcion: articulo.descripcion,
-      demandaArticulo: demanda,
-      costoAlmacenamiento: costo,
+      descripcion,
+      demandaArticulo,
+      costoAlmacenamiento,
       stock,
       stockSeguridad,
       precioVenta,
       idTipoModelo,
       idProvPredeterminado
-    }
-
-    if (articulo.proveedorId) {
-      payload.idProvPredeterminado = parseInt(articulo.proveedorId, 10)
     }
 
     try {
@@ -190,7 +163,7 @@ const EditarArticulo = () => {
             min={0}
             type='number'
             name='stockSeguridad'
-            defaultValue={articulo?.stock_seguridad}
+            defaultValue={articulo?.stockSeguridad}
             onChange={handleInputChange}
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
@@ -199,7 +172,7 @@ const EditarArticulo = () => {
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Proveedor (Opcional)
           <select
-            name='proveedorId'
+            name='idProvPredeterminado'
             defaultValue={articulo?.provPredeterminado?.id || ''}
             onChange={(e) => {
               handleInputChange(e)
@@ -207,9 +180,12 @@ const EditarArticulo = () => {
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
             <option value=''>Seleccionar proveedor</option>
-            {proveedores.map((prov) => (
-              <option key={prov.id} value={prov.id}>
-                {prov.razonSocial}
+            {articulo.articuloProveedores.map((articuloProveedor) => (
+              <option
+                key={articuloProveedor.proveedor.id}
+                value={articuloProveedor.proveedor.id}
+              >
+                {articuloProveedor.proveedor.razonSocial}
               </option>
             ))}
           </select>
@@ -218,7 +194,7 @@ const EditarArticulo = () => {
         <label className='block text-sm font-medium text-orange-800 w-full'>
           Tipo de Modelo
           <select
-            name='tipoModeloId'
+            name='idTipoModelo'
             required
             defaultValue={articulo?.tipoModeloInventario.id}
             onChange={handleInputChange}
