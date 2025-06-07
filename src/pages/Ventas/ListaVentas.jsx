@@ -25,8 +25,6 @@ const ListaVentas = () => {
     fetchVentas()
   }, [])
 
-  console.log(ventas)
-
   return (
     <div className='bg-white min-h-screen p-8'>
       <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>
