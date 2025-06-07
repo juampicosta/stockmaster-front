@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { obtenerVentaPorId } from '../../services/apiVentas'
 import { toast } from 'sonner'
 import { TiTicket } from 'react-icons/ti'
-import { BiBox } from 'react-icons/bi'
-import { AiFillProduct } from 'react-icons/ai'
+import { BiBox, BiMoney } from 'react-icons/bi'
+import { LuBoxes } from 'react-icons/lu'
 
 const DetalleVenta = () => {
   // Obtener el ID del proveedor desde los parámetros de la URL
@@ -46,14 +46,32 @@ const DetalleVenta = () => {
             #{venta.id}
           </span>
         </div>
-        <div className='flex items-center mb-2'>
-          <BiBox className='text-xl text-orange-500 ml-3 mr-2' />
-          <span className='text-md text-gray-700'>{venta.cantidad}</span>
+        <div className='flex items-center mb-2 gap-2 text-orange-800'>
+          <BiBox className='text-xl text-orange-500' />
+          <strong>Cantidad: </strong>
+          <span className='text-md text-gray-700'>${venta?.cantidad}</span>
         </div>
-        <div className='flex items-center'>
-          <AiFillProduct className='text-xl text-orange-500 ml-3 mr-2' />
+        <div className='flex items-center mb-2 gap-2 text-orange-800'>
+          <BiMoney className='text-xl text-orange-500' />
+          <strong>Monto Total: </strong>
+          <span className='text-md text-gray-700'>${venta?.montoTotal}</span>
+        </div>
+      </div>
+
+      <h2 className='text-2xl font-bold text-orange-800 mb-4'>Articulo</h2>
+      <div className='bg-white shadow-lg border border-yellow-200 rounded-xl p-6 mb-8'>
+        <div className='flex items-center mb-4'>
+          <div className='flex items-center justify-center w-12 h-12 bg-orange-100 rounded-full mr-4'>
+            <LuBoxes className='text-3xl text-orange-700' />
+          </div>
+          <span className='text-2xl font-semibold text-orange-800'>
+            {venta?.articulo?.descripcion}
+          </span>
+        </div>
+        <div className='flex items-center mb-2 gap-2 text-orange-800'>
+          <strong>Precio de Venta: </strong>
           <span className='text-md text-gray-700'>
-            {venta.articulo.descripcion}
+            ${venta?.articulo?.precioVenta}
           </span>
         </div>
       </div>

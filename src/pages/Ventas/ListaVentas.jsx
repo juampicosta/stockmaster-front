@@ -5,7 +5,7 @@ import { MdAddCircle } from 'react-icons/md'
 import { IoMdPaper } from 'react-icons/io'
 import { obtenerVentas } from '../../services/apiVentas'
 import { TiTicket } from 'react-icons/ti'
-import { BiBox } from 'react-icons/bi'
+import { BiBox, BiMoney } from 'react-icons/bi'
 import { AiFillProduct } from 'react-icons/ai'
 
 const ListaVentas = () => {
@@ -24,6 +24,8 @@ const ListaVentas = () => {
 
     fetchVentas()
   }, [])
+
+  console.log(ventas)
 
   return (
     <div className='bg-white min-h-screen p-8'>
@@ -61,7 +63,7 @@ const ListaVentas = () => {
                         #{venta.id}
                       </span>
                     </div>
-                    <div className='flex items-center mb-1 ml-3'>
+                    <div className='flex items-center ml-3'>
                       <BiBox className='text-lg text-orange-500 mr-2' />
                       <span className='text-md text-gray-700'>
                         {venta.cantidad}
@@ -71,6 +73,12 @@ const ListaVentas = () => {
                       <AiFillProduct className='text-lg text-orange-500 mr-2' />
                       <span className='text-md text-gray-700'>
                         {venta.articulo.descripcion}
+                      </span>
+                    </div>
+                    <div className='flex items-center ml-3'>
+                      <BiMoney className='text-lg text-orange-500 mr-2' />
+                      <span className='text-md text-gray-700'>
+                        ${venta.montoTotal}
                       </span>
                     </div>
                   </div>

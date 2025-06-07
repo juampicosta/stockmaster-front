@@ -34,6 +34,8 @@ const DetalleOrden = () => {
     fetchData()
   }, [id])
 
+  console.log(orden)
+
   return (
     <div className='bg-gradient-to-br from-orange-50 to-white min-h-screen p-8'>
       <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>
@@ -56,19 +58,6 @@ const DetalleOrden = () => {
           <LuBoxes className='text-xl text-orange-700' />
           <strong>Lote: </strong>
           <span className='text-md text-orange-800'>{orden?.lote}</span>
-        </div>
-        <div className='flex items-center justify-start gap-2 text-orange-800'>
-          <strong>Costo de Compra: </strong>
-          <span className='text-md text-orange-800'>
-            ${orden?.articulo?.costoCompra}
-          </span>
-        </div>
-
-        <div className='flex items-center justify-start gap-2 text-orange-800'>
-          <strong>Costo de Pedido: </strong>
-          <span className='text-md text-orange-800'>
-            ${orden?.articulo?.costoPedido}
-          </span>
         </div>
 
         <div className='flex items-center justify-start gap-2 text-orange-800'>
@@ -103,15 +92,21 @@ const DetalleOrden = () => {
           </span>
         </div>
         <div className='flex items-center mb-2 gap-2 text-orange-800'>
-          <strong>Costo de Compra: </strong>
+          <strong>Precio de Venta: </strong>
           <span className='text-md text-gray-700'>
-            {orden?.articulo?.costoCompra}
+            ${orden?.articulo?.precioUnitario}
+          </span>
+        </div>
+        <div className='flex items-center mb-2 gap-2 text-orange-800'>
+          <strong>Costo de Pedido: </strong>
+          <span className='text-md text-gray-700'>
+            ${orden?.articulo?.costoPedido}
           </span>
         </div>
         <div className='flex items-center gap-2 text-orange-800'>
-          <strong>Costo de Pedido: </strong>
+          <strong>Demora de Entrega: </strong>
           <span className='text-md text-gray-700'>
-            {orden?.articulo?.costoPedido}
+            {orden?.articulo?.demoraEntrega} días
           </span>
         </div>
       </div>

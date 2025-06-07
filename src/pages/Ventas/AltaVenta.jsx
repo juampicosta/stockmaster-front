@@ -3,9 +3,12 @@ import { obtenerArticulos } from '../../services/apiArticulos'
 import { registrarVenta } from '../../services/apiVentas'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { FaMoneyBill } from 'react-icons/fa'
 
 const AltaVenta = () => {
   const [articulos, setArticulos] = useState([]) // Estado para almacenar los articulos
+  const [selectedArticulo, setSelectedArticulo] = useState(null)
+  const [quantity, setQuantity] = useState(null)
   const navigate = useNavigate()
   //Dar de alta el nuevo Proveedor
   const handleSubmit = async (e) => {
@@ -42,6 +45,12 @@ const AltaVenta = () => {
     fetchArticulos()
   }, [])
 
+  const handleSelectChange = (e) => {
+    const { value } = e.target
+    const articuloSeleccionado = articulos.find((art) => art.codigo == value)
+    setSelectedArticulo(articuloSeleccionado)
+  }
+
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
       <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>
@@ -58,6 +67,9 @@ const AltaVenta = () => {
             Cantidad
           </label>
           <input
+            onChange={(e) => setQuantity(e.target.value)}
+            autoFocus
+            value={quantity || ''}
             min={1}
             required
             type='number'
@@ -73,6 +85,8 @@ const AltaVenta = () => {
           <select
             required
             name='idArticulo'
+            onChange={handleSelectChange}
+            value={selectedArticulo?.codigo || ''}
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-orange-200 focus:border-orange-500 transition-colors duration-200'
           >
             <option value=''>Seleccionar articulo</option>
@@ -83,6 +97,15 @@ const AltaVenta = () => {
             ))}
           </select>
         </div>
+
+        {selectedArticulo && (
+          <div className='col-span-full'>
+            <p className='font-bold text-orange-800'>
+              <FaMoneyBill className='inline mr-1' />
+              Monto Total: ${quantity * selectedArticulo.precioVenta}
+            </p>
+          </div>
+        )}
 
         <div className='flex items-end justify-end w-full col-span-full mt-2'>
           <button
