@@ -127,7 +127,7 @@ const AltaArticulos = () => {
         </label>
 
         <label className='block text-sm font-medium text-orange-800 w-full'>
-          Demanda del Artículo
+          Demanda Anual
           <input
             required
             min={0}

@@ -84,7 +84,7 @@ const DetalleArticulo = () => {
 
             <p className='flex gap-1.5 items-center mb-2'>
               <BsGraphUpArrow />
-              Demanda: {articulo.demandaArticulo}
+              Demanda Anual: {articulo.demandaArticulo}
             </p>
 
             <p className='flex gap-1.5 items-center mb-2'>
