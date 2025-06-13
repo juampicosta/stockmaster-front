@@ -94,7 +94,7 @@ const DetalleArticulo = () => {
 
             <p className='flex gap-1.5 items-center mb-2'>
               <MdSecurity />
-              Stock de Seguridad: {articulo.stock_seguridad}
+              Stock de Seguridad: {articulo.stockSeguridad}
             </p>
 
             <p className='flex gap-1.5 items-center mb-2'>
