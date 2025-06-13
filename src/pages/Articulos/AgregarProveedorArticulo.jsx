@@ -105,9 +105,11 @@ const AgregarProveedorArticulo = () => {
             value={idSeleccionado}
             onChange={(e) => setIdSeleccionado(e.target.value)}
           >
-            <option value=''>Selecciona un proveedor</option>
             {proveedoresDisponibles.length === 0 && (
               <option value=''>No hay proveedores disponibles</option>
+            )}
+            {proveedoresDisponibles.length > 0 && (
+              <option value=''>Selecciona un proveedor</option>
             )}
             {proveedoresDisponibles.map((proveedor) => (
               <option key={proveedor.id} value={proveedor.id}>
@@ -212,7 +214,7 @@ const AgregarProveedorArticulo = () => {
         <div className='flex items-end justify-start'>
           <button
             type='submit'
-            className='px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-md transition-colors duration-200'
+            className='px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
             disabled={!proveedorSeleccionado}
           >
             Guardar
