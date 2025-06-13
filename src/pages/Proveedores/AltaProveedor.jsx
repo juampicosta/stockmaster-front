@@ -286,6 +286,9 @@ const AltaProveedor = () => {
                       <label className='block text-sm font-medium text-orange-800 w-full'>
                         Tipo de Modelo
                         <select
+                          onChange={(e) =>
+                            handleChangeArticulo(e, articulo.idArticulo)
+                          }
                           required
                           name='idTipoModelo'
                           className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
