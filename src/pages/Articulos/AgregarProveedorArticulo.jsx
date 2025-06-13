@@ -173,7 +173,7 @@ const AgregarProveedorArticulo = () => {
                 onChange={(e) =>
                   setRelacion({
                     ...relacion,
-                    idTipoModelo: e.target.value
+                    idTipoModelo: parseInt(e.target.value)
                   })
                 }
                 required
@@ -187,6 +187,24 @@ const AgregarProveedorArticulo = () => {
                   </option>
                 ))}
               </select>
+              {relacion.idTipoModelo === 2 && (
+                <label className='block text-sm font-medium text-orange-800 mt-3'>
+                  Intervalo de Revisión (días)
+                  <input
+                    onChange={(e) =>
+                      setRelacion({
+                        ...relacion,
+                        intervaloRevision: parseFloat(e.target.value)
+                      })
+                    }
+                    required
+                    type='number'
+                    min={1}
+                    name='intervaloRevision'
+                    className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+                  />
+                </label>
+              )}
             </label>
           </>
         )}
