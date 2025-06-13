@@ -11,9 +11,10 @@ import {
   MdAttachMoney,
   MdAccessTime,
   MdPerson,
-  MdMonetizationOn,
+  MdAssignment,
   MdLocalShipping,
   MdInventory,
+  MdAddCircle,
   MdEdit,
 } from "react-icons/md";
 import { toast } from "sonner";
@@ -102,8 +103,9 @@ const DetalleProveedor = () => {
             <button
               type="submit"
               onClick={() => navigate(`/agregar-articulos/${id}`)}
-              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition-colors duration-200"
+              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition-colors duration-200 flex items-center"
             >
+              <MdAddCircle className="mr-2" />
               Añadir Articulo
             </button>
           </div>
@@ -114,6 +116,8 @@ const DetalleProveedor = () => {
                 articulo.articulo.articuloProveedores.find(
                   (prov) => prov.proveedor.id === parseInt(id)
                 );
+
+              const tipoModelo = proveedorIntermedia?.tipoModeloInventario;
               return (
                 <li
                   key={articulo.articulo.codigo}
@@ -149,6 +153,13 @@ const DetalleProveedor = () => {
                           <span>
                             <strong>Precio Unitario:</strong>{" "}
                             {proveedorIntermedia?.preciounitario}
+                          </span>
+                        </li>
+                        <li className="flex items-center">
+                          <MdAssignment className="text-lg text-orange-400 mr-2" />
+                          <span>
+                            <strong>Tipo de Modelo:</strong>{" "}
+                            {tipoModelo.descripcion || "Modelo no Definido"}
                           </span>
                         </li>
                         <li className="flex items-center mt-6">

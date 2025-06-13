@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   editProveedor,
@@ -10,6 +10,7 @@ import {
 const EditarProveedor = () => {
   const { id } = useParams();
   const [proveedor, setProveedor] = useState(null);
+  const navigate = useNavigate();
 
   //Dar de alta el nuevo Proveedor
   const handleSubmit = async (e) => {
@@ -24,6 +25,7 @@ const EditarProveedor = () => {
     toast.success("Proveedor editado correctamente");
     e.target.reset(); // Reiniciar el formulario
     setProveedor([]); // Reiniciar los articulos seleccionados
+    navigate("/proveedores"); // Redirigir a la lista de proveedores
   };
 
   // Actualizar campos del proveedor
