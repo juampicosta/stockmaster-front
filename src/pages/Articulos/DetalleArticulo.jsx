@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom' 
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { obtenerArticuloPorId } from '../../services/apiArticulos'
 import { toast } from 'sonner'
 import { BsFillBoxSeamFill, BsGraphUpArrow } from 'react-icons/bs'
@@ -18,7 +18,6 @@ const DetalleArticulo = () => {
   const navigate = useNavigate()
   const [articulo, setArticulo] = useState(null)
   const [loading, setLoading] = useState(true)
-
 
   useEffect(() => {
     const fetchArticulo = async () => {
@@ -102,11 +101,6 @@ const DetalleArticulo = () => {
               Precio de Venta: {articulo.precioVenta}
             </p>
 
-            <p className='flex gap-1.5 items-center mb-2'>
-              <MdOutlineInventory />
-              Modelo Inventario: {articulo.tipoModeloInventario.descripcion}
-            </p>
-
             <p className='flex gap-1.5 items-center'>
               <MdPerson />
               Proveedor predeterminado:{' '}
@@ -120,7 +114,7 @@ const DetalleArticulo = () => {
       {/* Sección de proveedores */}
       <div className='flex items-center justify-start gap-x-4 w-full mb-6'>
         <h2 className='text-2xl font-bold text-orange-800'>Proveedores</h2>
-        <button 
+        <button
           onClick={() => navigate(`/agregar-proveedor/${id}`)}
           className='bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600 transition-colors duration-200 flex items-center w-fit gap-2'
         >
@@ -172,9 +166,9 @@ const DetalleArticulo = () => {
                   </div>
                 </div>
                 <div className='flex gap-2'>
-                  <Link 
+                  <Link
                     to={`/proveedores/${id}/articulos/${articulo.codigo}`}
-                    className="flex items-center text-blue-600 hover:underline"
+                    className='flex items-center text-blue-600 hover:underline'
                   >
                     Editar
                   </Link>
