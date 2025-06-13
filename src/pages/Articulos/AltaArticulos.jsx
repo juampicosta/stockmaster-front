@@ -34,17 +34,16 @@ const AltaArticulos = () => {
         stock: data.stock,
         stockSeguridad: data.stockSeguridad,
         precioVenta: data.precioVenta
-      },
-      idTipoModelo: data.idTipoModelo
+      }
     }
 
     if (data.idProveedor) {
+      payload.idProveedor = data.idProveedor || null
       payload.articuloProveedorDTO = {
-        id: data.idProveedor || null, // Si no hay proveedor seleccionado, se envía null
         precioUnitario: data.precioUnitario,
-        costoCompra: data.costoCompra,
         costoPedido: data.costoPedido,
-        demoraEntrega: data.demoraEntrega
+        demoraEntrega: data.demoraEntrega,
+        idTipoModelo: data.idTipoModelo || null
       }
     }
 
@@ -229,24 +228,24 @@ const AltaArticulos = () => {
                 className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
               />
             </label>
+
+            <label className='block text-sm font-medium text-orange-800 w-full'>
+              Tipo de Modelo
+              <select
+                required
+                name='idTipoModelo'
+                className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
+              >
+                <option value=''>Seleccionar tipo de modelo</option>
+                {tipoModelos.map((tipo) => (
+                  <option key={tipo.id} value={tipo.id}>
+                    {tipo.descripcion}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
         )}
-
-        <label className='block text-sm font-medium text-orange-800 w-full'>
-          Tipo de Modelo
-          <select
-            required
-            name='idTipoModelo'
-            className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
-          >
-            <option value=''>Seleccionar tipo de modelo</option>
-            {tipoModelos.map((tipo) => (
-              <option key={tipo.id} value={tipo.id}>
-                {tipo.descripcion}
-              </option>
-            ))}
-          </select>
-        </label>
 
         <button
           type='submit'

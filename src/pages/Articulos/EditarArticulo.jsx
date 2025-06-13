@@ -5,7 +5,6 @@ import {
   actualizarArticulo
 } from '../../services/apiArticulos'
 import { toast } from 'sonner'
-import { obtenerTipoModeloInventarios } from '../../services/apiTipoModeloInventario'
 
 const EditarArticulo = () => {
   const { id } = useParams()
@@ -13,26 +12,18 @@ const EditarArticulo = () => {
   const navigate = useNavigate()
 
   const [articulo, setArticulo] = useState(null)
-  const [tipoModelos, setTipoModelos] = useState([])
   const [loading, setLoading] = useState(true)
 
   // Cargar artículo y proveedores al montar el componente
   useEffect(() => {
     const cargarDatos = async () => {
       try {
-        const [
-          { data: articuloData, errorMsg: errorArticulo },
-          { data: tipoModelosData, errorMsg: errorTipoModelos }
-        ] = await Promise.all([
-          obtenerArticuloPorId(id),
-          obtenerTipoModeloInventarios()
-        ])
+        const { data: articuloData, errorMsg: errorArticulo } =
+          await obtenerArticuloPorId(id)
 
         if (errorArticulo) return toast.error(errorArticulo)
-        if (errorTipoModelos) return toast.error(errorTipoModelos)
 
         setArticulo(articuloData)
-        setTipoModelos(tipoModelosData)
       } catch (error) {
         toast.error(`Error al cargar los datos: ${error.message}`)
       } finally {
@@ -62,7 +53,6 @@ const EditarArticulo = () => {
     const stock = parseInt(formValues.stock)
     const stockSeguridad = parseInt(formValues.stockSeguridad)
     const precioVenta = parseFloat(formValues.precioVenta)
-    const idTipoModelo = parseInt(formValues.idTipoModelo)
     const idProvPredeterminado =
       parseInt(formValues.idProvPredeterminado) || null
 
@@ -74,7 +64,6 @@ const EditarArticulo = () => {
       stock,
       stockSeguridad,
       precioVenta,
-      idTipoModelo,
       idProvPredeterminado
     }
 
@@ -186,24 +175,6 @@ const EditarArticulo = () => {
                 value={articuloProveedor.proveedor.id}
               >
                 {articuloProveedor.proveedor.razonSocial}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className='block text-sm font-medium text-orange-800 w-full'>
-          Tipo de Modelo
-          <select
-            name='idTipoModelo'
-            required
-            defaultValue={articulo?.tipoModeloInventario.id}
-            onChange={handleInputChange}
-            className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
-          >
-            <option value=''>Seleccionar tipo de modelo</option>
-            {tipoModelos.map((modelo) => (
-              <option key={modelo.id} value={modelo.id}>
-                {modelo.descripcion}
               </option>
             ))}
           </select>
