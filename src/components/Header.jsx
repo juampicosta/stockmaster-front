@@ -45,19 +45,6 @@ const Header = () => {
             alt='Deco'
             className='w-32 h-8 object-contain'
           />
-          <div className='animate-heartBeat relative inline-block'>
-            <span className='absolute top-1 right-1 flex size-3'>
-              <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75'></span>
-              <span className='relative inline-flex size-3 rounded-full bg-red-500'></span>
-            </span>
-            <div className='rounded-full hover:bg-arena transition-colors duration-200 p-2'>
-              <img
-                src='/Alerta4.png'
-                alt='Alertas'
-                className='w-10 h-10 rounded-full animate-wiggle'
-              />
-            </div>
-          </div>
         </div>
       </header>
     </>
