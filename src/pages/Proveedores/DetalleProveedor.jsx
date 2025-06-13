@@ -16,6 +16,7 @@ import {
   MdInventory,
   MdAddCircle,
   MdEdit,
+  MdDateRange,
 } from "react-icons/md";
 import { toast } from "sonner";
 
@@ -162,6 +163,15 @@ const DetalleProveedor = () => {
                             {tipoModelo.descripcion || "Modelo no Definido"}
                           </span>
                         </li>
+                        {tipoModelo.descripcion == "Intervalo Fijo" && (
+                          <li className="flex items-center">
+                            <MdDateRange className="text-lg text-blue-500 mr-2 ml-6" />
+                            <span>
+                              <strong>Intervalo de Revisión:</strong>{" "}
+                              {proveedorIntermedia?.intervaloRevision}
+                            </span>
+                          </li>
+                        )}
                         <li className="flex items-center mt-6">
                           <span
                             className={`ml-3 px-2 py-1 rounded text-xs font-bold ${
