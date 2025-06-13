@@ -14,6 +14,7 @@ const EditarArticuloProveedor = () => {
   const [proveedor, setProveedor] = useState(null);
   const [articuloNombre, setArticuloNombre] = useState("");
   const [tipoModelos, setTipoModelos] = useState([]);
+  const [selectedModelo, setSelectedModelo] = useState(null);
 
   //Dar de alta el nuevo articulo del proveedor
   const handleSubmit = async (e) => {
@@ -70,12 +71,20 @@ const EditarArticuloProveedor = () => {
         demoraEntrega: datosRelacion?.demoraEntrega ?? "",
         precioUnitario: datosRelacion?.preciounitario ?? "",
         idTipoModelo: datosRelacion?.tipoModeloInventario?.id ?? "",
+        intervaloRevision: datosRelacion?.intervaloRevision ?? "",
       });
       setArticuloNombre(articulo.articulo.descripcion || "");
       setProveedor(datosRelacion?.proveedor || null);
     };
     fetchRelacion();
   }, [id, codigo]);
+
+// Paraccaragar datos del modelo al seleccionar "Edtitar"
+  useEffect(() => {
+  if (relacion?.idTipoModelo) {
+    setSelectedModelo(parseInt(relacion.idTipoModelo));
+  }
+}, [relacion]);
 
   return (
     <section className="bg-white p-6 rounded-lg shadow-md">
@@ -151,22 +160,46 @@ const EditarArticuloProveedor = () => {
                 className="w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400"
               />
             </label>
-            <select
-              required
-              name="idTipoModelo"
-              value={relacion.idTipoModelo}
-              onChange={(e) =>
-                setRelacion({ ...relacion, idTipoModelo: e.target.value })
-              }
-              className="w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200"
-            >
-              <option value="">Seleccionar tipo de modelo</option>
-              {tipoModelos.map((tipo) => (
-                <option key={tipo.id} value={tipo.id}>
-                  {tipo.descripcion}
-                </option>
-              ))}
-            </select>
+            <label className="block text-sm font-medium text-orange-800 w-full">
+              Tipo de Modelo
+              <select
+                value={relacion.idTipoModelo} // <-- Esto selecciona el modelo previamente guardado
+                onChange={(e) => {
+                  setSelectedModelo(parseInt(e.target.value));
+                  setRelacion({ ...relacion, idTipoModelo: e.target.value });
+                }}
+                required
+                name="idTipoModelo"
+                className="w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200"
+              >
+                <option value="">Seleccionar tipo de modelo</option>
+                {tipoModelos.map((tipo) => (
+                  <option key={tipo.id} value={tipo.id}>
+                    {tipo.descripcion}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            {selectedModelo === 2 && (
+              <label className="block text-sm font-medium text-orange-800 w-full">
+                Intervalo de Revisión (días)
+                <input
+                  required
+                  type="number"
+                  min={1}
+                  name="intervaloRevision"
+                  value={relacion.intervaloRevision}
+                  onChange={(e) =>
+                    setRelacion({
+                      ...relacion,
+                      intervaloRevision: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400"
+                />
+              </label>
+            )}
           </>
         ) : (
           <p className="col-span-full text-orange-500">
