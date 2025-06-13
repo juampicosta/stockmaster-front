@@ -10,6 +10,7 @@ const Articulos = () => {
   const [articulos, setArticulos] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('')
+  const [conProveedor, setConProveedor] = useState(false)
 
   const handleEliminar = async (id) => {
     if (window.confirm('¿Estás seguro de eliminar este artículo?')) {
@@ -31,7 +32,18 @@ const Articulos = () => {
   }
 
   const handleChangeFilter = (e) => {
-    setFilter(e.target.value)
+    if (e.target.value === '') {
+      setConProveedor(null)
+      setFilter('')
+      return
+    }
+    if (e.target.value === 'Reponer' || e.target.value === 'Faltantes') {
+      setConProveedor(null)
+      setFilter(e.target.value)
+    } else {
+      setConProveedor(e.target.value)
+      setFilter(null)
+    }
   }
 
   useEffect(() => {
@@ -39,7 +51,7 @@ const Articulos = () => {
       setLoading(true)
 
       try {
-        const { data, errorMsg } = await obtenerArticulos(filter)
+        const { data, errorMsg } = await obtenerArticulos(conProveedor, filter)
 
         if (errorMsg) {
           toast.error(errorMsg)
@@ -55,7 +67,7 @@ const Articulos = () => {
     }
 
     fetchArticulos()
-  }, [filter])
+  }, [filter, conProveedor])
 
   return (
     <div className='bg-white min-h-screen p-8'>
@@ -79,17 +91,18 @@ const Articulos = () => {
           htmlFor='filtro'
           className='block text-sm font-medium text-orange-800 mb-2'
         >
-          Filtrar por proveedor
+          Filtrar
         </label>
         <select
           id='filtro'
-          value={filter}
           onChange={handleChangeFilter}
           className='border-orange-300 bg-white text-orange-800 rounded-md px-4 py-2 mb-4 w-full max-w-xs focus:outline-none focus:ring-2 focus:ring-orange-400'
         >
           <option value=''>Todos</option>
           <option value='true'>Con Proveedor</option>
           <option value='false'>Sin Proveedor</option>
+          <option value='Reponer'>A Reponer</option>
+          <option value='Faltantes'>Faltantes</option>
         </select>
 
         {/* Listado */}

@@ -1,11 +1,15 @@
 const API_URL = 'http://localhost:8080/articulos'
 
 // Obtener artículos con filtro opcional
-export const obtenerArticulos = async (tieneProveedor) => {
+export const obtenerArticulos = async (tieneProveedor, filtro) => {
   let url = API_URL
 
   if (tieneProveedor) {
     url += `?predeterminado=${tieneProveedor}`
+  }
+
+  if (filtro) {
+    url += `?filtro=${filtro}`
   }
 
   try {
@@ -107,41 +111,49 @@ export const obtenerArticuloPorId = async (id) => {
   }
 }
 export const obtenerProveedoresAjenos = async (idArticulo) => {
- try {
-   const response = await fetch(`${API_URL}/${idArticulo}/proveedores-ajenos`);
-   const data = await response.json();
-   
-   if (!response.ok) {
-     throw new Error(data?.mensaje || 'Error al obtener los proveedores ajenos');
-   }
-   
-   return { data };
- } catch (error) {
-   console.error('Error en obtenerProveedoresAjenos:', error);
-   return { errorMsg: error.message };
- }
-};
-export const vincularProveedorArticulo = async (idArticulo, idProveedor, datos) => {
- try {
-   const url = `http://localhost:8080/vincular/${idArticulo}/${idProveedor}`;
-   const response = await fetch(url, {
-     method: 'PUT', 
-     headers: {
-       'Content-Type': 'application/json'
-     },
-     body: JSON.stringify(datos)
-   });
-   if (!response.ok) {
-     const data = await response.json();
-     throw new Error(data?.mensaje || 'Error al vincular el proveedor al artículo');
-   }
+  try {
+    const response = await fetch(`${API_URL}/${idArticulo}/proveedores-ajenos`)
+    const data = await response.json()
 
-   return { ok: true };
- } catch (error) {
-   console.error('Error en vincularProveedorArticulo:', error);
-   return { errorMsg: error.message };
- }
-};
+    if (!response.ok) {
+      throw new Error(
+        data?.mensaje || 'Error al obtener los proveedores ajenos'
+      )
+    }
+
+    return { data }
+  } catch (error) {
+    console.error('Error en obtenerProveedoresAjenos:', error)
+    return { errorMsg: error.message }
+  }
+}
+export const vincularProveedorArticulo = async (
+  idArticulo,
+  idProveedor,
+  datos
+) => {
+  try {
+    const url = `http://localhost:8080/vincular/${idArticulo}/${idProveedor}`
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datos)
+    })
+    if (!response.ok) {
+      const data = await response.json()
+      throw new Error(
+        data?.mensaje || 'Error al vincular el proveedor al artículo'
+      )
+    }
+
+    return { ok: true }
+  } catch (error) {
+    console.error('Error en vincularProveedorArticulo:', error)
+    return { errorMsg: error.message }
+  }
+}
 // Actualizar artículo
 export const actualizarArticulo = async (id, datos) => {
   try {
