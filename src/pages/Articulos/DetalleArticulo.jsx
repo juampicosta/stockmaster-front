@@ -3,14 +3,9 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { obtenerArticuloPorId } from '../../services/apiArticulos'
 import { toast } from 'sonner'
 import { BsFillBoxSeamFill, BsGraphUpArrow } from 'react-icons/bs'
-import { FaBoxes, FaMaxcdn } from 'react-icons/fa'
+import { FaBoxes } from 'react-icons/fa'
 import { FaMoneyBill } from 'react-icons/fa6'
-import {
-  MdOutlineInventory,
-  MdPerson,
-  MdAddCircle,
-  MdSecurity
-} from 'react-icons/md'
+import { MdPerson, MdAddCircle, MdSecurity } from 'react-icons/md'
 import { GiPriceTag } from 'react-icons/gi'
 import { AiOutlineProduct } from 'react-icons/ai'
 
@@ -170,6 +165,24 @@ const DetalleArticulo = () => {
                           'N/A'}
                       </span>
                     </div>
+                    {articuloProveedor.tipoModeloInventario.id == 1 && (
+                      <>
+                        <div>
+                          <span className='font-medium'>Lote Óptimo:</span>
+                          <span className='ml-2'>
+                            {articuloProveedor.modeloInventario.loteOptimo ||
+                              'N/A'}
+                          </span>
+                        </div>
+                        <div>
+                          <span className='font-medium'>Punto de pedido:</span>
+                          <span className='ml-2'>
+                            {articuloProveedor.modeloInventario.puntoPedido ||
+                              'N/A'}
+                          </span>
+                        </div>
+                      </>
+                    )}
                     {articuloProveedor.tipoModeloInventario.id == 2 && (
                       <div>
                         <span className='font-medium'>

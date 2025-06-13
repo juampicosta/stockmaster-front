@@ -138,8 +138,6 @@ const AltaProveedor = () => {
     }))
   }
 
-  console.log(articuloDatos)
-
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
       <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>

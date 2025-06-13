@@ -1,14 +1,5 @@
 import { useParams } from 'react-router-dom'
-import {
-  MdEmail,
-  MdPhone,
-  MdAttachMoney,
-  MdAccessTime,
-  MdPerson,
-  MdMonetizationOn,
-  MdLocalShipping,
-  MdInventory
-} from 'react-icons/md'
+import { MdEmail, MdPhone, MdPerson } from 'react-icons/md'
 import { LuBoxes } from 'react-icons/lu'
 import { useEffect, useState } from 'react'
 import { obtenerOrden } from '../../services/apiOrdenes'
@@ -33,8 +24,6 @@ const DetalleOrden = () => {
 
     fetchData()
   }, [id])
-
-  console.log(orden)
 
   return (
     <div className='bg-gradient-to-br from-orange-50 to-white min-h-screen p-8'>

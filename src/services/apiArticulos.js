@@ -124,7 +124,6 @@ export const obtenerProveedoresAjenos = async (idArticulo) => {
 export const vincularProveedorArticulo = async (idArticulo, idProveedor, datos) => {
  try {
    const url = `http://localhost:8080/vincular/${idArticulo}/${idProveedor}`;
-   console.log("Enviando a:", url); // <-- Esto te muestra la URL en la consola
    const response = await fetch(url, {
      method: 'PUT', 
      headers: {
