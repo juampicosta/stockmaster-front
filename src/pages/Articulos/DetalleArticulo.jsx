@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { obtenerArticuloPorId } from '../../services/apiArticulos'
 import { toast } from 'sonner'
 import { BsFillBoxSeamFill, BsGraphUpArrow } from 'react-icons/bs'
-import { FaBoxes } from 'react-icons/fa'
+import { FaBoxes, FaMaxcdn } from 'react-icons/fa'
 import { FaMoneyBill } from 'react-icons/fa6'
 import {
   MdOutlineInventory,
@@ -12,6 +12,7 @@ import {
   MdSecurity
 } from 'react-icons/md'
 import { GiPriceTag } from 'react-icons/gi'
+import { AiOutlineProduct } from 'react-icons/ai'
 
 const DetalleArticulo = () => {
   const { id } = useParams()
@@ -101,6 +102,11 @@ const DetalleArticulo = () => {
               Precio de Venta: {articulo.precioVenta}
             </p>
 
+            <p className='flex gap-1.5 items-center mb-2'>
+              <AiOutlineProduct />
+              Inventario Máximo: {articulo.inventarioMax}
+            </p>
+
             <p className='flex gap-1.5 items-center'>
               <MdPerson />
               Proveedor predeterminado:{' '}
@@ -146,12 +152,6 @@ const DetalleArticulo = () => {
                       </span>
                     </div>
                     <div>
-                      <span className='font-medium'>Costo de Compra:</span>
-                      <span className='ml-2'>
-                        ${articuloProveedor.costoCompra || 'N/A'}
-                      </span>
-                    </div>
-                    <div>
                       <span className='font-medium'>Costo de Pedido:</span>
                       <span className='ml-2'>
                         ${articuloProveedor.costoPedido || 'N/A'}
@@ -163,6 +163,23 @@ const DetalleArticulo = () => {
                         {articuloProveedor.demoraEntrega || 'N/A'} días
                       </span>
                     </div>
+                    <div>
+                      <span className='font-medium'>Modelo de Inventario:</span>
+                      <span className='ml-2'>
+                        {articuloProveedor.tipoModeloInventario.descripcion ||
+                          'N/A'}
+                      </span>
+                    </div>
+                    {articuloProveedor.tipoModeloInventario.id == 2 && (
+                      <div>
+                        <span className='font-medium'>
+                          Intervalo de Revisión (días):
+                        </span>
+                        <span className='ml-2'>
+                          {articuloProveedor.intervaloRevision || 'N/A'}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className='flex gap-2'>

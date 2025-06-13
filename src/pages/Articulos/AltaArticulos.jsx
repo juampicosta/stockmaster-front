@@ -10,6 +10,7 @@ import { obtenerTipoModeloInventarios } from '../../services/apiTipoModeloInvent
 const AltaArticulos = () => {
   const [proveedores, setProveedores] = useState([])
   const [selectedProveedor, setSelectedProveedor] = useState(null)
+  const [selectedModelo, setSelectedModelo] = useState(null)
   const [tipoModelos, setTipoModelos] = useState([])
   const navigate = useNavigate()
 
@@ -24,6 +25,11 @@ const AltaArticulos = () => {
     data.stock = parseInt(data.stock, 10)
     data.stockSeguridad = parseInt(data.stockSeguridad, 10)
     data.precioVenta = parseFloat(data.precioVenta)
+    data.inventarioMax = parseInt(data.inventarioMax, 10)
+    data.precioUnitario = parseFloat(data.precioUnitario)
+    data.costoPedido = parseFloat(data.costoPedido)
+    data.demoraEntrega = parseFloat(data.demoraEntrega)
+    data.intervaloRevision = parseInt(data.intervaloRevision, 10)
 
     // Construir payload
     const payload = {
@@ -33,7 +39,8 @@ const AltaArticulos = () => {
         costoAlmacenamiento: data.costoAlmacenamiento,
         stock: data.stock,
         stockSeguridad: data.stockSeguridad,
-        precioVenta: data.precioVenta
+        precioVenta: data.precioVenta,
+        inventarioMax: data.inventarioMax
       }
     }
 
@@ -43,7 +50,8 @@ const AltaArticulos = () => {
         precioUnitario: data.precioUnitario,
         costoPedido: data.costoPedido,
         demoraEntrega: data.demoraEntrega,
-        idTipoModelo: data.idTipoModelo || null
+        idTipoModelo: data.idTipoModelo || null,
+        intervaloRevision: data.intervaloRevision
       }
     }
 
@@ -176,6 +184,17 @@ const AltaArticulos = () => {
         </label>
 
         <label className='block text-sm font-medium text-orange-800 w-full'>
+          Inventario Máximo
+          <input
+            required
+            min={0}
+            type='number'
+            name='inventarioMax'
+            className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+          />
+        </label>
+
+        <label className='block text-sm font-medium text-orange-800 w-full'>
           Proveedor (Opcional)
           <select
             name='idProveedor'
@@ -232,6 +251,9 @@ const AltaArticulos = () => {
             <label className='block text-sm font-medium text-orange-800 w-full'>
               Tipo de Modelo
               <select
+                onChange={(e) => {
+                  setSelectedModelo(parseInt(e.target.value))
+                }}
                 required
                 name='idTipoModelo'
                 className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
@@ -244,6 +266,19 @@ const AltaArticulos = () => {
                 ))}
               </select>
             </label>
+
+            {selectedModelo === 2 && (
+              <label className='block text-sm font-medium text-orange-800 w-full'>
+                Intervalo de Revisión (días)
+                <input
+                  required
+                  type='number'
+                  min={1}
+                  name='intervaloRevision'
+                  className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
+                />
+              </label>
+            )}
           </div>
         )}
 
