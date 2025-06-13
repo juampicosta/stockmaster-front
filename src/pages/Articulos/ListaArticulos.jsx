@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { MdAddCircle, MdEdit, MdDelete } from 'react-icons/md'
 import { IoMdPaper } from 'react-icons/io'
 import { BsFillBoxSeamFill } from 'react-icons/bs'
+import { Link } from 'react-router'
 
 const Articulos = () => {
   const [articulos, setArticulos] = useState([])
@@ -61,13 +62,13 @@ const Articulos = () => {
       <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>
         Gestión de Artículos
       </h1>
-      <a
-        href='/articulos/alta'
+      <Link
+        to='/articulos/alta'
         className='bg-orange-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-orange-600 transition duration-200 flex items-center w-fit gap-2'
       >
         <MdAddCircle />
         Crear Artículo
-      </a>
+      </Link>
 
       {/* Filtros */}
       <section className='mt-6'>

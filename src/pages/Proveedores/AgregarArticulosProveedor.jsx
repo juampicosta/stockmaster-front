@@ -6,6 +6,7 @@ import {
 } from '../../services/apiProveedores'
 import { obtenerTipoModeloInventarios } from '../../services/apiTipoModeloInventario'
 import { toast } from 'sonner'
+import Button from '../../components/Button'
 
 const AgregarArticuloProveedor = () => {
   const { id } = useParams()
@@ -218,13 +219,9 @@ const AgregarArticuloProveedor = () => {
         )}
 
         <div className='flex items-end justify-start'>
-          <button
-            type='submit'
-            className='px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
-            disabled={!articuloSeleccionado}
-          >
+          <Button type='submit' disabled={!articuloSeleccionado}>
             Guardar
-          </button>
+          </Button>
         </div>
       </form>
     </section>
