@@ -6,7 +6,6 @@ import {
   MdEmail,
   MdPhone,
   MdPerson,
-  MdAdd,
   MdAddCircle,
   MdEdit,
   MdDelete

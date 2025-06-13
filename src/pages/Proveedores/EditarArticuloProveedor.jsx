@@ -4,6 +4,7 @@ import {
   editArticuloProveedor,
   obtenerArticulosProveedor,
 } from "../../services/apiProveedores";
+import { obtenerTipoModeloInventarios } from "../../services/apiTipoModeloInventario";
 import { toast } from "sonner";
 import { MdPerson, MdInventory } from "react-icons/md";
 
@@ -12,6 +13,7 @@ const EditarArticuloProveedor = () => {
   const navigate = useNavigate();
   const [proveedor, setProveedor] = useState(null);
   const [articuloNombre, setArticuloNombre] = useState("");
+  const [tipoModelos, setTipoModelos] = useState([]);
 
   //Dar de alta el nuevo articulo del proveedor
   const handleSubmit = async (e) => {
@@ -27,6 +29,18 @@ const EditarArticuloProveedor = () => {
     navigate(`/proveedores/detalle/${id}`);
   };
 
+  //Traer los tipos de modelo para editar el artículo del proveedor
+  useEffect(() => {
+    const fetchTipoModelos = async () => {
+      const { data, errorMsg } = await obtenerTipoModeloInventarios();
+      if (errorMsg) {
+        return toast.error(errorMsg);
+      }
+      setTipoModelos(data);
+    };
+    fetchTipoModelos();
+  }, []);
+
   //Actualizar el articulo del proveedor
   const [relacion, setRelacion] = useState(null);
   useEffect(() => {
@@ -37,12 +51,14 @@ const EditarArticuloProveedor = () => {
         return;
       }
       // Buscar el artículo correcto por código
-      const articulo = data.find((a) => String(a.articulo.codigo) === String(codigo));
+      const articulo = data.find(
+        (a) => String(a.articulo.codigo) === String(codigo)
+      );
       if (!articulo) {
         toast.error("No se encontró el artículo para este proveedor");
         return;
       }
-      // Extraer los datos de la relación 
+      // Extraer los datos de la relación
       const datosRelacion = Array.isArray(articulo.articulo.articuloProveedores)
         ? articulo.articulo.articuloProveedores.find(
             (rel) => String(rel.proveedor.id) === String(id)
@@ -53,6 +69,7 @@ const EditarArticuloProveedor = () => {
         costoPedido: datosRelacion?.costoPedido ?? "",
         demoraEntrega: datosRelacion?.demoraEntrega ?? "",
         precioUnitario: datosRelacion?.preciounitario ?? "",
+        idTipoModelo: datosRelacion?.tipoModeloInventario?.id ?? "",
       });
       setArticuloNombre(articulo.articulo.descripcion || "");
       setProveedor(datosRelacion?.proveedor || null);
@@ -134,6 +151,22 @@ const EditarArticuloProveedor = () => {
                 className="w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400"
               />
             </label>
+            <select
+              required
+              name="idTipoModelo"
+              value={relacion.idTipoModelo}
+              onChange={(e) =>
+                setRelacion({ ...relacion, idTipoModelo: e.target.value })
+              }
+              className="w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200"
+            >
+              <option value="">Seleccionar tipo de modelo</option>
+              {tipoModelos.map((tipo) => (
+                <option key={tipo.id} value={tipo.id}>
+                  {tipo.descripcion}
+                </option>
+              ))}
+            </select>
           </>
         ) : (
           <p className="col-span-full text-orange-500">
