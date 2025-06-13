@@ -154,6 +154,16 @@ const Articulos = () => {
                     <MdDelete className='text-lg text-red-500 mr-2' />
                     Eliminar
                   </button>
+
+                  {(filter === 'Reponer' || filter === 'Faltantes') && (
+                    <Link
+                      to={`/ordenes-de-compra/alta?codigoArticulo=${a.codigo}`}
+                      className='text-yellow-600 hover:text-yellow-800 flex items-center px-2 py-1 rounded hover:bg-yellow-50 transition duration-200'
+                    >
+                      <MdAddCircle className='text-lg text-yellow-500 mr-2' />
+                      Generar Orden de Compra
+                    </Link>
+                  )}
                 </div>
               </li>
             ))
