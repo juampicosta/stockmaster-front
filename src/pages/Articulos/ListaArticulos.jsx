@@ -120,20 +120,20 @@ const Articulos = () => {
                   </div>
                 </div>
                 <div className='flex flex-col gap-1'>
-                  <a
-                    href={`/articulos/detalle/${a.codigo}`}
+                  <Link
+                    to={`/articulos/detalle/${a.codigo}`}
                     className='text-green-600 hover:text-green-800 flex items-center px-2 py-1 rounded hover:bg-green-50 transition duration-200'
                   >
                     <IoMdPaper className='text-lg text-green-500 mr-2' />
                     Ver detalle
-                  </a>
-                  <a
-                    href={`/articulos/editar/${a.codigo}`}
+                  </Link>
+                  <Link
+                    to={`/articulos/editar/${a.codigo}`}
                     className='text-blue-600 hover:text-blue-800 flex items-center px-2 py-1 rounded hover:bg-blue-50 transition duration-200'
                   >
                     <MdEdit className='text-lg text-blue-500 mr-2' />
                     Editar
-                  </a>
+                  </Link>
                   <button
                     onClick={() => handleEliminar(a.codigo)}
                     className='text-red-600 hover:text-red-800 cursor-pointer flex items-center px-2 py-1 rounded hover:bg-red-50 transition duration-200'

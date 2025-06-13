@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+
 const Header = () => {
   return (
     <>
@@ -13,30 +15,30 @@ const Header = () => {
         </div>
 
         <nav className='flex items-center space-x-6'>
-          <a
-            href='/articulos'
+          <Link
+            to='/articulos'
             className='text-base font-semibold hover:text-orange-600'
           >
             Artículos
-          </a>
-          <a
-            href='/ordenes-de-compra'
+          </Link>
+          <Link
+            to='/ordenes-de-compra'
             className='text-base font-semibold hover:text-orange-600'
           >
             Órdenes de Compra
-          </a>
-          <a
-            href='/proveedores'
+          </Link>
+          <Link
+            to='/proveedores'
             className='text-base font-semibold hover:text-orange-600'
           >
             Proveedores
-          </a>
-          <a
-            href='/ventas'
+          </Link>
+          <Link
+            to='/ventas'
             className='text-base font-semibold hover:text-orange-600'
           >
             Ventas
-          </a>
+          </Link>
         </nav>
 
         <div className='flex flex-row items-center space-x-0'>

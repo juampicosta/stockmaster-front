@@ -103,13 +103,13 @@ const ListaOrdenes = () => {
       </h1>
 
       <section className='mb-12'>
-        <a
+        <Link
           className='bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 flex  items-center justify-center w-fit'
-          href='/ordenes-de-compra/alta'
+          to='/ordenes-de-compra/alta'
         >
           <MdAddCircle />
           <span className='ml-2'>Crear Orden de Compra</span>
-        </a>
+        </Link>
         <section className='mt-10'>
           <h2 className='text-xl font-semibold text-orange-800 mb-4'>
             Lista de Ordenes de Compra
