@@ -193,6 +193,8 @@ const Articulos = () => {
     fetchArticulos()
   }, [filter])
 
+  console.log(articulos)
+
   return (
     <div className='bg-white min-h-screen p-8'>
       <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>
@@ -246,10 +248,13 @@ const Articulos = () => {
                     {a.descripcion}
                   </p>
                   <div className='ml-3 text-md'>
-                    <p>
-                      Stock: {a.stock} | Modelo Inventario:{' '}
-                      {a.tipoModeloInventario.descripcion}
-                    </p>
+                    <p>Stock: {a.stock}</p>
+                    {a.provPredeterminado && (
+                      <p className='text-sm text-gray-600'>
+                        Proveedor Predeterminado:{' '}
+                        {a.provPredeterminado.razonSocial}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className='flex flex-col gap-1'>
