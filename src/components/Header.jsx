@@ -6,9 +6,9 @@ const Header = () => {
       <header className='bg-beige text-orange-900 rounded-b-lg rounded-bl-none sticky top-0 z-50 h-20 flex items-center justify-between px-6 shadow-xl'>
         <div className='flex items-center space-x-4'>
           <img
-            src='/LogoSM.jpg'
+            src='/logoSM.png'
             alt='Logo'
-            className='size-16 rounded-full shadow-md'
+            className='size-16 rounded-full shadow-md bg-crema'
           />
 
           <span className='text-md font-bold'>Gestor de Inventarios</span>
