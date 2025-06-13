@@ -183,7 +183,7 @@ const Articulos = () => {
           setArticulos(data || [])
         }
       } catch (error) {
-        toast.error('Error al cargar los artículos')
+        toast.error(error.message || 'Error al obtener los artículos')
         setArticulos([])
       } finally {
         setLoading(false)
@@ -192,8 +192,6 @@ const Articulos = () => {
 
     fetchArticulos()
   }, [filter])
-
-  console.log(articulos)
 
   return (
     <div className='bg-white min-h-screen p-8'>
