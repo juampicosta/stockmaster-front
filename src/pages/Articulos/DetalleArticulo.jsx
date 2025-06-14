@@ -197,7 +197,7 @@ const DetalleArticulo = () => {
                 </div>
                 <div className='flex gap-2'>
                   <Link
-                    to={`/proveedores/${id}/articulos/${articulo.codigo}`}
+                    to={`/proveedores/${articuloProveedor.proveedor.id}/articulos/${id}`}
                     className='flex items-center text-blue-600 hover:underline'
                   >
                     Editar
