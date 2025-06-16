@@ -97,11 +97,6 @@ const DetalleArticulo = () => {
               Precio de Venta: {articulo.precioVenta}
             </p>
 
-            <p className='flex gap-1.5 items-center mb-2'>
-              <AiOutlineProduct />
-              Inventario Máximo: {articulo.inventarioMax}
-            </p>
-
             <p className='flex gap-1.5 items-center'>
               <MdPerson />
               Proveedor predeterminado:{' '}
@@ -182,6 +177,15 @@ const DetalleArticulo = () => {
                           </span>
                         </div>
                       </>
+                    )}
+                      {/* Mostrar Inventario Máximo solo si es Intervalo Fijo */}
+                    {articuloProveedor.tipoModeloInventario.id == 2 && (
+                     <div>
+                       <span className='font-medium'>Inventario Máximo:</span>
+                       <span className='ml-2'>
+                          {articuloProveedor.modeloInventario?.inventarioMax || 'N/A'}
+                       </span>
+                     </div>
                     )}
                   </div>
                 </div>
