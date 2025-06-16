@@ -183,16 +183,6 @@ const DetalleArticulo = () => {
                         </div>
                       </>
                     )}
-                    {articuloProveedor.tipoModeloInventario.id == 2 && (
-                      <div>
-                        <span className='font-medium'>
-                          Intervalo de Revisión (días):
-                        </span>
-                        <span className='ml-2'>
-                          {articuloProveedor.intervaloRevision || 'N/A'}
-                        </span>
-                      </div>
-                    )}
                   </div>
                 </div>
                 <div className='flex gap-2'>
