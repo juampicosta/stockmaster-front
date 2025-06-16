@@ -4,18 +4,21 @@ import { obtenerArticulos } from '../../services/apiArticulos'
 import { registrarOrden, sugerirOrdenCompra } from '../../services/apiOrdenes'
 import { LuBoxes } from 'react-icons/lu'
 import { BsCash } from 'react-icons/bs'
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 
 const AltaOrden = () => {
-  const [articulos, setArticulos] = useState([]) // Estado para los articulos
-  const [selectedArticulo, setSelectedArticulo] = useState(null) // Estado para el articulo seleccionado
-  const [sugerirOrden, setSugerirOrden] = useState(null) // Estado para la sugerencia de orden
-  const navigate = useNavigate() // Hook para redirigir al usuario
+  const [searchParams, setSearchParams] = useSearchParams()
+  const id = searchParams.get('id')
 
-  //Dar de alta el nuevo Proveedor
+  const [articulos, setArticulos] = useState([])
+  const [selectedArticulo, setSelectedArticulo] = useState(null)
+  const [sugerirOrden, setSugerirOrden] = useState(null)
+  const [selectedProveedor, setSelectedProveedor] = useState('') // NUEVO estado controlado
+  const navigate = useNavigate()
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const formData = new FormData(e.target) //Recupero los datos del formulario
+    const formData = new FormData(e.target)
     const lote = formData.get('lote')
     const articuloId = formData.get('articuloId')
     const proveedorId = formData.get('proveedorId')
@@ -26,47 +29,59 @@ const AltaOrden = () => {
       idProveedor: parseInt(proveedorId)
     }
 
-    // Llamar al servicio
-    const { errorMsg, data } = await registrarOrden(dataToSend)
+    const { errorMsg } = await registrarOrden(dataToSend)
     if (errorMsg) {
       return toast.error(errorMsg)
     }
 
     toast.success('Orden creada correctamente')
-    e.target.reset() // Reiniciar el formulario
-    navigate('/ordenes-de-compra') // Redirigir a la lista de ordenes
+    e.target.reset()
+    navigate('/ordenes-de-compra')
   }
 
-  //Llamar al servicio para traer los articulos
   useEffect(() => {
     const fetchArticulos = async () => {
-      // Pasar  el parametro predeterminado = true para que traiga los articulos con proveedores predeterminados
       const { errorMsg, data } = await obtenerArticulos()
       if (errorMsg) {
         return toast.error(errorMsg)
       }
       setArticulos(Array.isArray(data) ? data : [])
     }
+
     fetchArticulos()
   }, [])
 
-  const handleChangeArticulo = async (e) => {
+  useEffect(() => {
+    const suggestOrdenCompra = async (id) => {
+      if (!id) {
+        setSugerirOrden(null)
+        setSelectedProveedor('')
+        return
+      }
+
+      const { data, errorMsg } = await sugerirOrdenCompra(id)
+      if (errorMsg) {
+        return toast.error(errorMsg)
+      }
+
+      setSugerirOrden(data)
+      setSelectedProveedor(data?.proveedorPredeterminado?.id ?? '')
+    }
+
+    if (id && articulos.length > 0) {
+      const articulo = articulos.find((art) => art.codigo == id)
+      setSelectedArticulo(articulo || null)
+      suggestOrdenCompra(id)
+    }
+  }, [id, articulos])
+
+  const handleChangeArticulo = (e) => {
     const selectedCodigo = e.target.value
     if (!selectedCodigo) {
-      setSelectedArticulo(null)
-      setSugerirOrden(null)
+      setSearchParams({})
       return
     }
-
-    const articulo = articulos.find((art) => art.codigo == selectedCodigo)
-    setSelectedArticulo(articulo || null)
-
-    const { data, errorMsg } = await sugerirOrdenCompra(selectedCodigo)
-    if (errorMsg) {
-      return toast.error(errorMsg)
-    }
-
-    setSugerirOrden(data)
+    setSearchParams({ id: selectedCodigo })
   }
 
   return (
@@ -75,7 +90,6 @@ const AltaOrden = () => {
         Nueva Orden de Compra
       </h1>
 
-      {/* Formulario */}
       <form
         onSubmit={handleSubmit}
         className='grid grid-cols-1 md:grid-cols-3 gap-4 bg-beige p-6 rounded-lg shadow-md'
@@ -122,14 +136,12 @@ const AltaOrden = () => {
         {selectedArticulo && (
           <div>
             <label className='block text-sm font-medium text-orange-800'>
-              Provedores
+              Proveedores
             </label>
             <select
-              onChange={() => {
-                setSugerirOrden(null)
-              }}
               required
-              defaultValue={sugerirOrden?.proveedorPredeterminado?.id}
+              value={selectedProveedor} // controlado
+              onChange={(e) => setSelectedProveedor(e.target.value)}
               name='proveedorId'
               className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-orange-200 focus:border-orange-500 transition-colors duration-200'
             >
@@ -141,6 +153,7 @@ const AltaOrden = () => {
             </select>
           </div>
         )}
+
         {sugerirOrden && (
           <div className='text-orange-800'>
             <p className='flex items-center gap-2'>
