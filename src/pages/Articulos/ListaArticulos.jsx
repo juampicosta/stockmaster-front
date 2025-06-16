@@ -157,7 +157,7 @@ const Articulos = () => {
 
                   {(filter === 'Reponer' || filter === 'Faltantes') && (
                     <Link
-                      to={`/ordenes-de-compra/alta?codigoArticulo=${a.codigo}`}
+                      to={`/ordenes-de-compra/alta?id=${a.codigo}`}
                       className='text-yellow-600 hover:text-yellow-800 flex items-center px-2 py-1 rounded hover:bg-yellow-50 transition duration-200'
                     >
                       <MdAddCircle className='text-lg text-yellow-500 mr-2' />
