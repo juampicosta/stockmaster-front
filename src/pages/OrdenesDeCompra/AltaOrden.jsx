@@ -39,7 +39,7 @@ const AltaOrden = () => {
     ) {
       // Pedir confirmación al usuario
       const confirmacion = window.confirm(
-        `El lote ingresado más la cantidad (${newQuantity}) es menor al punto de pedido (${proveedorIntermedia.modeloInventario.puntoPedido}) del proveedor seleccionado. ¿Desea continuar?`
+        `El lote ingresado más el stock actual (${newQuantity}) es menor al punto de pedido (${proveedorIntermedia.modeloInventario.puntoPedido}) del proveedor seleccionado. ¿Desea continuar?`
       )
       if (!confirmacion) {
         return
