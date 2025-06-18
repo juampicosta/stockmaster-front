@@ -31,11 +31,19 @@ const AltaOrden = () => {
       )
     }
 
+    const newQuantity = parseInt(lote) + parseInt(selectedArticulo.stock)
+
     if (
-      selectedArticulo.stock + parseInt(lote) <
-      proveedorIntermedia.modeloInventario.puntoPedido
+      proveedorIntermedia.modeloInventario.id == 2 &&
+      newQuantity < proveedorIntermedia.modeloInventario.puntoPedido
     ) {
-      return toast.error('El lote no supera el punto de pedido')
+      // Pedir confirmación al usuario
+      const confirmacion = window.confirm(
+        `El lote ingresado más la cantidad (${newQuantity}) es menor al punto de pedido (${proveedorIntermedia.modeloInventario.puntoPedido}) del proveedor seleccionado. ¿Desea continuar?`
+      )
+      if (!confirmacion) {
+        return
+      }
     }
 
     const dataToSend = {
