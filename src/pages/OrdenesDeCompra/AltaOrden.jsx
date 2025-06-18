@@ -22,6 +22,21 @@ const AltaOrden = () => {
     const lote = formData.get('lote')
     const articuloId = formData.get('articuloId')
     const proveedorId = formData.get('proveedorId')
+    const proveedorIntermedia = selectedArticulo.articuloProveedores.find(
+      (p) => p.proveedor.id == proveedorId
+    )
+    if (!proveedorIntermedia) {
+      return toast.error(
+        'Proveedor no encontrado para el articulo seleccionado'
+      )
+    }
+
+    if (
+      selectedArticulo.stock + parseInt(lote) <
+      proveedorIntermedia.modeloInventario.puntoPedido
+    ) {
+      return toast.error('El lote no supera el punto de pedido')
+    }
 
     const dataToSend = {
       lote: parseInt(lote),
