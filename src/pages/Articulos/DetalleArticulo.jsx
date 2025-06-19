@@ -55,7 +55,6 @@ const DetalleArticulo = () => {
       </div>
     )
   }
-  console.log(articulo)
 
   return (
     <div className='bg-gradient-to-br from-orange-50 to-white min-h-screen p-8'>
@@ -85,7 +84,8 @@ const DetalleArticulo = () => {
 
             <p className='flex gap-1.5 items-center mb-2'>
               <FaMoneyBill />
-              Costo de Almacenamiento (Anual): ${articulo.costoAlmacenamiento}
+              Costo de Almacenamiento (Por Unidad): $
+              {articulo.costoAlmacenamiento}
             </p>
 
             <p className='flex gap-1.5 items-center mb-2'>
