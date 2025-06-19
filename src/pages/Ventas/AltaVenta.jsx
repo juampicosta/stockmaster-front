@@ -23,8 +23,17 @@ const AltaVenta = () => {
     }
 
     // Llamar al servicio
-    const { errorMsg, data } = await registrarVenta(dataToSend)
+    const { errorMsg } = await registrarVenta(dataToSend)
     if (errorMsg) {
+      if (
+        errorMsg ==
+        'El Artículo tiene órdenes de compra en estado Pendiente o Enviada'
+      ) {
+        toast.success('Venta creada correctamente')
+        return toast.error(
+          'El Artículo tiene órdenes de compra en estado Pendiente o Enviada por lo que no se pudo generar la orden de compra'
+        )
+      }
       return toast.error(errorMsg)
     }
 
