@@ -14,7 +14,6 @@ const EditarArticuloProveedor = () => {
   const [proveedor, setProveedor] = useState(null)
   const [articuloNombre, setArticuloNombre] = useState('')
   const [tipoModelos, setTipoModelos] = useState([])
-  const [selectedModelo, setSelectedModelo] = useState(null)
 
   //Dar de alta el nuevo articulo del proveedor
   const handleSubmit = async (e) => {
@@ -27,7 +26,8 @@ const EditarArticuloProveedor = () => {
     }
 
     toast.success('Artículo del proveedor editado correctamente')
-    navigate(`/proveedores/detalle/${id}`)
+    // Ir a la página anterior
+    navigate(-1)
   }
 
   //Traer los tipos de modelo para editar el artículo del proveedor
@@ -78,13 +78,6 @@ const EditarArticuloProveedor = () => {
     }
     fetchRelacion()
   }, [id, codigo])
-
-  // Paraccaragar datos del modelo al seleccionar "Edtitar"
-  useEffect(() => {
-    if (relacion?.idTipoModelo) {
-      setSelectedModelo(parseInt(relacion.idTipoModelo))
-    }
-  }, [relacion])
 
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
@@ -165,7 +158,6 @@ const EditarArticuloProveedor = () => {
               <select
                 value={relacion.idTipoModelo} // <-- Esto selecciona el modelo previamente guardado
                 onChange={(e) => {
-                  setSelectedModelo(parseInt(e.target.value))
                   setRelacion({ ...relacion, idTipoModelo: e.target.value })
                 }}
                 required
