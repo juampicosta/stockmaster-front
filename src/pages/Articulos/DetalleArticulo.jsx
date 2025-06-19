@@ -143,7 +143,7 @@ const DetalleArticulo = () => {
                 <div className='flex flex-col w-full items-start'>
                   <div className='flex items-center justify-center mb-3'>
                     <div className='flex items-center justify-center w-10 h-10 bg-orange-100 rounded-full mr-3'>
-                      <MdInventory className='text-2xl text-orange-700' />
+                      <MdPerson className='text-2xl text-orange-700' />
                     </div>
                     <span className='text-xl font-semibold text-orange-800'>
                       {articuloProveedor.proveedor.razonSocial}
