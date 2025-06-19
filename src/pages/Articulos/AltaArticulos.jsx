@@ -124,7 +124,7 @@ const AltaArticulos = () => {
         </label>
 
         <label className='block text-sm font-medium text-orange-800 w-full'>
-          Demanda Anual
+          Demanda (Anual)
           <input
             required
             min={0}
@@ -223,7 +223,7 @@ const AltaArticulos = () => {
             </label>
 
             <label className='block text-sm font-medium text-orange-800 w-full'>
-              Demora de Entrega
+              Demora de Entrega (dias)
               <input
                 required
                 min={0}

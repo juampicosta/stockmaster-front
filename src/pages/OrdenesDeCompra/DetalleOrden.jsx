@@ -93,7 +93,7 @@ const DetalleOrden = () => {
           </span>
         </div>
         <div className='flex items-center gap-2 text-orange-800'>
-          <strong>Demora de Entrega: </strong>
+          <strong>Demora de Entrega (dias): </strong>
           <span className='text-md text-gray-700'>
             {orden?.articulo?.demoraEntrega} días
           </span>

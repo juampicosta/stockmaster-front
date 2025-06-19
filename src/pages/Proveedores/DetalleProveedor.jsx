@@ -144,7 +144,7 @@ const DetalleProveedor = () => {
                         <li className="flex items-center">
                           <MdAccessTime className="text-lg text-yellow-600 mr-2" />
                           <span>
-                            <strong>Demora de Entrega:</strong>{" "}
+                            <strong>Demora de Entrega (dias):</strong>{" "}
                             {proveedorIntermedia?.demoraEntrega}
                           </span>
                         </li>

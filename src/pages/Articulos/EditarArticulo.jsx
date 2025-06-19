@@ -105,7 +105,7 @@ const EditarArticulo = () => {
         </label>
 
         <label className='block text-sm font-medium text-orange-800 w-full'>
-          Demanda Anual
+          Demanda (Anual)
           <input
             required
             type='number'

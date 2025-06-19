@@ -79,12 +79,12 @@ const DetalleArticulo = () => {
 
             <p className='flex gap-1.5 items-center mb-2'>
               <BsGraphUpArrow />
-              Demanda Anual: {articulo.demandaArticulo}
+              Demanda (Anual): {articulo.demandaArticulo}
             </p>
 
             <p className='flex gap-1.5 items-center mb-2'>
               <FaMoneyBill />
-              Costo de almacenamiento: {articulo.costoAlmacenamiento}
+              Costo de almacenamiento: ${articulo.costoAlmacenamiento}
             </p>
 
             <p className='flex gap-1.5 items-center mb-2'>
@@ -94,7 +94,7 @@ const DetalleArticulo = () => {
 
             <p className='flex gap-1.5 items-center mb-2'>
               <GiPriceTag />
-              Precio de Venta: {articulo.precioVenta}
+              Precio de Venta: ${articulo.precioVenta}
             </p>
 
             <p className='flex gap-1.5 items-center'>
@@ -148,7 +148,7 @@ const DetalleArticulo = () => {
                       </span>
                     </div>
                     <div>
-                      <span className='font-medium'>Demora de Entrega:</span>
+                      <span className='font-medium'>Demora de Entrega (dias):</span>
                       <span className='ml-2'>
                         {articuloProveedor.demoraEntrega || 'N/A'} días
                       </span>
