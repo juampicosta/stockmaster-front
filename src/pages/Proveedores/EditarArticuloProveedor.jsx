@@ -135,7 +135,7 @@ const EditarArticuloProveedor = () => {
               />
             </label>
             <label className="block text-sm font-medium text-orange-800">
-              Demora de Entrega
+              Demora de Entrega (dias)
               <input
                 required
                 type="number"

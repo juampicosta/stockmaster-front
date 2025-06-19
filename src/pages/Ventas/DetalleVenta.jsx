@@ -49,7 +49,7 @@ const DetalleVenta = () => {
         <div className='flex items-center mb-2 gap-2 text-orange-800'>
           <BiBox className='text-xl text-orange-500' />
           <strong>Cantidad: </strong>
-          <span className='text-md text-gray-700'>${venta?.cantidad}</span>
+          <span className='text-md text-gray-700'>{venta?.cantidad}</span>
         </div>
         <div className='flex items-center mb-2 gap-2 text-orange-800'>
           <BiMoney className='text-xl text-orange-500' />
