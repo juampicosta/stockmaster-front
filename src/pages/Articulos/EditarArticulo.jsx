@@ -159,7 +159,7 @@ const EditarArticulo = () => {
         </label>
 
         <label className='block text-sm font-medium text-orange-800 w-full'>
-          Proveedor (Opcional)
+          Proveedor Predeterminado
           <select
             name='idProvPredeterminado'
             defaultValue={articulo?.provPredeterminado?.id || ''}

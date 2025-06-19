@@ -55,6 +55,7 @@ const DetalleArticulo = () => {
       </div>
     )
   }
+  console.log(articulo)
 
   return (
     <div className='bg-gradient-to-br from-orange-50 to-white min-h-screen p-8'>
@@ -148,7 +149,9 @@ const DetalleArticulo = () => {
                       </span>
                     </div>
                     <div>
-                      <span className='font-medium'>Demora de Entrega (dias):</span>
+                      <span className='font-medium'>
+                        Demora de Entrega (dias):
+                      </span>
                       <span className='ml-2'>
                         {articuloProveedor.demoraEntrega || 'N/A'} días
                       </span>
@@ -162,6 +165,14 @@ const DetalleArticulo = () => {
                     </div>
                     {articuloProveedor.tipoModeloInventario.id == 1 && (
                       <>
+                        <div>
+                          <span className='font-medium'>
+                            CGI (Costo de Gestión de Inventario):
+                          </span>
+                          <span className='ml-2'>
+                            ${articuloProveedor.modeloInventario.cgi || 'N/A'}
+                          </span>
+                        </div>
                         <div>
                           <span className='font-medium'>Lote Óptimo:</span>
                           <span className='ml-2'>
@@ -178,14 +189,15 @@ const DetalleArticulo = () => {
                         </div>
                       </>
                     )}
-                      {/* Mostrar Inventario Máximo solo si es Intervalo Fijo */}
+                    {/* Mostrar Inventario Máximo solo si es Intervalo Fijo */}
                     {articuloProveedor.tipoModeloInventario.id == 2 && (
-                     <div>
-                       <span className='font-medium'>Inventario Máximo:</span>
-                       <span className='ml-2'>
-                          {articuloProveedor.modeloInventario?.inventarioMax || 'N/A'}
-                       </span>
-                     </div>
+                      <div>
+                        <span className='font-medium'>Inventario Máximo:</span>
+                        <span className='ml-2'>
+                          {articuloProveedor.modeloInventario?.inventarioMax ||
+                            'N/A'}
+                        </span>
+                      </div>
                     )}
                   </div>
                 </div>
