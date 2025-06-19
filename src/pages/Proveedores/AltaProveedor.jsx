@@ -215,7 +215,6 @@ const AltaProveedor = () => {
           </label>
           <select
             onChange={(e) => handleChange(e)}
-            required
             name='articuloId'
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-orange-200 focus:border-orange-500 transition-colors duration-200'
           >
@@ -268,7 +267,7 @@ const AltaProveedor = () => {
                   {articulosExpandido[articulo.idArticulo] && (
                     <>
                       <label className='block text-sm font-medium text-orange-800'>
-                        Costo de pedido
+                        Costo de Pedido (Anual)
                         <input
                           required
                           type='number'
@@ -281,7 +280,7 @@ const AltaProveedor = () => {
                         />
                       </label>
                       <label className='block text-sm font-medium text-orange-800'>
-                        Demora de Entrega
+                        Demora de Entrega (Días)
                         <input
                           required
                           type='number'

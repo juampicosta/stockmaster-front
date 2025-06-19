@@ -136,7 +136,7 @@ const AltaArticulos = () => {
         </label>
 
         <label className='block text-sm font-medium text-orange-800 w-full'>
-          Costo de Almacenamiento
+          Costo de Almacenamiento (Anual)
           <input
             required
             min={0}
@@ -211,7 +211,7 @@ const AltaArticulos = () => {
             </label>
 
             <label className='block text-sm font-medium text-orange-800 w-full'>
-              Costo de Pedido
+              Costo de Pedido (Anual)
               <input
                 required
                 min={0}
@@ -223,7 +223,7 @@ const AltaArticulos = () => {
             </label>
 
             <label className='block text-sm font-medium text-orange-800 w-full'>
-              Demora de Entrega (dias)
+              Demora de Entrega (Días) (dias)
               <input
                 required
                 min={0}

@@ -85,7 +85,7 @@ const DetalleArticulo = () => {
 
             <p className='flex gap-1.5 items-center mb-2'>
               <FaMoneyBill />
-              Costo de almacenamiento: ${articulo.costoAlmacenamiento}
+              Costo de Almacenamiento (Anual): ${articulo.costoAlmacenamiento}
             </p>
 
             <p className='flex gap-1.5 items-center mb-2'>
@@ -143,14 +143,16 @@ const DetalleArticulo = () => {
                       </span>
                     </div>
                     <div>
-                      <span className='font-medium'>Costo de Pedido:</span>
+                      <span className='font-medium'>
+                        Costo de Pedido (Anual):
+                      </span>
                       <span className='ml-2'>
                         ${articuloProveedor.costoPedido || 'N/A'}
                       </span>
                     </div>
                     <div>
                       <span className='font-medium'>
-                        Demora de Entrega (dias):
+                        Demora de Entrega (Días) (dias):
                       </span>
                       <span className='ml-2'>
                         {articuloProveedor.demoraEntrega || 'N/A'} días

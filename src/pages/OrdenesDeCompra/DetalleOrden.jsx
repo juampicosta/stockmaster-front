@@ -87,13 +87,13 @@ const DetalleOrden = () => {
           </span>
         </div>
         <div className='flex items-center mb-2 gap-2 text-orange-800'>
-          <strong>Costo de Pedido: </strong>
+          <strong>Costo de Pedido (Anual): </strong>
           <span className='text-md text-gray-700'>
             ${orden?.articulo?.costoPedido}
           </span>
         </div>
         <div className='flex items-center gap-2 text-orange-800'>
-          <strong>Demora de Entrega (dias): </strong>
+          <strong>Demora de Entrega (Días) (dias): </strong>
           <span className='text-md text-gray-700'>
             {orden?.articulo?.demoraEntrega} días
           </span>
