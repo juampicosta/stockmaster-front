@@ -13,7 +13,7 @@ import {
   MdLocalShipping,
   MdAccessTime,
   MdAttachMoney,
-  MdAssignment
+  MdAssignment,
 } from 'react-icons/md'
 import { GiPriceTag } from 'react-icons/gi'
 import { IoMdCart } from 'react-icons/io'
