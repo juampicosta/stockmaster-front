@@ -122,7 +122,7 @@ const EditarArticuloProveedor = () => {
         {relacion ? (
           <>
             <label className='block text-sm font-medium text-orange-800'>
-              Costo de Pedido (Anual)
+              Costo de Pedido
               <input
                 required
                 type='number'
@@ -135,7 +135,7 @@ const EditarArticuloProveedor = () => {
               />
             </label>
             <label className='block text-sm font-medium text-orange-800'>
-              Demora de Entrega (Días) (dias)
+              Demora de Entrega (Días)
               <input
                 required
                 type='number'

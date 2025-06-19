@@ -143,16 +143,14 @@ const DetalleArticulo = () => {
                       </span>
                     </div>
                     <div>
-                      <span className='font-medium'>
-                        Costo de Pedido (Anual):
-                      </span>
+                      <span className='font-medium'>Costo de Pedido:</span>
                       <span className='ml-2'>
                         ${articuloProveedor.costoPedido || 'N/A'}
                       </span>
                     </div>
                     <div>
                       <span className='font-medium'>
-                        Demora de Entrega (Días) (dias):
+                        Demora de Entrega (Días) :
                       </span>
                       <span className='ml-2'>
                         {articuloProveedor.demoraEntrega || 'N/A'} días

@@ -137,14 +137,14 @@ const DetalleProveedor = () => {
                         <li className='flex items-center'>
                           <MdLocalShipping className='text-lg text-blue-500 mr-2' />
                           <span>
-                            <strong>Costo de Pedido (Anual):</strong>{' '}
+                            <strong>Costo de Pedido:</strong>{' '}
                             {proveedorIntermedia?.costoPedido}
                           </span>
                         </li>
                         <li className='flex items-center'>
                           <MdAccessTime className='text-lg text-yellow-600 mr-2' />
                           <span>
-                            <strong>Demora de Entrega (Días) (dias):</strong>{' '}
+                            <strong>Demora de Entrega (Días) :</strong>{' '}
                             {proveedorIntermedia?.demoraEntrega}
                           </span>
                         </li>

@@ -137,7 +137,7 @@ const AgregarArticuloProveedor = () => {
         {articuloSeleccionado && (
           <>
             <label className='block text-sm font-medium text-orange-800'>
-              Costo de Pedido (Anual)
+              Costo de Pedido
               <input
                 required
                 type='number'
