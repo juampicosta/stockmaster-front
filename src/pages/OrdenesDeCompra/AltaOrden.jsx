@@ -219,18 +219,20 @@ const AltaOrden = () => {
           </div>
         )}
 
-        {sugerirOrden && sugerirOrden.lote == lote && (
-          <div className='text-orange-800'>
-            <p className='flex items-center gap-2'>
-              <LuBoxes className='text-xl text-orange-700' />
-              <strong>Lote:</strong> {sugerirOrden.lote}
-            </p>
-            <p className='flex items-center gap-2'>
-              <BsCash className='text-xl text-orange-700' />
-              <strong>Monto total:</strong> ${sugerirOrden.montoTotal}
-            </p>
-          </div>
-        )}
+        {sugerirOrden &&
+          sugerirOrden.lote == lote &&
+          sugerirOrden.proveedorPredeterminado.id == selectedProveedor && (
+            <div className='text-orange-800'>
+              <p className='flex items-center gap-2'>
+                <LuBoxes className='text-xl text-orange-700' />
+                <strong>Lote:</strong> {sugerirOrden.lote}
+              </p>
+              <p className='flex items-center gap-2'>
+                <BsCash className='text-xl text-orange-700' />
+                <strong>Monto total:</strong> ${sugerirOrden.montoTotal}
+              </p>
+            </div>
+          )}
 
         <div className='flex items-end justify-end w-full col-span-full mt-2'>
           <button
