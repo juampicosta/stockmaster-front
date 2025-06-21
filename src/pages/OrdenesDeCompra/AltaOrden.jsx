@@ -11,7 +11,6 @@ const AltaOrden = () => {
 
   const [articulos, setArticulos] = useState([])
   const [selectedArticulo, setSelectedArticulo] = useState(null)
-  const [sugerirOrden, setSugerirOrden] = useState(null)
   const [selectedProveedor, setSelectedProveedor] = useState('')
   const [existingOrden, setExistingOrden] = useState(false)
   const [lote, setLote] = useState('')
@@ -99,7 +98,6 @@ const AltaOrden = () => {
   useEffect(() => {
     const suggestOrdenCompra = async (id) => {
       if (!id) {
-        setSugerirOrden(null)
         setSelectedProveedor('')
         setLote('')
         setExistingOrden(false)
@@ -114,7 +112,6 @@ const AltaOrden = () => {
         ) {
           setExistingOrden(true)
         }
-        setSugerirOrden(null)
         setSelectedProveedor(
           articulos.find((art) => art.codigo == id)?.provPredeterminado?.id ||
             ''
@@ -123,7 +120,6 @@ const AltaOrden = () => {
         return toast.error(errorMsg)
       }
 
-      setSugerirOrden(data)
       setSelectedProveedor(data?.proveedorPredeterminado?.id ?? '')
       setLote(data?.lote ?? '')
     }
