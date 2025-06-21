@@ -12,9 +12,25 @@ const EditaOrden = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const stockActual = parseInt(orden.articulo.stock, 10)
-    const lote = parseInt(orden.lote, 10)
-
+    const stockActual = parseInt(orden.stock)
+    const lote = parseInt(orden.lote)
+    const modeloInventario = orden.articuloProveedor.tipoModeloInventario.id
+    if (
+      modeloInventario == 1 &&
+      stockActual + lote <= orden.articuloProveedor.modeloInventario.puntoPedido
+    ) {
+      // Pedir confirmación al usuario
+      const confirmacion = window.confirm(
+        `El lote ingresado más el stock actual (${
+          stockActual + lote
+        }) es menor o igual al punto de pedido (${
+          orden.articuloProveedor.modeloInventario.puntoPedido
+        }) del proveedor seleccionado. ¿Desea continuar?`
+      )
+      if (!confirmacion) {
+        return
+      }
+    }
     const { errorMsg } = await editarOrden(orden, id)
     if (errorMsg) {
       return toast.error(errorMsg)
@@ -49,8 +65,6 @@ const EditaOrden = () => {
 
     fetchOrden()
   }, [id])
-
-  console.log(orden)
 
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
