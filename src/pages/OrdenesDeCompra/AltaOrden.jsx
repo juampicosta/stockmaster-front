@@ -98,6 +98,8 @@ const AltaOrden = () => {
           'El Artículo tiene órdenes de compra en estado Pendiente o Enviada'
         ) {
           setExistingOrden(true)
+          setSugerirOrden(null)
+          setSelectedProveedor('')
         }
         return toast.error(errorMsg)
       }
