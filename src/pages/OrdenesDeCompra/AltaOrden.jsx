@@ -114,6 +114,7 @@ const AltaOrden = () => {
   }, [id, articulos])
 
   const handleChangeArticulo = (e) => {
+    setExistingOrden(false)
     const selectedCodigo = e.target.value
     if (!selectedCodigo) {
       setSearchParams({})
