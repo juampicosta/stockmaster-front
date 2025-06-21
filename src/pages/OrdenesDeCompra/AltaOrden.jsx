@@ -44,7 +44,7 @@ const AltaOrden = () => {
     const newQuantity = parseInt(lote) + parseInt(selectedArticulo.stock)
     if (
       proveedorIntermedia.modeloInventario.id == 2 &&
-      newQuantity < proveedorIntermedia.modeloInventario.puntoPedido
+      newQuantity <= proveedorIntermedia.modeloInventario.puntoPedido
     ) {
       // Pedir confirmación al usuario
       const confirmacion = window.confirm(
