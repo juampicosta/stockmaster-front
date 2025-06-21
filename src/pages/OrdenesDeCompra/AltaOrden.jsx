@@ -13,7 +13,8 @@ const AltaOrden = () => {
   const [articulos, setArticulos] = useState([])
   const [selectedArticulo, setSelectedArticulo] = useState(null)
   const [sugerirOrden, setSugerirOrden] = useState(null)
-  const [selectedProveedor, setSelectedProveedor] = useState('') // NUEVO estado controlado
+  const [selectedProveedor, setSelectedProveedor] = useState('')
+  const [existingOrden, setExistingOrden] = useState(false)
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -31,8 +32,16 @@ const AltaOrden = () => {
       )
     }
 
-    const newQuantity = parseInt(lote) + parseInt(selectedArticulo.stock)
+    if (existingOrden) {
+      const confirmacion = window.confirm(
+        'Ya existe una orden de compra pendiente o enviada para este artículo. ¿Desea continuar?'
+      )
+      if (!confirmacion) {
+        return
+      }
+    }
 
+    const newQuantity = parseInt(lote) + parseInt(selectedArticulo.stock)
     if (
       proveedorIntermedia.modeloInventario.id == 2 &&
       newQuantity < proveedorIntermedia.modeloInventario.puntoPedido
@@ -84,6 +93,12 @@ const AltaOrden = () => {
 
       const { data, errorMsg } = await sugerirOrdenCompra(id)
       if (errorMsg) {
+        if (
+          errorMsg ===
+          'El Artículo tiene órdenes de compra en estado Pendiente o Enviada'
+        ) {
+          setExistingOrden(true)
+        }
         return toast.error(errorMsg)
       }
 
