@@ -137,7 +137,8 @@ const AgregarArticuloProveedor = () => {
             <label className='block text-sm font-medium text-orange-800'>
               Costo de Pedido
               <input
-                min={0}
+                min={0.000001}
+                step='any'
                 required
                 type='number'
                 name='costoPedido'
@@ -165,7 +166,8 @@ const AgregarArticuloProveedor = () => {
             <label className='block text-sm font-medium text-orange-800'>
               Precio Unitario
               <input
-                min={0}
+                min={0.000001}
+                step='any'
                 required
                 type='number'
                 name='precioUnitario'
