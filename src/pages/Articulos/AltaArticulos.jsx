@@ -22,14 +22,14 @@ const AltaArticulos = () => {
     const data = Object.fromEntries(formData.entries())
 
     // Convertir tipos
-    data.demandaArticulo = parseFloat(data.demandaArticulo)
+    data.demandaArticulo = parseInt(data.demandaArticulo)
     data.costoAlmacenamiento = parseFloat(data.costoAlmacenamiento)
     data.stock = parseInt(data.stock, 10)
     data.stockSeguridad = parseInt(data.stockSeguridad, 10)
     data.precioVenta = parseFloat(data.precioVenta)
     data.precioUnitario = parseFloat(data.precioUnitario)
     data.costoPedido = parseFloat(data.costoPedido)
-    data.demoraEntrega = parseFloat(data.demoraEntrega)
+    data.demoraEntrega = parseInt(data.demoraEntrega)
     data.intervaloRevision = parseInt(data.intervaloRevision, 10)
 
     // Construir payload

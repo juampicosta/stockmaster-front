@@ -48,7 +48,7 @@ const EditarArticulo = () => {
     const formValues = Object.fromEntries(form.entries())
 
     const descripcion = formValues.descripcion.trim()
-    const demandaArticulo = parseFloat(formValues.demandaArticulo)
+    const demandaArticulo = parseInt(formValues.demandaArticulo)
     const costoAlmacenamiento = parseFloat(formValues.costoAlmacenamiento)
     const stock = parseInt(formValues.stock)
     const stockSeguridad = parseInt(formValues.stockSeguridad)
@@ -110,7 +110,6 @@ const EditarArticulo = () => {
             required
             type='number'
             name='demandaArticulo'
-            step='any'
             min={0}
             defaultValue={articulo?.demandaArticulo}
             onChange={handleInputChange}
@@ -123,7 +122,7 @@ const EditarArticulo = () => {
           <input
             required
             type='number'
-            min={0}
+            min={0.000001}
             name='costoAlmacenamiento'
             step='any'
             defaultValue={articulo?.costoAlmacenamiento}
