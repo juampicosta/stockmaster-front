@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { obtenerArticulos } from '../../services/apiArticulos'
 import { registrarOrden, sugerirOrdenCompra } from '../../services/apiOrdenes'
-import { LuBoxes } from 'react-icons/lu'
 import { BsCash } from 'react-icons/bs'
 import { useNavigate, useSearchParams } from 'react-router'
 
@@ -146,6 +145,18 @@ const AltaOrden = () => {
     setSearchParams({ id: selectedCodigo })
   }
 
+  const articuloSeleccionado = articulos.find(
+    (art) => art.codigo === selectedArticulo?.codigo
+  )
+
+  const articuloProveedor = articuloSeleccionado?.articuloProveedores.find(
+    (ap) => ap.proveedor.id === selectedProveedor
+  )
+
+  const montoTotal =
+    articuloProveedor?.preciounitario * lote + articuloProveedor?.costoPedido ||
+    0
+
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
       <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>
@@ -219,20 +230,14 @@ const AltaOrden = () => {
           </div>
         )}
 
-        {sugerirOrden &&
-          sugerirOrden.lote == lote &&
-          sugerirOrden.proveedorPredeterminado.id == selectedProveedor && (
-            <div className='text-orange-800'>
-              <p className='flex items-center gap-2'>
-                <LuBoxes className='text-xl text-orange-700' />
-                <strong>Lote:</strong> {sugerirOrden.lote}
-              </p>
-              <p className='flex items-center gap-2'>
-                <BsCash className='text-xl text-orange-700' />
-                <strong>Monto total:</strong> ${sugerirOrden.montoTotal}
-              </p>
-            </div>
-          )}
+        {lote && selectedProveedor && (
+          <div className='text-orange-800'>
+            <p className='flex items-center gap-2'>
+              <BsCash className='text-xl text-orange-700' />
+              <strong>Monto total:</strong> ${montoTotal.toFixed(2)}
+            </p>
+          </div>
+        )}
 
         <div className='flex items-end justify-end w-full col-span-full mt-2'>
           <button
