@@ -56,16 +56,18 @@ const AltaOrden = () => {
       }
     }
 
-    /* if (proveedorIntermedia.tipoModeloInventario.id == 2 &&
-      newQuantity > proveedorIntermedia.modeloInventario.inventarioMax) {
+    if (
+      proveedorIntermedia.tipoModeloInventario.id == 2 &&
+      newQuantity > proveedorIntermedia.modeloInventario.inventarioMax
+    ) {
       // Pedir confirmación al usuario
       const confirmacion = window.confirm(
-        `El lote ingresado más el stock actual (${newQuantity}) es menor o igual al punto de pedido (${proveedorIntermedia.modeloInventario.puntoPedido}) del proveedor seleccionado. ¿Desea continuar?`
+        `El lote ingresado más el stock actual (${newQuantity}) es mayor al inventario máximo (${proveedorIntermedia.modeloInventario.inventarioMax}) del proveedor seleccionado. ¿Desea continuar?`
       )
       if (!confirmacion) {
         return
       }
-    } */
+    }
 
     const dataToSend = {
       lote: parseInt(lote),
