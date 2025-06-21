@@ -168,11 +168,16 @@ const AltaOrden = () => {
               name='proveedorId'
               className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-orange-200 focus:border-orange-500 transition-colors duration-200'
             >
-              {selectedArticulo.articuloProveedores.map((prov) => (
-                <option key={prov.proveedor.id} value={prov.proveedor.id}>
-                  {prov.proveedor.razonSocial}
-                </option>
-              ))}
+              {selectedArticulo.articuloProveedores
+                .filter(
+                  (articuloProveedor) =>
+                    !articuloProveedor.proveedor.fechaHoraBaja
+                )
+                .map((prov) => (
+                  <option key={prov.proveedor.id} value={prov.proveedor.id}>
+                    {prov.proveedor.razonSocial}
+                  </option>
+                ))}
             </select>
           </div>
         )}
