@@ -119,7 +119,8 @@ const DetalleProveedor = () => {
                   (prov) => prov.proveedor.id === parseInt(id)
                 );
 
-              const tipoModelo = proveedorIntermedia?.modeloInventario;
+              const tipoModelo = proveedorIntermedia?.tipoModeloInventario;
+              const datosModelo = proveedorIntermedia?.modeloInventario;
 
               return (
                 <li
@@ -183,21 +184,21 @@ const DetalleProveedor = () => {
                               <li className="flex items-center">
                                 <MdInventory className="text-lg text-orange-400 mr-2" />
                                 <span>
-                                  <strong>CGI:</strong> ${tipoModelo.cgi}
+                                  <strong>CGI:</strong> ${datosModelo.cgi}
                                 </span>
                               </li>
                               <li className="flex items-center">
                                 <IoMdCart className="text-lg text-orange-400 mr-2" />
                                 <span>
                                   <strong>Lote Óptimo: </strong>
-                                  {tipoModelo.loteOptimo}
+                                  {datosModelo.loteOptimo}
                                 </span>
                               </li>
                               <li className="flex items-center">
                                 <TbMathMax className="text-lg text-orange-400 mr-2" />
                                 <span>
                                   <strong>Punto de Pedido: </strong>
-                                  {tipoModelo.puntoPedido}
+                                  {datosModelo.puntoPedido}
                                 </span>
                               </li>
                             </div>
@@ -210,7 +211,7 @@ const DetalleProveedor = () => {
                                 <TbMathMax className="text-lg text-orange-400 mr-2" />
                                 <span>
                                   <strong>Inventario Máximo: </strong>
-                                  {tipoModelo.inventarioMax}
+                                  {datosModelo.inventarioMax}
                                 </span>
                               </li>
                             </div>
