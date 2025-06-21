@@ -12,8 +12,6 @@ const AgregarArticuloProveedor = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [tipoModelos, setTipoModelos] = useState([])
-  const [selectedModelo, setSelectedModelo] = useState(null)
-
   const [articulosDisponibles, setArticulosDisponibles] = useState([])
   const [codigoSeleccionado, setCodigoSeleccionado] = useState('')
   const [relacion, setRelacion] = useState({
@@ -139,6 +137,7 @@ const AgregarArticuloProveedor = () => {
             <label className='block text-sm font-medium text-orange-800'>
               Costo de Pedido
               <input
+                min={0}
                 required
                 type='number'
                 name='costoPedido'
@@ -150,8 +149,9 @@ const AgregarArticuloProveedor = () => {
               />
             </label>
             <label className='block text-sm font-medium text-orange-800'>
-              Demora de Entrega (Días) (Días)
+              Demora de Entrega (Días)
               <input
+                min={0}
                 required
                 type='number'
                 name='demoraEntrega'
@@ -165,6 +165,7 @@ const AgregarArticuloProveedor = () => {
             <label className='block text-sm font-medium text-orange-800'>
               Precio Unitario
               <input
+                min={0}
                 required
                 type='number'
                 name='precioUnitario'
@@ -181,7 +182,6 @@ const AgregarArticuloProveedor = () => {
                 value={relacion.idTipoModelo} // <-- Esto selecciona el modelo previamente guardado
                 onChange={(e) => {
                   setRelacion({ ...relacion, idTipoModelo: e.target.value })
-                  setSelectedModelo(parseInt(e.target.value))
                 }}
                 required
                 name='idTipoModelo'

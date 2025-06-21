@@ -202,6 +202,7 @@ const AltaProveedor = () => {
             Teléfono
           </label>
           <input
+            min={0}
             required
             type='number'
             name='telefono'

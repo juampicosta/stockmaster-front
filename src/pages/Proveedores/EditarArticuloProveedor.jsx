@@ -117,6 +117,7 @@ const EditarArticuloProveedor = () => {
             <label className='block text-sm font-medium text-orange-800'>
               Costo de Pedido
               <input
+                min={0}
                 required
                 type='number'
                 name='costoPedido'
@@ -130,6 +131,7 @@ const EditarArticuloProveedor = () => {
             <label className='block text-sm font-medium text-orange-800'>
               Demora de Entrega (Días)
               <input
+                min={0}
                 required
                 type='number'
                 name='demoraEntrega'
@@ -143,6 +145,7 @@ const EditarArticuloProveedor = () => {
             <label className='block text-sm font-medium text-orange-800'>
               Precio Unitario
               <input
+                min={0}
                 required
                 type='number'
                 name='precioUnitario'
