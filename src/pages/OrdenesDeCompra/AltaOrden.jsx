@@ -202,7 +202,7 @@ const AltaOrden = () => {
           </div>
         )}
 
-        {sugerirOrden && (
+        {sugerirOrden && sugerirOrden.lote == lote && (
           <div className='text-orange-800'>
             <p className='flex items-center gap-2'>
               <LuBoxes className='text-xl text-orange-700' />
