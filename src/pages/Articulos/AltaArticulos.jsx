@@ -15,6 +15,9 @@ const AltaArticulos = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    // Desactivar el botón de envío
+    e.target.querySelector('button[type="submit"]').disabled = true
+    e.target.querySelector('button[type="submit"]').classList.add('opacity-50')
     const formData = new FormData(e.target)
     const data = Object.fromEntries(formData.entries())
 
@@ -64,6 +67,12 @@ const AltaArticulos = () => {
       console.log(error.message)
 
       toast.error(error.message || 'Error al crear el artículo')
+    } finally {
+      // Reactivar el botón de envío
+      e.target.querySelector('button[type="submit"]').disabled = false
+      e.target
+        .querySelector('button[type="submit"]')
+        .classList.remove('opacity-50')
     }
   }
 
