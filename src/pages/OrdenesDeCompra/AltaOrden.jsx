@@ -15,12 +15,12 @@ const AltaOrden = () => {
   const [sugerirOrden, setSugerirOrden] = useState(null)
   const [selectedProveedor, setSelectedProveedor] = useState('')
   const [existingOrden, setExistingOrden] = useState(false)
+  const [lote, setLote] = useState('')
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
-    const lote = formData.get('lote')
     const articuloId = formData.get('articuloId')
     const proveedorId = formData.get('proveedorId')
     const proveedorIntermedia = selectedArticulo.articuloProveedores.find(
@@ -88,6 +88,8 @@ const AltaOrden = () => {
       if (!id) {
         setSugerirOrden(null)
         setSelectedProveedor('')
+        setLote('')
+        setExistingOrden(false)
         return
       }
 
@@ -101,11 +103,13 @@ const AltaOrden = () => {
         }
         setSugerirOrden(null)
         setSelectedProveedor('')
+        setLote('')
         return toast.error(errorMsg)
       }
 
       setSugerirOrden(data)
       setSelectedProveedor(data?.proveedorPredeterminado?.id ?? '')
+      setLote(data?.lote ?? '')
     }
 
     if (id && articulos.length > 0) {
@@ -161,11 +165,9 @@ const AltaOrden = () => {
               Lote
             </label>
             <input
-              onChange={() => {
-                setSugerirOrden(null)
-              }}
+              onChange={(e) => setLote(e.target.value)}
               min={1}
-              defaultValue={sugerirOrden?.lote}
+              value={lote}
               required
               type='number'
               name='lote'
