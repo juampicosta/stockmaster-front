@@ -56,6 +56,17 @@ const AltaOrden = () => {
       }
     }
 
+    /* if (proveedorIntermedia.tipoModeloInventario.id == 2 &&
+      newQuantity > proveedorIntermedia.modeloInventario.inventarioMax) {
+      // Pedir confirmación al usuario
+      const confirmacion = window.confirm(
+        `El lote ingresado más el stock actual (${newQuantity}) es menor o igual al punto de pedido (${proveedorIntermedia.modeloInventario.puntoPedido}) del proveedor seleccionado. ¿Desea continuar?`
+      )
+      if (!confirmacion) {
+        return
+      }
+    } */
+
     const dataToSend = {
       lote: parseInt(lote),
       codigoArticulo: parseInt(articuloId),
@@ -103,7 +114,10 @@ const AltaOrden = () => {
           setExistingOrden(true)
         }
         setSugerirOrden(null)
-        setSelectedProveedor('')
+        setSelectedProveedor(
+          articulos.find((art) => art.codigo == id)?.provPredeterminado?.id ||
+            ''
+        )
         setLote('')
         return toast.error(errorMsg)
       }
