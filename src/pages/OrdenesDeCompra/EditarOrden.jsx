@@ -31,6 +31,24 @@ const EditaOrden = () => {
         return
       }
     }
+
+    if (
+      modeloInventario == 2 &&
+      stockActual + lote >
+        orden.articuloProveedor.modeloInventario.inventarioMax
+    ) {
+      // Pedir confirmación al usuario
+      const confirmacion = window.confirm(
+        `El lote ingresado más el stock actual (${
+          stockActual + lote
+        }) es mayor al inventario máximo (${
+          orden.articuloProveedor.modeloInventario.inventarioMax
+        }) del proveedor seleccionado. ¿Desea continuar?`
+      )
+      if (!confirmacion) {
+        return
+      }
+    }
     const { errorMsg } = await editarOrden(orden, id)
     if (errorMsg) {
       return toast.error(errorMsg)
