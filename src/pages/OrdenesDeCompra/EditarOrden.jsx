@@ -12,6 +12,9 @@ const EditaOrden = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    const stockActual = parseInt(orden.articulo.stock, 10)
+    const lote = parseInt(orden.lote, 10)
+
     const { errorMsg } = await editarOrden(orden, id)
     if (errorMsg) {
       return toast.error(errorMsg)
@@ -43,8 +46,11 @@ const EditaOrden = () => {
       }
       setOrden(data)
     }
+
     fetchOrden()
   }, [id])
+
+  console.log(orden)
 
   return (
     <section className='bg-white p-6 rounded-lg shadow-md'>
