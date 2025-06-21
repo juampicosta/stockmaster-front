@@ -139,7 +139,6 @@ const AltaArticulos = () => {
             min={0}
             type='number'
             name='demandaArticulo'
-            step='any'
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
           />
         </label>
@@ -148,7 +147,7 @@ const AltaArticulos = () => {
           Costo de Almacenamiento (Por Unidad)
           <input
             required
-            min={0}
+            min={0.000001}
             type='number'
             name='costoAlmacenamiento'
             step='any'
@@ -182,7 +181,8 @@ const AltaArticulos = () => {
           Precio de Venta
           <input
             required
-            min={0}
+            min={0.000001}
+            step='any'
             type='number'
             name='precioVenta'
             className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
@@ -211,7 +211,7 @@ const AltaArticulos = () => {
               Precio Unitario
               <input
                 required
-                min={0}
+                min={0.000001}
                 type='number'
                 name='precioUnitario'
                 step='any'
@@ -223,7 +223,7 @@ const AltaArticulos = () => {
               Costo de Pedido
               <input
                 required
-                min={0}
+                min={0.000001}
                 type='number'
                 name='costoPedido'
                 step='any'
@@ -238,7 +238,6 @@ const AltaArticulos = () => {
                 min={0}
                 type='number'
                 name='demoraEntrega'
-                step='any'
                 className='w-full px-3 py-2 text-black border rounded-md focus:outline-none focus:ring focus:border-orange-400'
               />
             </label>
