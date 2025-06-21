@@ -142,11 +142,11 @@ const AltaOrden = () => {
   }
 
   const articuloSeleccionado = articulos.find(
-    (art) => art.codigo === selectedArticulo?.codigo
+    (art) => art.codigo == selectedArticulo?.codigo
   )
 
   const articuloProveedor = articuloSeleccionado?.articuloProveedores.find(
-    (ap) => ap.proveedor.id === selectedProveedor
+    (ap) => ap.proveedor.id == selectedProveedor
   )
 
   const montoTotal =
