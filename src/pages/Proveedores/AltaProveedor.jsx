@@ -76,6 +76,10 @@ const AltaProveedor = () => {
   //Dar de alta el nuevo Proveedor
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (articuloDatos.length === 0) {
+      return toast.warning('Debe seleccionar al menos un artículo')
+    }
+
     const formData = new FormData(e.target) //Recupero los datos del formulario
     const email = formData.get('email')
     const razonSocial = formData.get('razonSocial')
