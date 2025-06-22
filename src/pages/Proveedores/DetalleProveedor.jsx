@@ -21,7 +21,7 @@ import {
 import { IoMdCart } from 'react-icons/io'
 import { TbMathMax } from 'react-icons/tb'
 import { toast } from 'sonner'
-import { desvincularProveedorArticulo } from '../../services/apiArticulos'
+import { desvincularArticuloProveedor } from '../../services/apiArticulos'
 
 const DetalleProveedor = () => {
   // Obtener el ID del proveedor desde los parámetros de la URL
@@ -68,7 +68,7 @@ const DetalleProveedor = () => {
       window.confirm('¿Estás seguro de eliminar este artículo del proveedor?')
     ) {
       try {
-        const response = await desvincularProveedorArticulo(
+        const response = await desvincularArticuloProveedor(
           codigoArticulo,
           idProveedor
         )

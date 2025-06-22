@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { vincularProveedorArticulo } from '../../services/apiArticulos'
+import { vincularArticuloProveedor } from '../../services/apiArticulos'
 import { obtenerProveedoresAjenos } from '../../services/apiArticulos'
 import { toast } from 'sonner'
 import { obtenerTipoModeloInventarios } from '../../services/apiTipoModeloInventario'
@@ -24,7 +24,7 @@ const AgregarProveedorArticulo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const { errorMsg } = await vincularProveedorArticulo(
+    const { errorMsg } = await vincularArticuloProveedor(
       id, // idArticulo (desde useParams)
       idSeleccionado, // idProveedor
       relacion // datos de la relación

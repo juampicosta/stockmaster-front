@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import {
-  desvincularProveedorArticulo,
+  desvincularArticuloProveedor,
   obtenerArticuloPorId
 } from '../../services/apiArticulos'
 import { toast } from 'sonner'
@@ -56,7 +56,7 @@ const DetalleArticulo = () => {
       window.confirm('¿Estás seguro de eliminar este proveedor del artículo?')
     ) {
       try {
-        const response = await desvincularProveedorArticulo(
+        const response = await desvincularArticuloProveedor(
           codigoArticulo,
           idProveedor
         )
@@ -290,10 +290,7 @@ const DetalleArticulo = () => {
                       {!isPredeterminado && (
                         <button
                           onClick={() =>
-                            handleEliminar(
-                              articulo.codigo,
-                              articuloProveedor.proveedor.id
-                            )
+                            handleEliminar(id, articuloProveedor.proveedor.id)
                           }
                           className='text-red-600 hover:text-red-800 cursor-pointer flex items-center px-2 py-1 rounded hover:bg-red-50 transition duration-200'
                         >

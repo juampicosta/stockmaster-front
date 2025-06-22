@@ -127,7 +127,7 @@ export const obtenerProveedoresAjenos = async (idArticulo) => {
     return { errorMsg: error.message }
   }
 }
-export const vincularProveedorArticulo = async (
+export const vincularArticuloProveedor = async (
   idArticulo,
   idProveedor,
   datos
@@ -150,12 +150,12 @@ export const vincularProveedorArticulo = async (
 
     return { ok: true }
   } catch (error) {
-    console.error('Error en vincularProveedorArticulo:', error)
+    console.error('Error en vincularArticuloProveedor:', error)
     return { errorMsg: error.message }
   }
 }
 
-export const desvincularProveedorArticulo = async (idArticulo, idProveedor) => {
+export const desvincularArticuloProveedor = async (idArticulo, idProveedor) => {
   try {
     const url = `http://localhost:8080/articulo-proveedor/desvincular/${idArticulo}/${idProveedor}`
     const response = await fetch(url, {
@@ -173,7 +173,7 @@ export const desvincularProveedorArticulo = async (idArticulo, idProveedor) => {
 
     return { ok: true }
   } catch (error) {
-    console.error('Error en vincularProveedorArticulo:', error)
+    console.error('Error en vincularArticuloProveedor:', error)
     return { errorMsg: error.message }
   }
 }
