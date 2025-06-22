@@ -133,7 +133,7 @@ export const vincularProveedorArticulo = async (
   datos
 ) => {
   try {
-    const url = `http://localhost:8080/vincular/${idArticulo}/${idProveedor}`
+    const url = `http://localhost:8080/articulo-proveedor/vincular/${idArticulo}/${idProveedor}`
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
