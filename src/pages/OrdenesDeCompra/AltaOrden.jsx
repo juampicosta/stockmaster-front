@@ -136,6 +136,9 @@ const AltaOrden = () => {
     const selectedCodigo = e.target.value
     if (!selectedCodigo) {
       setSearchParams({})
+      setSelectedArticulo(null)
+      setSelectedProveedor('')
+      setLote('')
       return
     }
     setSearchParams({ id: selectedCodigo })
@@ -207,7 +210,7 @@ const AltaOrden = () => {
             </label>
             <select
               required
-              value={selectedProveedor} // controlado
+              value={selectedProveedor}
               onChange={(e) => setSelectedProveedor(e.target.value)}
               name='proveedorId'
               className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-orange-200 focus:border-orange-500 transition-colors duration-200'

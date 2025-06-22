@@ -25,6 +25,8 @@ const DetalleOrden = () => {
     fetchData()
   }, [id])
 
+  console.log(orden)
+
   return (
     <div className='bg-gradient-to-br from-orange-50 to-white min-h-screen p-8'>
       <h1 className='text-4xl font-extrabold text-orange-900 mb-8 tracking-tight'>

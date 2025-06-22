@@ -13,7 +13,8 @@ import {
   MdLocalShipping,
   MdAccessTime,
   MdAttachMoney,
-  MdAssignment
+  MdAssignment,
+  MdEdit
 } from 'react-icons/md'
 import { GiPriceTag } from 'react-icons/gi'
 import { IoMdCart } from 'react-icons/io'
@@ -123,7 +124,7 @@ const DetalleArticulo = () => {
         <h2 className='text-2xl font-bold text-orange-800'>Proveedores</h2>
         <button
           onClick={() => navigate(`/agregar-proveedor/${id}`)}
-          className='bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600 transition-colors duration-200 flex items-center w-fit gap-2'
+          className='bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600 transition-colors duration-200 flex items-center w-fit gap-2 cursor-pointer'
         >
           <MdAddCircle className='text-lg' />
           Añadir Proveedor
@@ -143,7 +144,7 @@ const DetalleArticulo = () => {
                 key={index}
                 className='bg-white border border-orange-200 rounded-lg p-4 shadow-sm'
               >
-                <div className='flex flex-row justify-between'>
+                <div className='flex flex-row justify-between items-center'>
                   <div className='flex flex-col w-full items-start'>
                     <div className='flex items-center justify-center mb-3'>
                       <div className='flex items-center justify-center w-10 h-10 bg-orange-100 rounded-full mr-3'>
@@ -235,8 +236,9 @@ const DetalleArticulo = () => {
                   </div>
                   <Link
                     to={`/proveedores/${articuloProveedor.proveedor.id}/articulos/${id}`}
-                    className='flex items-center text-blue-600 hover:underline'
+                    className='h-fit text-blue-600 hover:text-blue-800 flex items-center px-2 py-1 rounded hover:bg-blue-50 transition duration-200'
                   >
+                    <MdEdit className='text-lg text-blue-500 mr-2' />
                     Editar
                   </Link>
                 </div>
