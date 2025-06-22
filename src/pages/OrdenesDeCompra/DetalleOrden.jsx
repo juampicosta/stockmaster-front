@@ -81,7 +81,7 @@ const DetalleOrden = () => {
           </span>
         </div>
         <div className='flex items-center mb-2 gap-2 text-orange-800'>
-          <strong>Precio de Venta: </strong>
+          <strong>Precio Unitario: </strong>
           <span className='text-md text-gray-700'>
             ${orden?.articulo?.precioUnitario}
           </span>
