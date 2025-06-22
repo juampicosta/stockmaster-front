@@ -168,9 +168,9 @@ const EditarArticulo = () => {
             className='w-full px-3 py-2 bg-beige text-black border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-orange-500 transition-colors duration-200'
           >
             <option value=''>Seleccionar proveedor</option>
-            {articulo.articuloProveedores
-              .filter((ap) => !ap.proveedor.fechaHoraBaja)
-              .map((articuloProveedor) => (
+            {articulo?.articuloProveedores
+              ?.filter((ap) => !ap.proveedor.fechaHoraBaja)
+              ?.map((articuloProveedor) => (
                 <option
                   key={articuloProveedor.proveedor.id}
                   value={articuloProveedor.proveedor.id}
