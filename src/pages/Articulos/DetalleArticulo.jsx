@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { obtenerArticuloPorId } from '../../services/apiArticulos'
+import {
+  desvincularProveedorArticulo,
+  obtenerArticuloPorId
+} from '../../services/apiArticulos'
 import { toast } from 'sonner'
 import { BsFillBoxSeamFill, BsGraphUpArrow } from 'react-icons/bs'
 import { FaBoxes } from 'react-icons/fa'
@@ -14,7 +17,8 @@ import {
   MdAccessTime,
   MdAttachMoney,
   MdAssignment,
-  MdEdit
+  MdEdit,
+  MdDelete
 } from 'react-icons/md'
 import { GiPriceTag } from 'react-icons/gi'
 import { IoMdCart } from 'react-icons/io'
@@ -46,6 +50,31 @@ const DetalleArticulo = () => {
 
     fetchArticulo()
   }, [id])
+
+  const handleEliminar = async (codigoArticulo, idProveedor) => {
+    if (
+      window.confirm('¿Estás seguro de eliminar este proveedor del artículo?')
+    ) {
+      try {
+        const response = await desvincularProveedorArticulo(
+          codigoArticulo,
+          idProveedor
+        )
+        if (!response.ok) {
+          throw new Error(response.errorMsg || 'Error al eliminar el proveedor')
+        }
+        setArticulo((prevArticulo) => ({
+          ...prevArticulo,
+          articuloProveedores: prevArticulo.articuloProveedores.filter(
+            (ap) => ap.proveedor.id !== idProveedor
+          )
+        }))
+        toast.success('Proveedor eliminado correctamente')
+      } catch (error) {
+        toast.error(`Error al eliminar el proveedor: ${error.message}`)
+      }
+    }
+  }
 
   if (loading) {
     return (
@@ -139,111 +168,144 @@ const DetalleArticulo = () => {
             .filter(
               (articuloProveedor) => !articuloProveedor.proveedor.fechaHoraBaja
             )
-            .map((articuloProveedor, index) => (
-              <div
-                key={index}
-                className='bg-white border border-orange-200 rounded-lg p-4 shadow-sm'
-              >
-                <div className='flex flex-row justify-between items-center'>
-                  <div className='flex flex-col w-full items-start'>
-                    <div className='flex items-center justify-center mb-3'>
-                      <div className='flex items-center justify-center w-10 h-10 bg-orange-100 rounded-full mr-3'>
-                        <MdPerson className='text-2xl text-orange-700' />
-                      </div>
-                      <span className='text-xl font-semibold text-orange-800'>
-                        {articuloProveedor.proveedor.razonSocial}
-                        <span
-                          className={`ml-3 px-2 py-1 rounded text-xs font-bold ${
-                            articuloProveedor?.proveedor.id ==
+            .map((articuloProveedor, index) => {
+              const isPredeterminado =
+                articuloProveedor.proveedor.id ===
+                articulo.provPredeterminado.id
+              return (
+                <div
+                  key={index}
+                  className='bg-white border border-orange-200 rounded-lg p-4 shadow-sm'
+                >
+                  <div className='flex flex-row justify-between items-center'>
+                    <div className='flex flex-col w-full items-start'>
+                      <div className='flex items-center justify-center mb-3'>
+                        <div className='flex items-center justify-center w-10 h-10 bg-orange-100 rounded-full mr-3'>
+                          <MdPerson className='text-2xl text-orange-700' />
+                        </div>
+                        <span className='text-xl font-semibold text-orange-800'>
+                          {articuloProveedor.proveedor.razonSocial}
+                          <span
+                            className={`ml-3 px-2 py-1 rounded text-xs font-bold ${
+                              articuloProveedor?.proveedor.id ==
+                              articulo.provPredeterminado?.id
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-red-100 text-red-700'
+                            }`}
+                          >
+                            {articuloProveedor?.proveedor.id ==
                             articulo.provPredeterminado?.id
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-red-100 text-red-700'
-                          }`}
-                        >
-                          {articuloProveedor?.proveedor.id ==
-                          articulo.provPredeterminado?.id
-                            ? 'Proveedor Predeterminado'
-                            : 'Proveedor no predeterminado'}
+                              ? 'Proveedor Predeterminado'
+                              : 'Proveedor no predeterminado'}
+                          </span>
                         </span>
-                      </span>
-                    </div>
-                    <div className='flex flex-col ml-3 text-gray-700 text-md'>
-                      <ul className='grid grid-cols-3  gap-3'>
-                        <li className='flex items-center'>
-                          <MdLocalShipping className='text-lg text-blue-500 mr-2' />
-                          <span>
-                            <strong>Costo de Pedido:</strong>{' '}
-                            {articuloProveedor.costoPedido}
-                          </span>
-                        </li>
-                        <li className='flex items-center'>
-                          <MdAccessTime className='text-lg text-yellow-600 mr-2' />
-                          <span>
-                            <strong>Demora de Entrega (Días) :</strong>{' '}
-                            {articuloProveedor.demoraEntrega}
-                          </span>
-                        </li>
-                        <li className='flex items-center'>
-                          <MdAttachMoney className='text-lg text-green-700 mr-2' />
-                          <span>
-                            <strong>Precio Unitario:</strong>{' '}
-                            {articuloProveedor.preciounitario}
-                          </span>
-                        </li>
-                        <li className='flex items-center'>
-                          <MdAssignment className='text-lg text-orange-400 mr-2' />
-                          <span>
-                            <strong>Tipo de Modelo:</strong>{' '}
-                            {articuloProveedor.tipoModeloInventario.descripcion}
-                          </span>
-                        </li>
-                        {articuloProveedor.tipoModeloInventario.id == 1 && (
-                          <>
-                            <li className='flex items-center'>
-                              <MdInventory className='text-lg text-orange-400 mr-2' />
-                              <span>
-                                <strong>CGI:</strong> $
-                                {articuloProveedor.modeloInventario.cgi}
-                              </span>
-                            </li>
-                            <li className='flex items-center'>
-                              <IoMdCart className='text-lg text-orange-400 mr-2' />
-                              <span>
-                                <strong>Lote Óptimo: </strong>
-                                {articuloProveedor.modeloInventario.loteOptimo}
-                              </span>
-                            </li>
+                      </div>
+                      <div className='flex flex-col ml-3 text-gray-700 text-md'>
+                        <ul className='grid grid-cols-3  gap-3'>
+                          <li className='flex items-center'>
+                            <MdLocalShipping className='text-lg text-blue-500 mr-2' />
+                            <span>
+                              <strong>Costo de Pedido:</strong>{' '}
+                              {articuloProveedor.costoPedido}
+                            </span>
+                          </li>
+                          <li className='flex items-center'>
+                            <MdAccessTime className='text-lg text-yellow-600 mr-2' />
+                            <span>
+                              <strong>Demora de Entrega (Días) :</strong>{' '}
+                              {articuloProveedor.demoraEntrega}
+                            </span>
+                          </li>
+                          <li className='flex items-center'>
+                            <MdAttachMoney className='text-lg text-green-700 mr-2' />
+                            <span>
+                              <strong>Precio Unitario:</strong>{' '}
+                              {articuloProveedor.preciounitario}
+                            </span>
+                          </li>
+                          <li className='flex items-center'>
+                            <MdAssignment className='text-lg text-orange-400 mr-2' />
+                            <span>
+                              <strong>Tipo de Modelo:</strong>{' '}
+                              {
+                                articuloProveedor.tipoModeloInventario
+                                  .descripcion
+                              }
+                            </span>
+                          </li>
+                          {articuloProveedor.tipoModeloInventario.id == 1 && (
+                            <>
+                              <li className='flex items-center'>
+                                <MdInventory className='text-lg text-orange-400 mr-2' />
+                                <span>
+                                  <strong>CGI:</strong> $
+                                  {articuloProveedor.modeloInventario.cgi}
+                                </span>
+                              </li>
+                              <li className='flex items-center'>
+                                <IoMdCart className='text-lg text-orange-400 mr-2' />
+                                <span>
+                                  <strong>Lote Óptimo: </strong>
+                                  {
+                                    articuloProveedor.modeloInventario
+                                      .loteOptimo
+                                  }
+                                </span>
+                              </li>
+                              <li className='flex items-center'>
+                                <TbMathMax className='text-lg text-orange-400 mr-2' />
+                                <span>
+                                  <strong>Punto de Pedido: </strong>
+                                  {
+                                    articuloProveedor.modeloInventario
+                                      .puntoPedido
+                                  }
+                                </span>
+                              </li>
+                            </>
+                          )}
+                          {articuloProveedor.tipoModeloInventario.id == 2 && (
                             <li className='flex items-center'>
                               <TbMathMax className='text-lg text-orange-400 mr-2' />
                               <span>
-                                <strong>Punto de Pedido: </strong>
-                                {articuloProveedor.modeloInventario.puntoPedido}
+                                <strong>Inventario Máximo: </strong>
+                                {
+                                  articuloProveedor.modeloInventario
+                                    .inventarioMax
+                                }
                               </span>
                             </li>
-                          </>
-                        )}
-                        {articuloProveedor.tipoModeloInventario.id == 2 && (
-                          <li className='flex items-center'>
-                            <TbMathMax className='text-lg text-orange-400 mr-2' />
-                            <span>
-                              <strong>Inventario Máximo: </strong>
-                              {articuloProveedor.modeloInventario.inventarioMax}
-                            </span>
-                          </li>
-                        )}
-                      </ul>
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+                    <div>
+                      <Link
+                        to={`/proveedores/${articuloProveedor.proveedor.id}/articulos/${id}`}
+                        className='h-fit text-blue-600 hover:text-blue-800 flex items-center px-2 py-1 rounded hover:bg-blue-50 transition duration-200'
+                      >
+                        <MdEdit className='text-lg text-blue-500 mr-2' />
+                        Editar
+                      </Link>
+                      {!isPredeterminado && (
+                        <button
+                          onClick={() =>
+                            handleEliminar(
+                              articulo.codigo,
+                              articuloProveedor.proveedor.id
+                            )
+                          }
+                          className='text-red-600 hover:text-red-800 cursor-pointer flex items-center px-2 py-1 rounded hover:bg-red-50 transition duration-200'
+                        >
+                          <MdDelete className='text-lg text-red-500 mr-2' />
+                          Eliminar
+                        </button>
+                      )}
                     </div>
                   </div>
-                  <Link
-                    to={`/proveedores/${articuloProveedor.proveedor.id}/articulos/${id}`}
-                    className='h-fit text-blue-600 hover:text-blue-800 flex items-center px-2 py-1 rounded hover:bg-blue-50 transition duration-200'
-                  >
-                    <MdEdit className='text-lg text-blue-500 mr-2' />
-                    Editar
-                  </Link>
                 </div>
-              </div>
-            ))
+              )
+            })
         ) : (
           <div className='bg-white border border-orange-200 rounded-lg p-6 shadow-sm text-center'>
             <p className='text-orange-600 text-lg'>

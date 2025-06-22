@@ -154,6 +154,30 @@ export const vincularProveedorArticulo = async (
     return { errorMsg: error.message }
   }
 }
+
+export const desvincularProveedorArticulo = async (idArticulo, idProveedor) => {
+  try {
+    const url = `http://localhost:8080/articulo-proveedor/desvincular/${idArticulo}/${idProveedor}`
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    if (!response.ok) {
+      const data = await response.json()
+      throw new Error(
+        data?.mensaje || 'Error al vincular el proveedor al artículo'
+      )
+    }
+
+    return { ok: true }
+  } catch (error) {
+    console.error('Error en vincularProveedorArticulo:', error)
+    return { errorMsg: error.message }
+  }
+}
+
 // Actualizar artículo
 export const actualizarArticulo = async (id, datos) => {
   try {
