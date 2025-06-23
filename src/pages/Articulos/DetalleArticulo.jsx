@@ -205,7 +205,7 @@ const DetalleArticulo = () => {
                           <li className='flex items-center'>
                             <MdLocalShipping className='text-lg text-blue-500 mr-2' />
                             <span>
-                              <strong>Costo de Pedido:</strong>{' '}
+                              <strong>Costo de Pedido:</strong>{' $'}
                               {articuloProveedor.costoPedido}
                             </span>
                           </li>
@@ -219,7 +219,7 @@ const DetalleArticulo = () => {
                           <li className='flex items-center'>
                             <MdAttachMoney className='text-lg text-green-700 mr-2' />
                             <span>
-                              <strong>Precio Unitario:</strong>{' '}
+                              <strong>Precio Unitario:</strong>{' $'}
                               {articuloProveedor.preciounitario}
                             </span>
                           </li>

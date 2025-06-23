@@ -172,23 +172,25 @@ const ListaOrdenes = () => {
                     </div>
                   </div>
                   <div className='flex flex-col items-center justify-center gap-1'>
-                    <Link
-                      to={`/ordenes-de-compra/detalle/${ord.id}`}
-                      state={{ orden: ord }}
-                      className='text-green-600 hover:text-green-800 flex items-center px-2 py-1 rounded hover:bg-green-50 transition duration-200'
-                    >
-                      <IoMdPaper className='text-lg text-green-500 mr-2' />
-                      Ver Detalle
-                    </Link>
-                    {ord.estadoOrdenCompra.descripcion === 'Pendiente' && (
+                    <div className='flex flex-col items-start'>
                       <Link
-                        to={`/ordenes-de-compra/editar/${ord.id}`}
-                        className='text-blue-600 hover:text-blue-800 flex items-center px-2 py-1 rounded hover:bg-blue-50 transition duration-200'
+                        to={`/ordenes-de-compra/detalle/${ord.id}`}
+                        state={{ orden: ord }}
+                        className='text-green-600 hover:text-green-800 flex items-center px-2 py-1 rounded hover:bg-green-50 transition duration-200'
                       >
-                        <MdEdit className='text-lg text-blue-500 mr-2' />
-                        Editar
+                        <IoMdPaper className='text-lg text-green-500 mr-2' />
+                        Ver Detalle
                       </Link>
-                    )}
+                      {ord.estadoOrdenCompra.descripcion === 'Pendiente' && (
+                        <Link
+                          to={`/ordenes-de-compra/editar/${ord.id}`}
+                          className='text-blue-600 hover:text-blue-800 flex items-center px-2 py-1 rounded hover:bg-blue-50 transition duration-200'
+                        >
+                          <MdEdit className='text-lg text-blue-500 mr-2' />
+                          Editar
+                        </Link>
+                      )}
+                    </div>
                     <div className='flex items-center justify-center gap-1'>
                       {states[
                         ord.estadoOrdenCompra.descripcion

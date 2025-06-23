@@ -176,7 +176,7 @@ const DetalleProveedor = () => {
                         <li className='flex items-center'>
                           <MdLocalShipping className='text-lg text-blue-500 mr-2' />
                           <span>
-                            <strong>Costo de Pedido:</strong>{' '}
+                            <strong>Costo de Pedido:</strong>{' $'}
                             {proveedorIntermedia?.costoPedido}
                           </span>
                         </li>
@@ -190,7 +190,7 @@ const DetalleProveedor = () => {
                         <li className='flex items-center'>
                           <MdAttachMoney className='text-lg text-green-700 mr-2' />
                           <span>
-                            <strong>Precio Unitario:</strong>{' '}
+                            <strong>Precio Unitario:</strong>{' $'}
                             {proveedorIntermedia?.preciounitario}
                           </span>
                         </li>
