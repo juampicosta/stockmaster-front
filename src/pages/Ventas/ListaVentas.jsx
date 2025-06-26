@@ -84,7 +84,7 @@ const ListaVentas = () => {
                     <Link
                       to={`/ventas/detalle/${venta.id}`}
                       state={{ venta }}
-                      className='flex items-center justify-center ml-2 text-green-600 hover:underline'
+                      className='text-green-600 hover:text-green-800 flex items-center px-2 py-1 rounded hover:bg-green-50 transition duration-200'
                     >
                       <IoMdPaper className='text-lg text-green-500 mr-2' />
                       Ver Detalle

@@ -68,7 +68,7 @@ const ListaOrdenes = () => {
         return toast.error(errorMsg)
       }
     } else {
-      const { data, errorMsg } = await advanceOrderState(id)
+      const { errorMsg } = await advanceOrderState(id)
       if (errorMsg) {
         return toast.error(errorMsg)
       }
@@ -175,7 +175,7 @@ const ListaOrdenes = () => {
                     <Link
                       to={`/ordenes-de-compra/detalle/${ord.id}`}
                       state={{ orden: ord }}
-                      className='flex items-center justify-center text-green-600 hover:underline'
+                      className='text-green-600 hover:text-green-800 flex items-center px-2 py-1 rounded hover:bg-green-50 transition duration-200'
                     >
                       <IoMdPaper className='text-lg text-green-500 mr-2' />
                       Ver Detalle
@@ -183,7 +183,7 @@ const ListaOrdenes = () => {
                     {ord.estadoOrdenCompra.descripcion === 'Pendiente' && (
                       <Link
                         to={`/ordenes-de-compra/editar/${ord.id}`}
-                        className=' text-blue-600 hover:underline flex items-center'
+                        className='text-blue-600 hover:text-blue-800 flex items-center px-2 py-1 rounded hover:bg-blue-50 transition duration-200'
                       >
                         <MdEdit className='text-lg text-blue-500 mr-2' />
                         Editar
@@ -195,7 +195,7 @@ const ListaOrdenes = () => {
                       ]?.nextStates.map((nextState) => (
                         <button
                           key={nextState.descripcion}
-                          className={`cursor-pointer hover:underline flex items-center justify-center p-2 rounded-full ${getOrderStateColor(
+                          className={`text-blue-600 flex items-center px-2 py-1 rounded hover:opacity-80 cursor-pointer transition duration-200 ${getOrderStateColor(
                             nextState.descripcion
                           )}`}
                           onClick={() =>

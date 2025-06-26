@@ -126,20 +126,20 @@ const ListaProveedores = () => {
                     <Link
                       to={`/proveedores/detalle/${prov.id}`}
                       state={{ proveedor: prov }}
-                      className='flex items-center justify-center ml-2 text-green-600 hover:underline'
+                      className='text-green-600 hover:text-green-800 flex items-center px-2 py-1 rounded hover:bg-green-50 transition duration-200'
                     >
                       <IoMdPaper className='text-lg text-green-500 mr-2' />
                       Ver Detalle
                     </Link>
                     <Link
                       to={`/proveedores/editar/${prov.id}`}
-                      className='ml-2 text-blue-600 hover:underline flex items-center'
+                      className='text-blue-600 hover:text-blue-800 flex items-center px-2 py-1 rounded hover:bg-blue-50 transition duration-200'
                     >
                       <MdEdit className='text-lg text-blue-500 mr-2' />
                       Editar
                     </Link>
                     <button
-                      className='cursor-pointer ml-2 text-red-600 hover:underline flex items-center justify-center'
+                      className='text-red-600 hover:text-red-800 cursor-pointer flex items-center px-2 py-1 rounded hover:bg-red-50 transition duration-200'
                       onClick={() => handleBorrarProveedor(prov.id)}
                     >
                       <MdDelete className='text-lg text-red-500 mr-2' />
